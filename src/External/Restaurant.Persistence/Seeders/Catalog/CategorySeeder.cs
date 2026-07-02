@@ -5,7 +5,7 @@ using Restaurant.Persistence.Contexts;
 
 namespace Restaurant.Persistence.Seeders.Catalog
 {
-    public class CategorySeeder : IDataSeeder
+    internal class CategorySeeder : IDataSeeder
     {
         public async Task SeedAsync(RestaurantDbContext context)
         {

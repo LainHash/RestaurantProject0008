@@ -4,7 +4,7 @@ using Restaurant.Persistence.Seeders.Catalog;
 
 namespace Restaurant.Persistence.Seeders
 {
-    public class DatabaseSeeder
+    internal class DatabaseSeeder
     {
         private readonly RestaurantDbContext _context;
         private readonly IServiceProvider _serviceProvider;
