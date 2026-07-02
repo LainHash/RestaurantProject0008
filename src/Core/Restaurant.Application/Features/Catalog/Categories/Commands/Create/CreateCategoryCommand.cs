@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Restaurant.Application.Models;
+using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Catalog.Categories;
 using System.Windows.Input;
 

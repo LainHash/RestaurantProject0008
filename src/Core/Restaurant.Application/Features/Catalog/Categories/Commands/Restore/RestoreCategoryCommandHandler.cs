@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Restaurant.Application.Models;
+using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 
 namespace Restaurant.Application.Features.Catalog.Categories.Commands.Restore
