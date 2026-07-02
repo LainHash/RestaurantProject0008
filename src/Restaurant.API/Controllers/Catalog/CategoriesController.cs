@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Catalog.Categories.Commands.Create;
+using Restaurant.Application.Features.Catalog.Categories.Commands.Delete;
+using Restaurant.Application.Features.Catalog.Categories.Commands.Restore;
 using Restaurant.Application.Features.Catalog.Categories.Commands.Update;
 using Restaurant.Application.Features.Catalog.Categories.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Categories.Queries.GetById;
@@ -43,6 +45,20 @@ namespace Restaurant.API.Controllers.Catalog
         public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new UpdateCategoryCommand(id, request), cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new DeleteCategoryCommand(id), cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<IActionResult> RestoreCategory([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new RestoreCategoryCommand(id), cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
     }
