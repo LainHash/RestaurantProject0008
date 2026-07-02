@@ -9,9 +9,20 @@ namespace Restaurant.Domain.Entities.Catalog
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 
+        public Category(string name, string? description = null)
+        {
+            Name = name;
+            Description = description;
+        }
         public Category(Guid id, string name, string? description = null)
         {
             Id = id;
+            Name = name;
+            Description = description;
+        }
+
+        public void Update(string name, string? description = null)
+        {
             Name = name;
             Description = description;
         }
