@@ -14,7 +14,7 @@ namespace Restaurant.Application.Features.Catalog.Categories.Queries.GetById
         }
         public async Task<Result<CategoryResponse>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var response = await _categoryService.GetCategoryByIdAsync(request.Id, cancellationToken);
+            var response = await _categoryService.GetByIdAsync(request.Id, cancellationToken);
             return response;
         }
     }

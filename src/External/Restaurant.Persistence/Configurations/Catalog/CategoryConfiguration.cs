@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Restaurant.Domain.Entities.Catalog;
 
@@ -16,10 +16,10 @@ namespace Restaurant.Persistence.Configurations.Catalog
             builder.HasQueryFilter(x => !x.IsDeleted);
 
             // Relationships
-            //builder.HasMany(x => x.Products)
-            //       .WithOne(x => x.Category)
-            //       .HasForeignKey(x => x.CategoryId)
-            //       .OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(x => x.Products)
+                   .WithOne(x => x.Category)
+                   .HasForeignKey(x => x.CategoryId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

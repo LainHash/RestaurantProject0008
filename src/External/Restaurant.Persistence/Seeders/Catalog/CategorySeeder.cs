@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
 using MiniExcelLibs;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Persistence.Contexts;
+using System.Globalization;
 
 namespace Restaurant.Persistence.Seeders.Catalog
 {
@@ -28,7 +29,7 @@ namespace Restaurant.Persistence.Seeders.Catalog
 
                 foreach (var record in records)
                 {
-                    context.Categories.Add(new Category(record.Id, record.Name, record.Description));
+                    context.Categories.Add(new Category(record.Id, record.Name, record.Description ?? string.Empty));
                 }
 
                 await context.SaveChangesAsync();

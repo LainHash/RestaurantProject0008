@@ -1,12 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MiniExcelLibs;
-using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Persistence.Contexts;
 
-namespace Restaurant.Persistence.Seeders
+namespace Restaurant.Persistence.Seeders;
+
+public interface IDataSeeder
 {
-    internal interface IDataSeeder
-    {
-        Task SeedAsync(RestaurantDbContext context);
-    }
+    Task SeedAsync(RestaurantDbContext context);
 }

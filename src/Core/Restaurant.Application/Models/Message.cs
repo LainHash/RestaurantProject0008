@@ -7,6 +7,7 @@
         public const string Created = "Resource created successfully.";
         public const string Updated = "Resource updated successfully.";
         public const string Deleted = "Resource deleted successfully.";
+        public const string Restored = "Resource restored successfully.";
 
         public const string Retrieved = "Data retrieved successfully.";
         public const string Saved = "Data saved successfully.";
@@ -31,6 +32,9 @@
         public const string Forbidden = "Access denied.";
         public const string NotFound = "Resource not found.";
         public const string Conflict = "Resource already exists.";
+
+        public const string Deleted = "Resource already deleted.";
+        public const string Restored = "Resource not yet deleted.";
 
         public const string ValidationFailed = "Validation failed.";
 

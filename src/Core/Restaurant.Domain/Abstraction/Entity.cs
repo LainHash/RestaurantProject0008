@@ -35,5 +35,11 @@
             IsDeleted = true;
             DeletedAt = DateTime.Now;
         }
+
+        public void Restore()
+        {
+            IsDeleted = false;
+            DeletedAt = null;
+        }
     }
 }
