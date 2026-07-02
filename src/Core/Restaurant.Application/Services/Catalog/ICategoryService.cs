@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Models;
+﻿using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Catalog.Categories;
 
 namespace Restaurant.Application.Services.Catalog

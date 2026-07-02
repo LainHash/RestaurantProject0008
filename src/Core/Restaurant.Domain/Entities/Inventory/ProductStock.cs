@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Domain.Entities.Inventory
 {
-    public class ProductStock : Entity
+    public partial class ProductStock : Entity
     {
         public decimal UnitPrice { get; set; }
         public string Unit { get; set; } = string.Empty;
@@ -11,6 +11,17 @@ namespace Restaurant.Domain.Entities.Inventory
         public Guid ProductId { get; set; }
 
         public virtual Product Product { get; set; } = null!;
+    }
+
+    public partial class ProductStock
+    {
+        public ProductStock(decimal unitPrice, string unit, decimal stockQuantity)
+        {
+            UnitPrice = unitPrice;
+            Unit = unit;
+            StockQuantity = stockQuantity;
+        }
+
 
         public ProductStock(Guid id, decimal unitPrice, string unit, decimal stockQuantity, Guid productId)
         {
@@ -20,5 +31,11 @@ namespace Restaurant.Domain.Entities.Inventory
             StockQuantity = stockQuantity;
             ProductId = productId;
         }
+
+        public static ProductStock Create(decimal unitPrice, string unit, decimal stockQuantity)
+        {
+            return new ProductStock(unitPrice, unit, stockQuantity);
+        }
+
     }
 }

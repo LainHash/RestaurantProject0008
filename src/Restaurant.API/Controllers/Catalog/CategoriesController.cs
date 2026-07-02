@@ -21,42 +21,42 @@ namespace Restaurant.API.Controllers.Catalog
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromQuery] GetAllCategoriesQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllCategoriesQuery query, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryById([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new GetCategoryByIdQuery(id), cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new CreateCategoryCommand(request), cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateCategoryRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new UpdateCategoryCommand(id, request), cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new DeleteCategoryCommand(id), cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpPatch("{id}/restore")]
-        public async Task<IActionResult> RestoreCategory([FromRoute] Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Restore([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new RestoreCategoryCommand(id), cancellationToken);
             return StatusCode(result.StatusCode, result);

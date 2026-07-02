@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Restaurant.Application.Models
+namespace Restaurant.Application.Models.Results
 {
     public class Result<T>
     {
