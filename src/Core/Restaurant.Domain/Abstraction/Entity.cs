@@ -1,4 +1,4 @@
-﻿namespace Restaurant.Domain.Abstractions
+﻿namespace Restaurant.Domain.Abstraction
 {
     public abstract class Entity
     {

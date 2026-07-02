@@ -1,4 +1,4 @@
-﻿using Restaurant.Domain.Abstractions;
+﻿using Restaurant.Domain.Abstraction;
 
 namespace Restaurant.Domain.Entities.Catalog
 {
