@@ -17,7 +17,7 @@ namespace Restaurant.Application.Models
             StatusCode = (int)statusCode;
         }
 
-        public static Result<T> Success(T? data, string message, HttpStatusCode statusCode = HttpStatusCode.OK)
+        public static Result<T> Succeed(T? data, string message, HttpStatusCode statusCode = HttpStatusCode.OK)
             => new(data, true, message, statusCode);
 
         public static Result<T> Fail(string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
