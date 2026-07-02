@@ -47,6 +47,7 @@ namespace Restaurant.Persistence
 
             // ── Service ──────────────────────────────────────────────────────
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }

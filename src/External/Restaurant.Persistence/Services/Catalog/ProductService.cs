@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Contract.DTOs.Catalog.Products;
@@ -15,17 +16,17 @@ namespace Restaurant.Persistence.Services.Catalog
             _productRepository = productRepository;
         }
 
-        public async Task<Result<IEnumerable<ProductResponse>>> 
-            GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ProductResponse>>>
+            GetAllAsync(GetAllProductSpecification specification, CancellationToken cancellationToken = default)
         {
-            var products = await _productRepository.ToListAsync(cancellationToken);
+            var products = await _productRepository.ToListAsync(specification, cancellationToken);
 
             var response = products.Select(p => new ProductResponse(p));
             return Result<IEnumerable<ProductResponse>>
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ProductResponse>> 
+        public async Task<Result<ProductResponse>>
             GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var product = await _productRepository.FindAsync(id, cancellationToken);
