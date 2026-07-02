@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="src/Core/Restaurant.Application/Restaurant.Application.csproj" Id="375e2a89-eba8-4fef-83a7-f28130859290" />
+    <Project Path="src/Core/Restaurant.Domain/Restaurant.Domain.csproj" Id="4f4c99c1-3c45-49f3-a850-82db0454ee3c" />
+  </Folder>
+  <Folder Name="/External/">
+    <Project Path="src/External/Restaurant.Infrastructure/Restaurant.Infrastructure.csproj" Id="a560a521-f298-45e4-b242-94c350c85b6d" />
+    <Project Path="src/External/Restaurant.Persistence/Restaurant.Persistence.csproj" Id="be6c6c1a-0fdd-4576-ba3a-99f1b6d72f2a" />
+    <Project Path="src/External/Restaurant.Presentation/Restaurant.Presentation.csproj" Id="91f956f5-e6c3-41bb-ad76-4b4ac5326949" />
+  </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="src/Shared/Restaurant.Contract/Restaurant.Contract.csproj" Id="366f7637-98f6-4aad-af44-4cc37a501620" />
+  </Folder>
+  <Project Path="src/Restaurant.API/Restaurant.API.csproj" />
+</Solution>
