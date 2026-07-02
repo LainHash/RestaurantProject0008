@@ -13,6 +13,17 @@
     {
         public DateTime CreatedAt { get; protected set; } = DateTime.Now;
         public DateTime UpdatedAt { get; protected set; } = DateTime.Now;
+
+        public void MarkCreated(DateTime now)
+        {
+            CreatedAt = now;
+            UpdatedAt = now;
+        }
+
+        public void MarkUpdated(DateTime now)
+        {
+            UpdatedAt = now;
+        }
     }
 
     public abstract class SoftDeletableEntity : AuditableEntity
