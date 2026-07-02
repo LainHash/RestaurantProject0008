@@ -1,16 +1,15 @@
-using MiniExcelLibs;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Domain.Entities.Catalog;
+using MiniExcelLibs;
+using Restaurant.Domain.Entities.Territory;
 using Restaurant.Persistence.Contexts;
-using System.Globalization;
 
-namespace Restaurant.Persistence.Seeders.Catalog
+namespace Restaurant.Persistence.Seeders.Territory
 {
-    internal class CategorySeeder : IDataSeeder
+    internal class RestaurantTableSeeder : IDataSeeder
     {
         public async Task SeedAsync(RestaurantDbContext context)
         {
-            if (await context.Categories.AnyAsync())
+            if (await context.RestaurantTables.AnyAsync())
                 return;
 
             var xlsxPath = Path.Combine(
@@ -20,7 +19,7 @@ namespace Restaurant.Persistence.Seeders.Catalog
             if (!File.Exists(xlsxPath))
                 throw new FileNotFoundException($"Seed data file not found: {xlsxPath}");
 
-            var records = MiniExcel.Query<CategoryExcelRecord>(xlsxPath, sheetName: "Categories").ToList();
+            var records = MiniExcel.Query<RestaurantTableExcelRecord>(xlsxPath, sheetName: "RestaurantTables").ToList();
 
             var strategy = context.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
@@ -29,20 +28,21 @@ namespace Restaurant.Persistence.Seeders.Catalog
 
                 foreach (var record in records)
                 {
-                    context.Categories.Add(new Category(record.Id, record.Name, record.Description ?? string.Empty));
+                    context.RestaurantTables.Add(new RestaurantTable(record.Id, record.TableNumber, record.Capacity, record.Status, record.AreaId));
                 }
 
                 await context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
             });
         }
 
-        private class CategoryExcelRecord
+        private class RestaurantTableExcelRecord
         {
             public Guid Id { get; set; }
-            public string Name { get; set; } = string.Empty;
-            public string? Description { get; set; }
+            public string TableNumber { get; set; } = string.Empty;
+            public int Capacity { get; set; }
+            public string Status { get; set; } = string.Empty;
+            public Guid AreaId { get; set; }
         }
     }
 }

@@ -11,8 +11,9 @@ namespace Restaurant.Domain.Entities.Territory
 
         public virtual ICollection<RestaurantTable> RestaurantTables { get; set; } = new List<RestaurantTable>();
 
-        public Area(string name, string? description, string type, string status)
+        public Area(Guid id, string name, string? description, string type, string status)
         {
+            Id = id;
             Name = name;
             Description = description;
             Type = type;

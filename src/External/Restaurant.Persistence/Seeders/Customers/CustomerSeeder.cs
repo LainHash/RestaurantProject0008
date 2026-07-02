@@ -1,16 +1,15 @@
-using MiniExcelLibs;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Domain.Entities.Catalog;
+using MiniExcelLibs;
+using Restaurant.Domain.Entities.Guests;
 using Restaurant.Persistence.Contexts;
-using System.Globalization;
 
-namespace Restaurant.Persistence.Seeders.Catalog
+namespace Restaurant.Persistence.Seeders.Customers
 {
-    internal class CategorySeeder : IDataSeeder
+    internal class CustomerSeeder : IDataSeeder
     {
         public async Task SeedAsync(RestaurantDbContext context)
         {
-            if (await context.Categories.AnyAsync())
+            if (await context.Customers.AnyAsync())
                 return;
 
             var xlsxPath = Path.Combine(
@@ -20,7 +19,7 @@ namespace Restaurant.Persistence.Seeders.Catalog
             if (!File.Exists(xlsxPath))
                 throw new FileNotFoundException($"Seed data file not found: {xlsxPath}");
 
-            var records = MiniExcel.Query<CategoryExcelRecord>(xlsxPath, sheetName: "Categories").ToList();
+            var records = MiniExcel.Query<CustomerExcelRecord>(xlsxPath, sheetName: "Customers").ToList();
 
             var strategy = context.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
@@ -29,20 +28,19 @@ namespace Restaurant.Persistence.Seeders.Catalog
 
                 foreach (var record in records)
                 {
-                    context.Categories.Add(new Category(record.Id, record.Name, record.Description ?? string.Empty));
+                    context.Customers.Add(new Customer(record.Id, record.UserId, record.PIId));
                 }
 
                 await context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
             });
         }
 
-        private class CategoryExcelRecord
+        private class CustomerExcelRecord
         {
             public Guid Id { get; set; }
-            public string Name { get; set; } = string.Empty;
-            public string? Description { get; set; }
+            public Guid UserId { get; set; }
+            public Guid PIId { get; set; }
         }
     }
 }

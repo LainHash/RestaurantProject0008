@@ -13,8 +13,9 @@ namespace Restaurant.Domain.Entities.Misc
         public virtual Product Product { get; set; } = null!;
         public virtual Image Image { get; set; } = null!;
 
-        public ProductImage(int displayOrder, Guid productId, Guid imageId)
+        public ProductImage(Guid id, int displayOrder, Guid productId, Guid imageId)
         {
+            Id = id;
             DisplayOrder = displayOrder;
             ProductId = productId;
             ImageId = imageId;

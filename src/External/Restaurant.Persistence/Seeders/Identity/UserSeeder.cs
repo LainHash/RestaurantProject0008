@@ -1,16 +1,15 @@
-using MiniExcelLibs;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Domain.Entities.Catalog;
+using MiniExcelLibs;
+using Restaurant.Domain.Entities.Identity;
 using Restaurant.Persistence.Contexts;
-using System.Globalization;
 
-namespace Restaurant.Persistence.Seeders.Catalog
+namespace Restaurant.Persistence.Seeders.Identity
 {
-    internal class CategorySeeder : IDataSeeder
+    internal class UserSeeder : IDataSeeder
     {
         public async Task SeedAsync(RestaurantDbContext context)
         {
-            if (await context.Categories.AnyAsync())
+            if (await context.Users.AnyAsync())
                 return;
 
             var xlsxPath = Path.Combine(
@@ -20,7 +19,7 @@ namespace Restaurant.Persistence.Seeders.Catalog
             if (!File.Exists(xlsxPath))
                 throw new FileNotFoundException($"Seed data file not found: {xlsxPath}");
 
-            var records = MiniExcel.Query<CategoryExcelRecord>(xlsxPath, sheetName: "Categories").ToList();
+            var records = MiniExcel.Query<UserExcelRecord>(xlsxPath, sheetName: "Users").ToList();
 
             var strategy = context.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
@@ -29,20 +28,22 @@ namespace Restaurant.Persistence.Seeders.Catalog
 
                 foreach (var record in records)
                 {
-                    context.Categories.Add(new Category(record.Id, record.Name, record.Description ?? string.Empty));
+                    context.Users.Add(new User(record.Id, record.UserName, record.Email, BCrypt.Net.BCrypt.HashPassword(record.PasswordHash, 12), record.IsActive, record.RoleId));;
                 }
 
                 await context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
             });
         }
 
-        private class CategoryExcelRecord
+        private class UserExcelRecord
         {
             public Guid Id { get; set; }
-            public string Name { get; set; } = string.Empty;
-            public string? Description { get; set; }
+            public string UserName { get; set; } = string.Empty;
+            public string Email { get; set; } = string.Empty;
+            public string PasswordHash { get; set; } = string.Empty;
+            public bool IsActive { get; set; }
+            public Guid RoleId { get; set; }
         }
     }
 }

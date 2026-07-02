@@ -16,8 +16,9 @@ namespace Restaurant.Domain.Entities.Misc
 
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
-        public Image(string altText, string url, string storagePath, decimal fileSize, string contentType, bool isPrimary)
+        public Image(Guid id, string altText, string url, string storagePath, decimal fileSize, string contentType, bool isPrimary)
         {
+            Id = id;
             AltText = altText;
             Url = url;
             StoragePath = storagePath;

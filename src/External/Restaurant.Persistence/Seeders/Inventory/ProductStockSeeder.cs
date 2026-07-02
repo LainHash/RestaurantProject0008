@@ -1,16 +1,15 @@
-using MiniExcelLibs;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Domain.Entities.Catalog;
+using MiniExcelLibs;
+using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Persistence.Contexts;
-using System.Globalization;
 
-namespace Restaurant.Persistence.Seeders.Catalog
+namespace Restaurant.Persistence.Seeders.Inventory
 {
-    internal class CategorySeeder : IDataSeeder
+    internal class ProductStockSeeder : IDataSeeder
     {
         public async Task SeedAsync(RestaurantDbContext context)
         {
-            if (await context.Categories.AnyAsync())
+            if (await context.ProductStocks.AnyAsync())
                 return;
 
             var xlsxPath = Path.Combine(
@@ -20,7 +19,7 @@ namespace Restaurant.Persistence.Seeders.Catalog
             if (!File.Exists(xlsxPath))
                 throw new FileNotFoundException($"Seed data file not found: {xlsxPath}");
 
-            var records = MiniExcel.Query<CategoryExcelRecord>(xlsxPath, sheetName: "Categories").ToList();
+            var records = MiniExcel.Query<ProductStockExcelRecord>(xlsxPath, sheetName: "ProductStocks").ToList();
 
             var strategy = context.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
@@ -29,20 +28,21 @@ namespace Restaurant.Persistence.Seeders.Catalog
 
                 foreach (var record in records)
                 {
-                    context.Categories.Add(new Category(record.Id, record.Name, record.Description ?? string.Empty));
+                    context.ProductStocks.Add(new ProductStock(record.Id, record.Price, record.Unit ?? string.Empty, record.Quantity, record.ProductId));
                 }
 
                 await context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
             });
         }
 
-        private class CategoryExcelRecord
+        private class ProductStockExcelRecord
         {
             public Guid Id { get; set; }
-            public string Name { get; set; } = string.Empty;
-            public string? Description { get; set; }
+            public Guid ProductId { get; set; }
+            public decimal Price { get; set; }
+            public string? Unit { get; set; }
+            public decimal Quantity { get; set; }
         }
     }
 }

@@ -1,6 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Catalog;
+using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Entities.Identity;
+using Restaurant.Domain.Entities.Inventory;
+using Restaurant.Domain.Entities.Misc;
+using Restaurant.Domain.Entities.Production;
+using Restaurant.Domain.Entities.Territory;
 using System.Reflection;
 
 namespace Restaurant.Persistence.Contexts
@@ -14,6 +20,21 @@ namespace Restaurant.Persistence.Contexts
 
         // ── DbSets ──────────────────────────────────────────────────────────
         public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Product> Products { get; set; } = null!;
+        public DbSet<ProductStock> ProductStocks { get; set; } = null!;
+        public DbSet<Image> Images { get; set; } = null!;
+        public DbSet<ProductImage> ProductImages { get; set; } = null!;
+
+        public DbSet<PersonalInformation> PersonalInformations { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Customer> Customers { get; set; } = null!;
+        public DbSet<Role> Roles { get; set; } = null!;
+
+        public DbSet<Area> Areas { get; set; } = null!;
+        public DbSet<RestaurantTable> RestaurantTables { get; set; } = null!;
+
+        public DbSet<Reservation> Reservations { get; set; } = null!;
+        public DbSet<TemporaryContact> TemporaryContacts { get; set; } = null!;
 
         // ── Model building ──────────────────────────────────────────────────
         protected override void OnModelCreating(ModelBuilder modelBuilder)

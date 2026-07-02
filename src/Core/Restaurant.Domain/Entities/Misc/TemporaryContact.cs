@@ -11,8 +11,9 @@ namespace Restaurant.Domain.Entities.Misc
 
         public virtual Reservation Reservation { get; set; } = null!;
 
-        public TemporaryContact(string guestName, string guestEmail, string guestPhone)
+        public TemporaryContact(Guid id, string guestName, string guestEmail, string guestPhone)
         {
+            Id = id;
             GuestName = guestName;
             GuestEmail = guestEmail;
             GuestPhone = guestPhone;
