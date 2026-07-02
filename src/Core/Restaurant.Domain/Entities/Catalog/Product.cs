@@ -1,10 +1,11 @@
 ﻿using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Domain.Entities.Misc;
+using Restaurant.Domain.Informations.Catalog;
 
 namespace Restaurant.Domain.Entities.Catalog
 {
-    public class Product : SoftDeletableEntity
+    public partial class Product : SoftDeletableEntity
     {
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
@@ -17,6 +18,10 @@ namespace Restaurant.Domain.Entities.Catalog
         public virtual ProductStock ProductStock { get; set; } = null!;
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
+    }
+
+    public partial class Product
+    {
         public Product(string name, bool isMadeToOrder, bool isAvailable, Guid categoryId, string? description = null)
         {
             Name = name;
@@ -36,11 +41,11 @@ namespace Restaurant.Domain.Entities.Catalog
             Description = description;
         }
 
-        public static Product Create(string name, string? description, bool isMadeToOrder, bool isAvailable, Guid categoryId, decimal unitPrice, string unit, decimal stockQuantity)
+        public static Product Create(ProductInformation information)
         {
-            var product = new Product(name, isMadeToOrder, isAvailable, categoryId, description)
+            var product = new Product(information.Name, information.IsMadeToOrder, information.IsAvailable, information.CategoryId, information.Description)
             {
-                ProductStock = new ProductStock(unitPrice, unit, stockQuantity)
+                ProductStock = ProductStock.Create(information.ProductStock.UnitPrice, information.ProductStock.Unit, information.ProductStock.StockQuantity)
             };
             return product;
         }

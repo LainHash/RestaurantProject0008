@@ -1,11 +1,11 @@
 ﻿using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
+using Restaurant.Application.Mapping.Catalog;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Contract.DTOs.Catalog.Products;
 using Restaurant.Domain.Entities.Catalog;
-using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Domain.Repositories.Catalog;
 using System.Net;
 
@@ -46,15 +46,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
         public async Task<Result<ProductResponse>> CreateProductAsync(CreateProductRequest request, CancellationToken cancellationToken = default)
         {
-            var product = Product.Create(
-                request.Name,
-                request.Description,
-                request.IsMadeToOrder,
-                request.IsAvailable,
-                request.CategoryId,
-                request.UnitPrice,
-                request.Unit,
-                request.StockQuantity);
+            var product = Product.Create(request.ToInfo());
             await _productRepository.AddAsync(product, cancellationToken);
 
             var response = new ProductResponse(product);
