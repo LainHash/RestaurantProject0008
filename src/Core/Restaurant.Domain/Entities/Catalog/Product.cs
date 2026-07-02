@@ -26,17 +26,5 @@ namespace Restaurant.Domain.Entities.Catalog
             CategoryId = categoryId;
             Description = description;
         }
-
-        public void Delete()
-        {
-            IsDeleted = true;
-            DeletedAt = DateTime.UtcNow;
-        }
-
-        public void Restore()
-        {
-            IsDeleted = false;
-            DeletedAt = null;
-        }
     }
 }
