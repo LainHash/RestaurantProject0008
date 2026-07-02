@@ -7,13 +7,13 @@ namespace Restaurant.Domain.Entities.Guests
     public class Customer : SoftDeletableEntity
     {
         public Guid UserId { get; set; }
-        public Guid? PIId { get; set; }
+        public Guid? PersonalInformationId { get; private set; }
 
-        public Customer(Guid id, Guid userId, Guid? piId = null)
+        public Customer(Guid id, Guid userId, Guid? personalInformationId = null)
         {
             Id = id;
             UserId = userId;
-            PIId = piId;
+            PersonalInformationId = personalInformationId;
         }
 
         public virtual User User { get; set; } = null!;

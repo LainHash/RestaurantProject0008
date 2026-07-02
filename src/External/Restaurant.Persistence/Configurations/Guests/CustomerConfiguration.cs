@@ -14,7 +14,7 @@ namespace Restaurant.Persistence.Configurations.Guests
             builder.Property(x => x.UserId)
                 .IsRequired();
 
-            builder.Property(x => x.PIId)
+            builder.Property(x => x.PersonalInformationId)
                 .IsRequired();
 
             // Relationships
@@ -24,8 +24,8 @@ namespace Restaurant.Persistence.Configurations.Guests
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.PersonalInformation)
-                .WithMany()
-                .HasForeignKey(x => x.PIId)
+                .WithOne(x => x.Customer)
+                .HasForeignKey<Customer>(x => x.PersonalInformationId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 

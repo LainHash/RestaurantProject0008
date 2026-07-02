@@ -1,4 +1,5 @@
 ﻿using Restaurant.Domain.Abstraction;
+using Restaurant.Domain.Entities.Guests;
 
 namespace Restaurant.Domain.Entities.Identity
 {
@@ -7,7 +8,7 @@ namespace Restaurant.Domain.Entities.Identity
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
 
-        public DateOnly DOB { get; set; }
+        public DateOnly Dob { get; set; }
         public bool Gender { get; set; }
 
         public string Address { get; set; } = string.Empty;
@@ -22,7 +23,7 @@ namespace Restaurant.Domain.Entities.Identity
             Id = id;
             FirstName = firstName;
             LastName = lastName;
-            DOB = dob;
+            Dob = dob;
             Gender = gender;
             Address = address;
             City = city;
@@ -30,5 +31,7 @@ namespace Restaurant.Domain.Entities.Identity
             Phone = phone;
             CitizenCardId = citizenCardId;
         }
+
+        public virtual Customer Customer { get; set; } = null!;
     }
 }

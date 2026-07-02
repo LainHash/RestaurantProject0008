@@ -18,7 +18,7 @@ namespace Restaurant.Persistence.Configurations.Identity
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(x => x.DOB)
+            builder.Property(x => x.Dob)
                 .IsRequired();
 
             builder.Property(x => x.Gender)
