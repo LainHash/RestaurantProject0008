@@ -17,6 +17,15 @@ namespace Restaurant.Domain.Entities.Catalog
         public virtual ProductStock ProductStock { get; set; } = null!;
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
+        public Product(string name, bool isMadeToOrder, bool isAvailable, Guid categoryId, string? description = null)
+        {
+            Name = name;
+            IsMadeToOrder = isMadeToOrder;
+            IsAvailable = isAvailable;
+            CategoryId = categoryId;
+            Description = description;
+        }
+
         public Product(Guid id, string name, bool isMadeToOrder, bool isAvailable, Guid categoryId, string? description = null)
         {
             Id = id;
@@ -25,6 +34,15 @@ namespace Restaurant.Domain.Entities.Catalog
             IsAvailable = isAvailable;
             CategoryId = categoryId;
             Description = description;
+        }
+
+        public static Product Create(string name, string? description, bool isMadeToOrder, bool isAvailable, Guid categoryId, decimal unitPrice, string unit, decimal stockQuantity)
+        {
+            var product = new Product(name, isMadeToOrder, isAvailable, categoryId, description)
+            {
+                ProductStock = new ProductStock(unitPrice, unit, stockQuantity)
+            };
+            return product;
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Specifications;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Restaurant.Application.Features.Catalog.Products.Queries.GetById
 {
