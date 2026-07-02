@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restaurant.Domain.Abstractions;
+using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Catalog;
 using System.Reflection;
 

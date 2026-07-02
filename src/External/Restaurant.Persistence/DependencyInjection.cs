@@ -1,8 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Restaurant.Application.Services.Catalog;
+using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Persistence.Contexts;
+using Restaurant.Persistence.Repositories.Catalog;
 using Restaurant.Persistence.Seeders;
+using Restaurant.Persistence.Services.Catalog;
 
 namespace Restaurant.Persistence
 {
@@ -34,12 +38,14 @@ namespace Restaurant.Persistence
             }
 
             // ── Repositories ─────────────────────────────────────────────────
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             // ── AutoMapper ───────────────────────────────────────────────────
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
 
 
             // ── Service ──────────────────────────────────────────────────────
+            services.AddScoped<ICategoryService, CategoryService>();
 
             return services;
         }
