@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
+using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
@@ -27,16 +28,18 @@ namespace Restaurant.Persistence.Services.Catalog
         }
 
         public async Task<Result<ProductResponse>>
-            GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+            GetByIdAsync(GetProductByIdSpecification specification, CancellationToken cancellationToken = default)
         {
-            var product = await _productRepository.FindAsync(id, cancellationToken);
+            var product = await _productRepository.FindAsync(specification, cancellationToken);
             if (product == null)
             {
-                return Result<ProductResponse>.Fail(Error.NotFound, HttpStatusCode.NotFound);
+                return Result<ProductResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new ProductResponse(product);
-            return Result<ProductResponse>.Succeed(response, Success.Retrieved);
+            return Result<ProductResponse>
+                .Succeed(response, Success.Retrieved);
         }
     }
 }

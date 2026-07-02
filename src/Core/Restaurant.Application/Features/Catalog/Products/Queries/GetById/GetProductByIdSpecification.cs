@@ -10,6 +10,8 @@ namespace Restaurant.Application.Features.Catalog.Products.Queries.GetById
     {
         public GetProductByIdSpecification(GetProductByIdQuery query)
         {
+            Criteria = p => p.Id == query.Id;
+
             AddInclude(p => p.Category);
             AddInclude(p => p.ProductStock);
         }

@@ -23,9 +23,11 @@ namespace Restaurant.Persistence.Repositories.Catalog
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<Product?> FindAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Product?> FindAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Products.AsQueryable(), specification);
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default)

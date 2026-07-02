@@ -14,7 +14,8 @@ namespace Restaurant.Application.Features.Catalog.Products.Queries.GetById
         }
         public async Task<Result<ProductResponse>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var response = await _productService.GetByIdAsync(request.Id, cancellationToken);
+            var specification = new GetProductByIdSpecification(request);
+            var response = await _productService.GetByIdAsync(specification, cancellationToken);
             return response;
         }
     }
