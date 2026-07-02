@@ -14,7 +14,9 @@ namespace Restaurant.Persistence.Services.Catalog
         {
             _productRepository = productRepository;
         }
-        public async Task<Result<IEnumerable<ProductResponse>>> GetAllAsync(CancellationToken cancellationToken = default)
+
+        public async Task<Result<IEnumerable<ProductResponse>>> 
+            GetAllAsync(CancellationToken cancellationToken = default)
         {
             var products = await _productRepository.ToListAsync(cancellationToken);
 
@@ -23,7 +25,8 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ProductResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductResponse>> 
+            GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var product = await _productRepository.FindAsync(id, cancellationToken);
             if (product == null)
