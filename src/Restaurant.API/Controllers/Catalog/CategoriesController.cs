@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.Application.Features.Catalog.Categories.Commands.Create;
 using Restaurant.Application.Features.Catalog.Categories.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Categories.Queries.GetById;
+using Restaurant.Contract.DTOs.Catalog.Categories;
 
 namespace Restaurant.API.Controllers.Catalog
 {
@@ -26,6 +28,13 @@ namespace Restaurant.API.Controllers.Catalog
         public async Task<IActionResult> GetCategoryById([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new GetCategoryByIdQuery(id), cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new CreateCategoryCommand(request), cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
     }
