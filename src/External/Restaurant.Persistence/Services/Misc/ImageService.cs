@@ -1,6 +1,7 @@
 ﻿using CloudinaryDotNet;
 using Microsoft.Extensions.Logging;
 using Restaurant.Application.Features.Misc.Images.Commands.UploadProductImage;
+using Restaurant.Application.Mapping.Misc;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Misc;
@@ -8,6 +9,7 @@ using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Storage;
 using Restaurant.Contract.DTOs.Misc.Images;
 using Restaurant.Domain.Entities.Misc;
+using Restaurant.Domain.Informations.Misc.Images;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Misc;
 using System.Net;
@@ -82,14 +84,7 @@ namespace Restaurant.Persistence.Services.Misc
                 }
 
                 // 5. Tạo Image entity
-                var image = new Image(
-                    altText: specification.Metadata.AltText ?? string.Empty,
-                    url: uploadResult.Url,
-                    storagePath: uploadResult.StoragePath,
-                    fileSize: uploadResult.FileSize,
-                    contentType: uploadResult.ContentType,
-                    isPrimary: specification.Metadata.IsPrimary
-                );
+                var image = new Image(ImageMapping.ToInfo(specification, uploadResult));
 
                 await _imageRepository.AddAsync(image, cancellationToken);
 
@@ -105,17 +100,7 @@ namespace Restaurant.Persistence.Services.Misc
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
 
-                var response = new UploadImageResponse
-                {
-                    ImageId = image.Id,
-                    Url = image.Url,
-                    PublicId = uploadResult.PublicId,
-                    AltText = image.AltText,
-                    IsPrimary = image.IsPrimary,
-                    DisplayOrder = productImage.DisplayOrder,
-                    FileSize = image.FileSize,
-                    ContentType = image.ContentType,
-                };
+                var response = new UploadImageResponse(productImage, uploadResult.PublicId);
 
                 return Result<UploadImageResponse>.Succeed(
                     response,

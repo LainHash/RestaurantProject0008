@@ -1,4 +1,5 @@
 ﻿using Restaurant.Domain.Abstraction;
+using Restaurant.Domain.Informations.Misc.Images;
 
 namespace Restaurant.Domain.Entities.Misc
 {
@@ -20,6 +21,16 @@ namespace Restaurant.Domain.Entities.Misc
 
     public partial class Image
     {
+        public Image(UploadImageInformation information)
+        {
+            AltText = information.AltText ?? string.Empty;
+            Url = information.Url;
+            StoragePath = information.StoragePath;
+            FileSize = information.FileSize;
+            ContentType = information.ContentType;
+            IsPrimary = information.IsPrimary;
+        }
+
         public Image(string altText, string url, string storagePath, decimal fileSize, string contentType, bool isPrimary)
         {
             AltText = altText;
