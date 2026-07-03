@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
+﻿using Restaurant.Application.Features.Catalog.Products.Commands.Update;
+using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
 using Restaurant.Application.Mapping.Catalog;
 using Restaurant.Application.Models.Messages;
@@ -54,16 +55,16 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<ProductResponse>> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductResponse>> UpdateAsync(UpdateProductSpecification specification, CancellationToken cancellationToken = default)
         {
-            var product = await _productRepository.FindAsync(id, cancellationToken);
+            var product = await _productRepository.FindAsync(specification, cancellationToken);
             if (product is null)
             {
                 return Result<ProductResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            product.Update(request.ToInfo());
+            product.Update(specification.Body.ToInfo());
             await _productRepository.UpdateAsync(product, cancellationToken);
 
             var response = new ProductResponse(product);

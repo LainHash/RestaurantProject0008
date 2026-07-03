@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
+﻿using Restaurant.Application.Features.Catalog.Products.Commands.Update;
+using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
 using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Catalog.Products;
@@ -17,7 +18,7 @@ namespace Restaurant.Application.Services.Catalog
             CreateAsync(CreateProductRequest request, CancellationToken cancellationToken = default);
 
         Task<Result<ProductResponse>>
-            UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken cancellationToken = default);
+            UpdateAsync(UpdateProductSpecification specification, CancellationToken cancellationToken = default);
 
         Task<Result<object>>
             DeleteAsync(Guid id, CancellationToken cancellationToken = default);
