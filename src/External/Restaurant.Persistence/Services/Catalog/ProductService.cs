@@ -33,7 +33,7 @@ namespace Restaurant.Persistence.Services.Catalog
             GetByIdAsync(GetProductByIdSpecification specification, CancellationToken cancellationToken = default)
         {
             var product = await _productRepository.FindAsync(specification, cancellationToken);
-            if (product == null)
+            if (product is null)
             {
                 return Result<ProductResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
@@ -44,7 +44,7 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ProductResponse>> CreateProductAsync(CreateProductRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductResponse>> CreateAsync(CreateProductRequest request, CancellationToken cancellationToken = default)
         {
             var product = Product.Create(request.ToInfo());
             await _productRepository.AddAsync(product, cancellationToken);
@@ -52,6 +52,50 @@ namespace Restaurant.Persistence.Services.Catalog
             var response = new ProductResponse(product);
             return Result<ProductResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var product = await _productRepository.FindAsync(id, cancellationToken);
+            if (product is null)
+            {
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if(product.IsDeleted)
+            {
+                return Result<object>
+                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+            }
+
+            product.SoftDelete();
+            await _productRepository.UpdateAsync(product, cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Deleted);
+        }
+
+        public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var product = await _productRepository.FindAsync(id, cancellationToken);
+            if (product is null)
+            {
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if(!product.IsDeleted)
+            {
+                return Result<object>
+                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+            }
+
+            product.Restore();
+            await _productRepository.UpdateAsync(product, cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Restored);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Restaurant.Application.Features.Catalog.Products.Commands.Create
 
         public async Task<Result<ProductResponse>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var response = await _productService.CreateProductAsync(request.Body, cancellationToken);
+            var response = await _productService.CreateAsync(request.Body, cancellationToken);
             return response;
         }
     }
