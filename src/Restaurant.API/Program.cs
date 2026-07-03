@@ -1,7 +1,7 @@
-using Restaurant.Persistence;
-
 using DotNetEnv;
 using Restaurant.Application;
+using Restaurant.Infrastructure;
+using Restaurant.Persistence;
 
 
 Env.Load();
@@ -28,9 +28,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+// Add custom services
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

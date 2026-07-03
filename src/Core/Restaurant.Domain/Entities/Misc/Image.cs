@@ -2,7 +2,7 @@
 
 namespace Restaurant.Domain.Entities.Misc
 {
-    public class Image : AuditableEntity
+    public partial class Image : AuditableEntity
     {
         public string AltText { get; set; } = null!;
 
@@ -16,6 +16,20 @@ namespace Restaurant.Domain.Entities.Misc
 
         public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
+    }
+
+    public partial class Image
+    {
+        public Image(string altText, string url, string storagePath, decimal fileSize, string contentType, bool isPrimary)
+        {
+            AltText = altText;
+            Url = url;
+            StoragePath = storagePath;
+            FileSize = fileSize;
+            ContentType = contentType;
+            IsPrimary = isPrimary;
+        }
+
         public Image(Guid id, string altText, string url, string storagePath, decimal fileSize, string contentType, bool isPrimary)
         {
             Id = id;
@@ -26,5 +40,6 @@ namespace Restaurant.Domain.Entities.Misc
             ContentType = contentType;
             IsPrimary = isPrimary;
         }
+
     }
 }

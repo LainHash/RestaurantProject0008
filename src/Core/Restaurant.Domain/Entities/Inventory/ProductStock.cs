@@ -1,5 +1,6 @@
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Catalog;
+using Restaurant.Domain.Informations.Inventory.ProductStocks;
 
 namespace Restaurant.Domain.Entities.Inventory
 {
@@ -32,11 +33,11 @@ namespace Restaurant.Domain.Entities.Inventory
             ProductId = productId;
         }
 
-        public void Update(decimal unitPrice, string unit, decimal stockQuantity)
+        public void Update(UpdateProductStockInformation information)
         {
-            UnitPrice = unitPrice;
-            Unit = unit;
-            StockQuantity = stockQuantity;
+            UnitPrice = information.UnitPrice;
+            Unit = information.Unit;
+            StockQuantity = information.StockQuantity;
         }
 
         public static ProductStock Create(decimal unitPrice, string unit, decimal stockQuantity)

@@ -1,4 +1,5 @@
-﻿using Restaurant.Domain.Entities.Catalog;
+﻿using Restaurant.Contract.DTOs.Misc.Images;
+using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Contract.DTOs.Catalog.Products
 {
@@ -16,6 +17,9 @@ namespace Restaurant.Contract.DTOs.Catalog.Products
 
         public string CategoryName { get; init; } = string.Empty;
 
+        public ImageResponse? PrimaryImage { get; set; }
+        public IEnumerable<ImageResponse> Images { get; set; } = new List<ImageResponse>();
+
         public ProductResponse(Product product)
         {
             Id = product.Id;
@@ -27,6 +31,8 @@ namespace Restaurant.Contract.DTOs.Catalog.Products
             Unit = product.ProductStock.Unit;
             StockQuantity = product.ProductStock.StockQuantity;
             CategoryName = product.Category.Name;
+            PrimaryImage = ImageResponse.GetPrimary(product.ProductImages);
+            Images = product.ProductImages.Select(pi => new ImageResponse(pi));
         }
     }
 }
