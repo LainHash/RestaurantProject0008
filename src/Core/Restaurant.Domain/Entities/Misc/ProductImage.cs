@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Domain.Entities.Misc
 {
-    public class ProductImage : Entity
+    public partial class ProductImage : Entity
     {
         public int DisplayOrder { get; set; }
 
@@ -13,6 +13,10 @@ namespace Restaurant.Domain.Entities.Misc
         public virtual Product Product { get; set; } = null!;
         public virtual Image Image { get; set; } = null!;
 
+    }
+
+    public partial class ProductImage
+    {
         public ProductImage(int displayOrder, Guid productId, Guid imageId)
         {
             DisplayOrder = displayOrder;
@@ -27,5 +31,6 @@ namespace Restaurant.Domain.Entities.Misc
             ProductId = productId;
             ImageId = imageId;
         }
+
     }
 }
