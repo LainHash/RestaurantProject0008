@@ -54,6 +54,23 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
+        public async Task<Result<ProductResponse>> UpdateAsync(Guid id, UpdateProductRequest request, CancellationToken cancellationToken = default)
+        {
+            var product = await _productRepository.FindAsync(id, cancellationToken);
+            if (product is null)
+            {
+                return Result<ProductResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            product.Update(request.ToInfo());
+            await _productRepository.UpdateAsync(product, cancellationToken);
+
+            var response = new ProductResponse(product);
+            return Result<ProductResponse>
+                .Succeed(response, Success.Updated);
+        }
+
         public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var product = await _productRepository.FindAsync(id, cancellationToken);

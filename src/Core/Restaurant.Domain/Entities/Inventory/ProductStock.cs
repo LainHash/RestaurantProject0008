@@ -32,6 +32,13 @@ namespace Restaurant.Domain.Entities.Inventory
             ProductId = productId;
         }
 
+        public void Update(decimal unitPrice, string unit, decimal stockQuantity)
+        {
+            UnitPrice = unitPrice;
+            Unit = unit;
+            StockQuantity = stockQuantity;
+        }
+
         public static ProductStock Create(decimal unitPrice, string unit, decimal stockQuantity)
         {
             return new ProductStock(unitPrice, unit, stockQuantity);

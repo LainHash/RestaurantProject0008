@@ -1,7 +1,7 @@
 ﻿using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Domain.Entities.Misc;
-using Restaurant.Domain.Informations.Catalog;
+using Restaurant.Domain.Informations.Catalog.Products;
 
 namespace Restaurant.Domain.Entities.Catalog
 {
@@ -41,7 +41,16 @@ namespace Restaurant.Domain.Entities.Catalog
             Description = description;
         }
 
-        public static Product Create(ProductInformation information)
+        public void Update(UpdateProductInformation information)
+        {
+            Name = information.Name;
+            IsMadeToOrder = information.IsMadeToOrder;
+            IsAvailable = information.IsAvailable;
+            CategoryId = information.CategoryId;
+            Description = information.Description;
+        }
+
+        public static Product Create(CreateProductInformation information)
         {
             var product = new Product(information.Name, information.IsMadeToOrder, information.IsAvailable, information.CategoryId, information.Description)
             {

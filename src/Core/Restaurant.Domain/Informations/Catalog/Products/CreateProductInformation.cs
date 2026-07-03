@@ -1,8 +1,8 @@
 ﻿using Restaurant.Domain.Entities.Inventory;
 
-namespace Restaurant.Domain.Informations.Catalog
+namespace Restaurant.Domain.Informations.Catalog.Products
 {
-    public sealed record ProductInformation(
+    public sealed record CreateProductInformation(
         string Name,
         string? Description,
         bool IsMadeToOrder,
