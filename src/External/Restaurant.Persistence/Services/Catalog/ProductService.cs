@@ -1,7 +1,9 @@
 ﻿using Restaurant.Application.Features.Catalog.Products.Commands.Update;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
+using Restaurant.Application.Features.Inventory.ProductStocks.Commands.Update;
 using Restaurant.Application.Mapping.Catalog;
+using Restaurant.Application.Mapping.Inventory;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
@@ -72,6 +74,23 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Updated);
         }
 
+        public async Task<Result<ProductResponse>> UpdateAsync(UpdateProductStockSpecification specification, CancellationToken cancellationToken = default)
+        {
+            var product = await _productRepository.FindAsync(specification, cancellationToken);
+            if (product is null)
+            {
+                return Result<ProductResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            product.ProductStock.Update(specification.Body.ToInfo());
+            await _productRepository.UpdateAsync(product, cancellationToken);
+
+            var response = new ProductResponse(product);
+            return Result<ProductResponse>
+                .Succeed(response, Success.Updated);
+        }
+
         public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var product = await _productRepository.FindAsync(id, cancellationToken);
@@ -115,5 +134,6 @@ namespace Restaurant.Persistence.Services.Catalog
             return Result<object>
                 .Succeed(default, Success.Restored);
         }
+
     }
 }
