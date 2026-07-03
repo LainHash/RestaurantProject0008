@@ -1,6 +1,5 @@
 using FluentValidation;
 using MediatR;
-using Restaurant.Application.Common.Models.Result;
 using Restaurant.Application.Models.Results;
 using System.Net;
 

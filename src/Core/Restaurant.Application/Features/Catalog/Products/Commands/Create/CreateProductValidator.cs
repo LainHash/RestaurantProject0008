@@ -3,7 +3,7 @@ using Restaurant.Application.Features.Catalog.Products.Commands.Create;
 
 namespace Restaurant.Application.Features.Catalog.Products.Validators
 {
-    public class CreateProductValidator : AbstractValidator<CreateProductCommand>
+    internal class CreateProductValidator : AbstractValidator<CreateProductCommand>
     {
         public CreateProductValidator()
         {
