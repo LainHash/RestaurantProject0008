@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Application.Services.Catalog;
+using Restaurant.Application.Services.Misc;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Misc;
@@ -10,6 +11,7 @@ using Restaurant.Persistence.Repositories.Catalog;
 using Restaurant.Persistence.Repositories.Misc;
 using Restaurant.Persistence.Seeders;
 using Restaurant.Persistence.Services.Catalog;
+using Restaurant.Persistence.Services.Misc;
 using Restaurant.Persistence.Services.Persistence;
 
 namespace Restaurant.Persistence
@@ -54,7 +56,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
-            //services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IImageService, ImageService>();
 
             return services;
         }

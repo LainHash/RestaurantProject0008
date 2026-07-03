@@ -1,4 +1,6 @@
-﻿using Restaurant.Domain.Entities.Catalog;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Domain.Entities.Catalog;
+using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Specifications;
 
 namespace Restaurant.Application.Features.Catalog.Products.Queries.GetAll
@@ -9,6 +11,9 @@ namespace Restaurant.Application.Features.Catalog.Products.Queries.GetAll
         {
             AddInclude(p => p.Category);
             AddInclude(p => p.ProductStock);
+            AddIncludeAggregator(q => q.Include(p => p.ProductImages)
+                                       .ThenInclude((ProductImage pi) => pi.Image));
+
         }
     }
 }
