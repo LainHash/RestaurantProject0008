@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Catalog.Products.Commands.Create;
+using Restaurant.Application.Features.Catalog.Products.Commands.Delete;
+using Restaurant.Application.Features.Catalog.Products.Commands.Restore;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
 using Restaurant.Contract.DTOs.Catalog.Products;
@@ -35,6 +37,20 @@ namespace Restaurant.API.Controllers.Catalog
         public async Task<IActionResult> Create([FromBody] CreateProductRequest request, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(new CreateProductCommand(request), cancellationToken);
+            return StatusCode(result.StatusCode, result.Data);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new DeleteProductCommand(id), cancellationToken);
+            return StatusCode(result.StatusCode, result.Data);
+        }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<IActionResult> Restore([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new RestoreProductCommand(id), cancellationToken);
             return StatusCode(result.StatusCode, result.Data);
         }
     }
