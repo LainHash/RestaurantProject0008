@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Domain.Repositories.Misc;
 using Restaurant.Persistence.Contexts;
 using Restaurant.Persistence.Repositories.Catalog;
+using Restaurant.Persistence.Repositories.Misc;
 using Restaurant.Persistence.Seeders;
 using Restaurant.Persistence.Services.Catalog;
 
@@ -40,6 +42,7 @@ namespace Restaurant.Persistence
             // ── Repositories ─────────────────────────────────────────────────
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
 
             // ── AutoMapper ───────────────────────────────────────────────────
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
@@ -48,6 +51,7 @@ namespace Restaurant.Persistence
             // ── Service ──────────────────────────────────────────────────────
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            //services.AddScoped<IImageService, ImageService>();
 
             return services;
         }
