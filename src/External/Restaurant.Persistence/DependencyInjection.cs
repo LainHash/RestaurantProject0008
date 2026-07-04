@@ -4,15 +4,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Application.Services.Misc;
 using Restaurant.Application.Services.Persistence;
+using Restaurant.Application.Services.Territory;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Misc;
+using Restaurant.Domain.Repositories.Territory;
 using Restaurant.Persistence.Contexts;
 using Restaurant.Persistence.Repositories.Catalog;
 using Restaurant.Persistence.Repositories.Misc;
+using Restaurant.Persistence.Repositories.Territory;
 using Restaurant.Persistence.Seeders;
 using Restaurant.Persistence.Services.Catalog;
 using Restaurant.Persistence.Services.Misc;
 using Restaurant.Persistence.Services.Persistence;
+using Restaurant.Persistence.Services.Territory;
 
 namespace Restaurant.Persistence
 {
@@ -47,6 +51,8 @@ namespace Restaurant.Persistence
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IAreaRepository, AreaRepository>();
+            services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
 
             // ── AutoMapper ───────────────────────────────────────────────────
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
@@ -57,6 +63,8 @@ namespace Restaurant.Persistence
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IAreaService, AreaService>();
+            services.AddScoped<IRestaurantTableService, RestaurantTableService>();
 
             return services;
         }
