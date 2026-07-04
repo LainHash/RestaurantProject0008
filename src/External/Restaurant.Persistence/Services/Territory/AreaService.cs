@@ -29,7 +29,7 @@ namespace Restaurant.Persistence.Services.Territory
         public async Task<Result<AreaResponse>> GetByIdAsync(GetAreaByIdSpecification specification, CancellationToken cancellationToken = default)
         {
             var area = await _areaRepository.FindAsync(specification, cancellationToken);
-            if (area == null)
+            if (area is null)
             {
                 return Result<AreaResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
