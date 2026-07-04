@@ -1,7 +1,9 @@
-﻿using Restaurant.Domain.Entities.Territory;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Domain.Entities.Territory;
 using Restaurant.Domain.Repositories.Territory;
+using Restaurant.Domain.Specifications;
 using Restaurant.Persistence.Contexts;
-using Microsoft.EntityFrameworkCore;
+using Restaurant.Persistence.Specifications;
 
 namespace Restaurant.Persistence.Repositories.Territory
 {
@@ -16,6 +18,13 @@ namespace Restaurant.Persistence.Repositories.Territory
         public async Task<IEnumerable<Area>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Areas.ToListAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Area>> GetAllAsync(ISpecification<Area> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Areas.AsQueryable(), specification);
+            return await query.ToListAsync(cancellationToken);
         }
 
         public async Task<Area?> FindAsync(Guid id, CancellationToken cancellationToken = default)

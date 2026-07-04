@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Territory.Areas.Queries.GetAll;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Territory;
 using Restaurant.Contract.DTOs.Territory.Areas;
@@ -15,9 +16,9 @@ namespace Restaurant.Persistence.Services.Territory
             _areaRepository = areaRepository;
         }
 
-        public async Task<Result<IEnumerable<AreaResponse>>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<AreaResponse>>> GetAllAsync(GetAllAreasSpecification specification, CancellationToken cancellationToken = default)
         {
-            var areas = await _areaRepository.GetAllAsync(cancellationToken);
+            var areas = await _areaRepository.GetAllAsync(specification, cancellationToken);
 
             var response = areas.Select(a => new AreaResponse(a));
             return Result<IEnumerable<AreaResponse>>

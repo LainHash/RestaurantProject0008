@@ -18,4 +18,9 @@
     <ProjectReference Include="..\Restaurant.Domain\Restaurant.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Territory\Areas\Commands\" />
+    <Folder Include="Features\Territory\Areas\Queries\GetById\" />
+  </ItemGroup>
+
 </Project>
