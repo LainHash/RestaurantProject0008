@@ -84,6 +84,7 @@ namespace Restaurant.Persistence.Services.Territory
             }
 
             table.SoftDelete();
+            await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
 
             return Result<object>
                     .Succeed(default, Success.Deleted, HttpStatusCode.OK);
@@ -105,6 +106,7 @@ namespace Restaurant.Persistence.Services.Territory
             }
 
             table.Restore();
+            await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
 
             return Result<object>
                     .Succeed(default, Success.Restored, HttpStatusCode.OK);
