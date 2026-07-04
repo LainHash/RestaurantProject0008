@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Territory\Areas\Commands\" />
+    <Folder Include="Features\Territory\RestaurantTables\Commands\" />
   </ItemGroup>
 
 </Project>
