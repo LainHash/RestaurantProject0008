@@ -22,5 +22,19 @@ namespace Restaurant.Persistence.Repositories.Territory
         {
             return await _context.RestaurantTables.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
+
+        public async Task<RestaurantTable> AddAsync(RestaurantTable table, CancellationToken cancellationToken = default)
+        {
+            _context.RestaurantTables.Add(table);
+            await _context.SaveChangesAsync(cancellationToken);
+            return table;
+        }
+
+        public async Task<RestaurantTable> UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default)
+        {
+            _context.RestaurantTables.Update(table);
+            await _context.SaveChangesAsync(cancellationToken);
+            return table;
+        }
     }
 }
