@@ -15,7 +15,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
             _context = context;
         }
 
-        public async Task<List<Product>> ToListAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
+        public async Task<List<Product>> GetAllAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
                 .GetQuery(_context.Products.AsQueryable(), specification);
