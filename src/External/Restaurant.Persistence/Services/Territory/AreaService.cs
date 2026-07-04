@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Territory.Areas.Queries.GetAll;
+using Restaurant.Application.Features.Territory.Areas.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Territory;
@@ -25,9 +26,9 @@ namespace Restaurant.Persistence.Services.Territory
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<AreaResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result<AreaResponse>> GetByIdAsync(GetAreaByIdSpecification specification, CancellationToken cancellationToken = default)
         {
-            var area = await _areaRepository.FindAsync(id, cancellationToken);
+            var area = await _areaRepository.FindAsync(specification, cancellationToken);
             if (area == null)
             {
                 return Result<AreaResponse>
