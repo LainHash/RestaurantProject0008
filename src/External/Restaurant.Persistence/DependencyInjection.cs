@@ -6,10 +6,14 @@ using Restaurant.Application.Services.Misc;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Territory;
 using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Domain.Repositories.Guest;
+using Restaurant.Domain.Repositories.Identity;
 using Restaurant.Domain.Repositories.Misc;
 using Restaurant.Domain.Repositories.Territory;
 using Restaurant.Persistence.Contexts;
 using Restaurant.Persistence.Repositories.Catalog;
+using Restaurant.Persistence.Repositories.Guest;
+using Restaurant.Persistence.Repositories.Identity;
 using Restaurant.Persistence.Repositories.Misc;
 using Restaurant.Persistence.Repositories.Territory;
 using Restaurant.Persistence.Seeders;
@@ -53,6 +57,9 @@ namespace Restaurant.Persistence
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IAreaRepository, AreaRepository>();
             services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             // ── AutoMapper ───────────────────────────────────────────────────
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
