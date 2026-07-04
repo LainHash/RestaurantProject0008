@@ -13,7 +13,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
             _context = context;
         }
 
-        public async Task<List<Category>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<Category>> ToListAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Categories.ToListAsync(cancellationToken);
         }

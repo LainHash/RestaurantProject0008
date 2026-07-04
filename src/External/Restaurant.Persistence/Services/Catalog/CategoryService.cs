@@ -18,7 +18,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
         public async Task<Result<IEnumerable<CategoryResponse>>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var categories = await _categoryRepository.GetAllAsync(cancellationToken);
+            var categories = await _categoryRepository.ToListAsync(cancellationToken);
 
             var response = categories.Select(c => new CategoryResponse(c));
             return Result<IEnumerable<CategoryResponse>>

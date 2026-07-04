@@ -18,7 +18,7 @@ namespace Restaurant.Persistence.Repositories.Territory
             return await _context.Areas.ToListAsync(cancellationToken);
         }
 
-        public async Task<Area?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Area?> FindAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _context.Areas.FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
         }

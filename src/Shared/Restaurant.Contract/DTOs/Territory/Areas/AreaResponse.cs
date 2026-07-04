@@ -1,4 +1,5 @@
 ﻿using Restaurant.Contract.DTOs.Territory.RestaurantTables;
+using Restaurant.Domain.Entities.Territory;
 
 namespace Restaurant.Contract.DTOs.Territory.Areas
 {
@@ -10,5 +11,14 @@ namespace Restaurant.Contract.DTOs.Territory.Areas
         public string Status { get; set; } = string.Empty;
 
         public IEnumerable<RestaurantTableResponse> Tables { get; set; } = new List<RestaurantTableResponse>();
+
+        public AreaResponse(Area area)
+        {
+            Name = area.Name;
+            Description = area.Description;
+            Type = area.Type;
+            Status = area.Status;
+            Tables = area.RestaurantTables.Select(table => new RestaurantTableResponse(table)).ToList();
+        }
     }
 }
