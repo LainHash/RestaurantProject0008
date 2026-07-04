@@ -11,5 +11,17 @@ namespace Restaurant.Application.Services.Territory
         Task<Result<RestaurantTableResponse>> 
             GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
+        Task<Result<RestaurantTableResponse>>
+            CreateAsync(CreateRestaurantTableRequest request, CancellationToken cancellationToken = default);
+
+        Task<Result<RestaurantTableResponse>>
+            UpdateAsync(Guid id, UpdateRestaurantTableRequest request, CancellationToken cancellationToken = default);
+
+        Task<Result<object>>
+            DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+        Task<Result<object>>
+            RestoreAsync(Guid id, CancellationToken cancellationToken = default);
+
     }
 }

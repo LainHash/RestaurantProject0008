@@ -4,10 +4,16 @@ namespace Restaurant.Domain.Repositories.Territory
 {
     public interface IRestaurantTableRepository
     {
-        Task<IEnumerable<RestaurantTable>> 
+        Task<IEnumerable<RestaurantTable>>
             ToListAsync(CancellationToken cancellationToken = default);
 
-        Task<RestaurantTable?> 
+        Task<RestaurantTable?>
             FindAsync(Guid id, CancellationToken cancellationToken = default);
+
+        Task<RestaurantTable>
+            AddAsync(RestaurantTable table, CancellationToken cancellationToken = default);
+
+        Task<RestaurantTable>
+            UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default);
     }
 }
