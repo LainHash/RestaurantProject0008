@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Authentication\Commands\Register\" />
     <Folder Include="Features\Territory\Areas\Commands\" />
   </ItemGroup>
 

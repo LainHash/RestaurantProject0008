@@ -44,7 +44,8 @@ namespace Restaurant.Persistence.Services.Authentication
             _jwtProvider = jwtProvider;
         }
 
-        public async Task<Result<object>> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<object>> 
+            RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
         {
             var existingUser = await _userRepository.FindAsync(request.Email, cancellationToken);
             if (existingUser != null)
@@ -86,7 +87,8 @@ namespace Restaurant.Persistence.Services.Authentication
             
         }
 
-        public async Task<Result<object>> VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<object>> 
+            VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userRepository.FindAsync(request.Email, cancellationToken);
             if (user == null)
@@ -123,7 +125,8 @@ namespace Restaurant.Persistence.Services.Authentication
                 .Succeed(default, "Email verified successfully. You can now complete your profile.", HttpStatusCode.Accepted);
         }
 
-        public async Task<Result<object>> CompleteProfileAsync(CompleteProfileRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<object>> 
+            CompleteProfileAsync(CompleteProfileRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userRepository.FindAsync(request.Email, cancellationToken);
             if (user == null)
@@ -164,7 +167,8 @@ namespace Restaurant.Persistence.Services.Authentication
                 .Succeed(default, "Profile completed successfully.", HttpStatusCode.Accepted);
         }
 
-        public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<AuthenticationResponse>> 
+            LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
         {
             var user = await _userRepository.FindAsync(request.Email, cancellationToken);
             if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
