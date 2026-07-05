@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Authentication.Commands.CompleteProfile;
 using Restaurant.Application.Features.Authentication.Commands.Login;
 using Restaurant.Application.Features.Authentication.Commands.Register;
+using Restaurant.Application.Features.Authentication.Commands.VerifyEmail;
 using Restaurant.Contract.DTOs.Authentication;
 
 namespace Restaurant.API.Controllers.Authentication
@@ -37,6 +38,14 @@ namespace Restaurant.API.Controllers.Authentication
         public async Task<IActionResult> CompleteProfile([FromBody] CompleteProfileRequest request, CancellationToken cancellationToken)
         {
             var command = new CompleteProfileCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("/verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request, CancellationToken cancellationToken)
+        {
+            var command = new VerifyEmailCommand(request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
