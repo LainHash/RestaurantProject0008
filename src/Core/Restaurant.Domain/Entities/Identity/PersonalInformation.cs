@@ -18,9 +18,41 @@ namespace Restaurant.Domain.Entities.Identity
         public string Phone { get; set; } = string.Empty;
         public string CitizenCardId { get; set; } = string.Empty;
 
-        public PersonalInformation(Guid id, string firstName, string lastName, DateOnly dob, bool gender, string address, string city, string country, string phone, string citizenCardId)
+        public PersonalInformation(
+            Guid id,
+            string firstName,
+            string lastName,
+            DateOnly dob,
+            bool gender,
+            string address,
+            string city,
+            string country,
+            string phone,
+            string citizenCardId)
         {
             Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            Dob = dob;
+            Gender = gender;
+            Address = address;
+            City = city;
+            Country = country;
+            Phone = phone;
+            CitizenCardId = citizenCardId;
+        }
+
+        public PersonalInformation(
+            string firstName,
+            string lastName,
+            DateOnly dob,
+            bool gender,
+            string address,
+            string city,
+            string country,
+            string phone,
+            string citizenCardId)
+        {
             FirstName = firstName;
             LastName = lastName;
             Dob = dob;

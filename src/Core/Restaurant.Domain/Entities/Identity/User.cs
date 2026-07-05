@@ -26,5 +26,23 @@ namespace Restaurant.Domain.Entities.Identity
             IsActive = isActive;
             RoleId = roleId;
         }
+
+        public User(
+            string userName,
+            string email,
+            string passwordHash,
+            bool isActive,
+            Guid roleId,
+            string verificationCode,
+            DateTime verificationCodeExpiresAt)
+        {
+            UserName = userName;
+            Email = email;
+            PasswordHash = passwordHash;
+            IsActive = isActive;
+            RoleId = roleId;
+            VerificationCode = verificationCode;
+            VerificationCodeExpiresAt = verificationCodeExpiresAt;
+        }
     }
 }

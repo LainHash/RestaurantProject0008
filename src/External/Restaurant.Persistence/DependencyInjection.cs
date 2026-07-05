@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Restaurant.Application.Services.Authentication;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Application.Services.Misc;
 using Restaurant.Application.Services.Persistence;
@@ -17,6 +18,7 @@ using Restaurant.Persistence.Repositories.Identity;
 using Restaurant.Persistence.Repositories.Misc;
 using Restaurant.Persistence.Repositories.Territory;
 using Restaurant.Persistence.Seeders;
+using Restaurant.Persistence.Services.Authentication;
 using Restaurant.Persistence.Services.Catalog;
 using Restaurant.Persistence.Services.Misc;
 using Restaurant.Persistence.Services.Persistence;
@@ -60,6 +62,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
 
             // ── AutoMapper ───────────────────────────────────────────────────
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
@@ -72,6 +75,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IAreaService, AreaService>();
             services.AddScoped<IRestaurantTableService, RestaurantTableService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;
         }
