@@ -1,9 +1,10 @@
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Informations.Identity.Users;
 
 namespace Restaurant.Domain.Entities.Identity
 {
-    public class User : SoftDeletableEntity
+    public partial class User : SoftDeletableEntity
     {
         public string UserName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
@@ -17,6 +18,10 @@ namespace Restaurant.Domain.Entities.Identity
         public virtual Customer Customer { get; set; } = null!;
         public virtual Role Role { get; set; } = null!;
 
+    }
+
+    public partial class User
+    {
         public User(Guid id, string userName, string email, string passwordHash, bool isActive, Guid roleId)
         {
             Id = id;
@@ -25,6 +30,34 @@ namespace Restaurant.Domain.Entities.Identity
             PasswordHash = passwordHash;
             IsActive = isActive;
             RoleId = roleId;
+        }
+
+        public User(
+            string userName,
+            string email,
+            string passwordHash,
+            bool isActive,
+            Guid roleId,
+            string verificationCode,
+            DateTime verificationCodeExpiresAt)
+        {
+            UserName = userName;
+            Email = email;
+            PasswordHash = passwordHash;
+            IsActive = isActive;
+            RoleId = roleId;
+            VerificationCode = verificationCode;
+            VerificationCodeExpiresAt = verificationCodeExpiresAt;
+        }
+
+        public User(CreateUserInformation information)
+        {
+            UserName = information.UserName;
+            Email = information.Email;
+            PasswordHash = information.PasswordHash;
+            RoleId = information.RoleId;
+            VerificationCode = information.VerificationCode;
+            VerificationCodeExpiresAt = information.VerificationCodeExpiresAt;
         }
     }
 }

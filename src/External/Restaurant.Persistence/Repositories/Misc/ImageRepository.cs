@@ -41,11 +41,10 @@ namespace Restaurant.Persistence.Repositories.Misc
             await _context.Set<ProductImage>().AddAsync(productImage, cancellationToken);
         }
 
-        public async Task<Image> AddAsync(Image image, CancellationToken cancellationToken = default)
+        public async Task AddAsync(Image image, CancellationToken cancellationToken = default)
         {
             _context.Images.Add(image);
             await _context.SaveChangesAsync(cancellationToken);
-            return image;
         }
     }
 }

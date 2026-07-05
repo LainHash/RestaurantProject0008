@@ -12,6 +12,7 @@
         public const string Retrieved = "Data retrieved successfully.";
         public const string Saved = "Data saved successfully.";
 
+        public const string Register = "User registered successfully. Please check your email for the verification code.";
         public const string Login = "Login successful.";
         public const string Logout = "Logout successful.";
 

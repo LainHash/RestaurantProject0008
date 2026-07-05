@@ -10,4 +10,9 @@
     <ProjectReference Include="..\..\Core\Restaurant.Domain\Restaurant.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\Identity\Roles\" />
+    <Folder Include="DTOs\Identity\Users\" />
+  </ItemGroup>
+
 </Project>

@@ -6,8 +6,8 @@ namespace Restaurant.Domain.Repositories.Catalog
     {
         Task<List<Category>> ToListAsync(CancellationToken cancellationToken = default);
         Task<Category?> FindAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<Category> AddAsync(Category category, CancellationToken cancellationToken = default);
-        Task<Category> UpdateAsync(Category category, CancellationToken cancellationToken = default);
+        Task AddAsync(Category category, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Category category, CancellationToken cancellationToken = default);
         Task DeleteAsync(CancellationToken cancellationToken = default);
     }
 }

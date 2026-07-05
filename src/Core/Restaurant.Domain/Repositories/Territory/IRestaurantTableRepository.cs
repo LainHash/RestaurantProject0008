@@ -10,10 +10,8 @@ namespace Restaurant.Domain.Repositories.Territory
         Task<RestaurantTable?>
             FindAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<RestaurantTable>
-            AddAsync(RestaurantTable table, CancellationToken cancellationToken = default);
+        Task AddAsync(RestaurantTable table, CancellationToken cancellationToken = default);
 
-        Task<RestaurantTable>
-            UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default);
+        Task UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default);
     }
 }
