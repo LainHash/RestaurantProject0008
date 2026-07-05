@@ -26,5 +26,17 @@ namespace Restaurant.Persistence.Repositories.Guest
         {
             return await _context.Customers.FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
         }
+
+        public async Task AddAsync(Customer customer, CancellationToken cancellationToken = default)
+        {
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Customer customer, CancellationToken cancellationToken = default)
+        {
+            _context.Customers.Update(customer);
+            await _context.SaveChangesAsync();
+        }
     }
 }

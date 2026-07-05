@@ -32,5 +32,11 @@ namespace Restaurant.Persistence.Repositories.Identity
             }
             return _context.Users.FirstOrDefaultAsync(u => u.UserName == emailOrUserName, cancellationToken);
         }
+
+        public async Task AddAsync(User user, CancellationToken cancellationToken = default)
+        {
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

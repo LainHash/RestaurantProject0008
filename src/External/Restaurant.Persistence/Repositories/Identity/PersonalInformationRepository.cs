@@ -22,5 +22,11 @@ namespace Restaurant.Persistence.Repositories.Identity
         {
             return await _context.PersonalInformations.ToListAsync(cancellationToken);
         }
+
+        public async Task AddAsync(PersonalInformation personalInformation, CancellationToken cancellationToken = default)
+        {
+            _context.PersonalInformations.Add(personalInformation);
+            await _context.SaveChangesAsync();
+        }
     }
 }

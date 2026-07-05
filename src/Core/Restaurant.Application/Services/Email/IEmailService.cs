@@ -1,7 +1,9 @@
-﻿namespace Restaurant.Application.Services.Email
+﻿using Restaurant.Application.Models.Messages;
+
+namespace Restaurant.Application.Services.Email
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string to, string subject, string body, CancellationToken cancellationToken = default);
+        Task SendEmailAsync(string to, EmailMessage message, CancellationToken cancellationToken = default);
     }
 }

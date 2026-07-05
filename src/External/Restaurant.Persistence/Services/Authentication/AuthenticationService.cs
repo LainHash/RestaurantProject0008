@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Results;
+﻿using Restaurant.Application.Models.Messages;
+using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Authentication;
 using Restaurant.Application.Services.Email;
 using Restaurant.Application.Services.Persistence;
@@ -47,18 +48,18 @@ namespace Restaurant.Persistence.Services.Authentication
             var existingUser = await _userRepository.FindAsync(request.Email, cancellationToken);
             if (existingUser != null)
             {
-                return Result<object>.Fail("Email already exists.");
+                return Result<object>
+                    .Fail(Error.EmailExisted, HttpStatusCode.Conflict);
             }
 
             var customerRole = await _roleRepository.FindAsync("Customer", cancellationToken);
             if (customerRole == null)
             {
-                return Result<object>.Fail("Default role Customer not found.");
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            // Generate 6-digit verification code
-            var random = new Random();
-            var verificationCode = random.Next(100000, 999999).ToString();
+            var verificationCode = GenerateCode();
 
             var user = new User(
                 request.UserName,
@@ -80,12 +81,12 @@ namespace Restaurant.Persistence.Services.Authentication
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             // Send activation email with the 6-digit code
-            var subject = "Restaurant - Email Verification Code";
-            var body = $"Hello {user.UserName},<br/><br/>Your verification code is: <b>{verificationCode}</b><br/>This code will expire in 15 minutes.";
-            await _emailService.SendEmailAsync(user.Email, subject, body, cancellationToken);
+            var message = new EmailMessage(user.UserName, verificationCode);
+            await _emailService.SendEmailAsync(user.Email, message, cancellationToken);
 
             return Result<object>
-                .Succeed(default, "User registered successfully. Please check your email for the verification code.");
+                .Succeed(default, Success.Register, HttpStatusCode.Created);
+            
         }
 
         public async Task<Result<object>> VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default)
@@ -168,7 +169,7 @@ namespace Restaurant.Persistence.Services.Authentication
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             customer.PersonalInformationId = personalInfo.Id;
-            _customerRepository.Update(customer);
+            await _customerRepository.UpdateAsync(customer);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
@@ -205,6 +206,14 @@ namespace Restaurant.Persistence.Services.Authentication
 
             return Result<AuthenticationResponse>
                 .Succeed(response, "Login successful.");
+        }
+
+        private string GenerateCode()
+        {
+            // Generate 6-digit verification code
+            var random = new Random();
+            var verificationCode = random.Next(100000, 999999).ToString();
+            return verificationCode;
         }
     }
 }

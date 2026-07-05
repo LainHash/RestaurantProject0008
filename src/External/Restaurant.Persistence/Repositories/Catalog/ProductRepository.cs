@@ -34,18 +34,16 @@ namespace Restaurant.Persistence.Repositories.Catalog
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<Product> AddAsync(Product product, CancellationToken cancellationToken = default)
+        public async Task AddAsync(Product product, CancellationToken cancellationToken = default)
         {
             _context.Products.Add(product);
             await _context.SaveChangesAsync(cancellationToken);
-            return product;
         }
 
-        public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(Product product, CancellationToken cancellationToken = default)
         {
             _context.Products.Update(product);
             await _context.SaveChangesAsync(cancellationToken);
-            return product;
         }
 
         public async Task DeleteAsync(CancellationToken cancellationToken = default)

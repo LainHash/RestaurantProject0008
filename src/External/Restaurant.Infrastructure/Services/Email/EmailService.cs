@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Services.Email;
 using Restaurant.Contract.Settings.Email;
 using System.Net;
@@ -21,7 +22,7 @@ namespace Restaurant.Infrastructure.Services.Email
         }
 
         public async Task 
-            SendEmailAsync(string to, string subject, string body, CancellationToken cancellationToken = default)
+            SendEmailAsync(string to, EmailMessage message, CancellationToken cancellationToken = default)
         {
             using var client = new SmtpClient(_settings.SmtpServer, _settings.SmtpPort)
             {
@@ -35,8 +36,8 @@ namespace Restaurant.Infrastructure.Services.Email
             {
                 From = new MailAddress(_settings.SenderEmail, _settings.SenderName),
 
-                Subject = subject,
-                Body = body,
+                Subject = message.Subject,
+                Body = message.Body,
                 IsBodyHtml = true
             };
 

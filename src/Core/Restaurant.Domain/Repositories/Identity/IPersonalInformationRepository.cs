@@ -6,5 +6,6 @@ namespace Restaurant.Domain.Repositories.Identity
     {
         Task<List<PersonalInformation>> ToListAsync(CancellationToken cancellationToken = default);
         Task<PersonalInformation?> FindAsync(Guid id, CancellationToken cancellationToken = default);
+        Task AddAsync(PersonalInformation personalInformation, CancellationToken cancellationToken = default);
     }
 }
