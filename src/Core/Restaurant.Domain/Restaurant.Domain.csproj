@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Entities\Personnel\" />
+    <Folder Include="Informations\Authentication\" />
     <Folder Include="Specifications\" />
   </ItemGroup>
 

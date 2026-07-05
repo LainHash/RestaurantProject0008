@@ -18,7 +18,7 @@
         public const string InternalServerError = "An unexpected error occurred.";
 
         public const string EmailExisted = "Email already exists.";
-        public const string LoginFailed = "Invalid username or password.";
+        public const string LoginFailed = "Invalid email or password.";
 
         public const string InvalidToken = "Invalid or expired token.";
 

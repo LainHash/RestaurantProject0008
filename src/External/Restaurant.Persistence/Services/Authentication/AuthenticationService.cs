@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Mapping.Identity;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Authentication;
 using Restaurant.Application.Services.Email;
@@ -61,14 +62,10 @@ namespace Restaurant.Persistence.Services.Authentication
 
             var verificationCode = GenerateCode();
 
-            var user = new User(
-                request.UserName,
-                request.Email,
+            var user = new User(request.ToInfo(
                 _passwordHasher.HashPassword(request.Password),
-                false,
                 customerRole.Id,
-                verificationCode,
-                DateTime.UtcNow.AddMinutes(15));
+                verificationCode));
 
 
             await _userRepository.AddAsync(user, cancellationToken);
@@ -95,25 +92,25 @@ namespace Restaurant.Persistence.Services.Authentication
             if (user == null)
             {
                 return Result<object>
-                    .Fail("User not found.");
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
             if (user.IsActive)
             {
                 return Result<object>
-                    .Fail("Account is already active.");
+                    .Fail("Account is already active.", HttpStatusCode.Conflict);
             }
 
             if (user.VerificationCode != request.Code)
             {
                 return Result<object>
-                    .Fail("Invalid verification code.");
+                    .Fail("Invalid verification code.", HttpStatusCode.Conflict);
             }
 
             if (user.VerificationCodeExpiresAt < DateTime.UtcNow)
             {
                 return Result<object>
-                    .Fail("Verification code has expired. Please request a new one.");
+                    .Fail("Verification code has expired. Please request a new one.", HttpStatusCode.RequestTimeout);
             }
 
             user.IsActive = true;
@@ -123,7 +120,7 @@ namespace Restaurant.Persistence.Services.Authentication
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, "Email verified successfully. You can now complete your profile.");
+                .Succeed(default, "Email verified successfully. You can now complete your profile.", HttpStatusCode.Accepted);
         }
 
         public async Task<Result<object>> CompleteProfileAsync(CompleteProfileRequest request, CancellationToken cancellationToken = default)
@@ -132,38 +129,29 @@ namespace Restaurant.Persistence.Services.Authentication
             if (user == null)
             {
                 return Result<object>
-                    .Fail("User not found.");
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
             if (!user.IsActive)
             {
                 return Result<object>
-                    .Fail("Account is not active. Please verify your email first.");
+                    .Fail("Account is not active. Please verify your email first.", HttpStatusCode.PreconditionRequired);
             }
 
             var customer = await _customerRepository.FindByUserIdAsync(user.Id, cancellationToken);
             if (customer == null)
             {
                 return Result<object>
-                    .Fail("Customer record not found.");
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
             if (customer.PersonalInformationId.HasValue)
             {
                 return Result<object>
-                    .Fail("Profile has already been completed.");
+                    .Fail("Profile has already been completed.", HttpStatusCode.Conflict);
             }
 
-            var personalInfo = new PersonalInformation(
-                request.FirstName,
-                request.LastName,
-                request.DOB,
-                request.Gender,
-                request.Address,
-                request.City,
-                request.Country,
-                request.Phone,
-                request.CitizenCardId);
+            var personalInfo = new PersonalInformation(request.ToInfo());
 
             await _personalInfoRepository.AddAsync(personalInfo, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -173,7 +161,7 @@ namespace Restaurant.Persistence.Services.Authentication
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, "Profile completed successfully.");
+                .Succeed(default, "Profile completed successfully.", HttpStatusCode.Accepted);
         }
 
         public async Task<Result<AuthenticationResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
@@ -182,13 +170,13 @@ namespace Restaurant.Persistence.Services.Authentication
             if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
             {
                 return Result<AuthenticationResponse>
-                    .Fail("Invalid email or password.", HttpStatusCode.Unauthorized);
+                    .Fail(Error.LoginFailed, HttpStatusCode.Unauthorized);
             }
 
             if (!user.IsActive)
             {
                 return Result<AuthenticationResponse>
-                    .Fail("Account is not active. Please verify your email.", HttpStatusCode.Forbidden);
+                    .Fail("Account is not active. Please verify your email.", HttpStatusCode.PreconditionRequired);
             }
 
             var role = await _roleRepository.FindAsync(user.RoleId, cancellationToken);
@@ -205,7 +193,7 @@ namespace Restaurant.Persistence.Services.Authentication
             };
 
             return Result<AuthenticationResponse>
-                .Succeed(response, "Login successful.");
+                .Succeed(response, "Login successful.", HttpStatusCode.Accepted);
         }
 
         private string GenerateCode()
