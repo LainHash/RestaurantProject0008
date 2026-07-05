@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Authentication.Commands.Login;
+using Restaurant.Application.Features.Authentication.Commands.Register;
 using Restaurant.Contract.DTOs.Authentication;
 
 namespace Restaurant.API.Controllers.Authentication
@@ -19,6 +20,14 @@ namespace Restaurant.API.Controllers.Authentication
         public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
         {
             var command = new LoginCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("/register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+        {
+            var command = new RegisterCommand(request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
