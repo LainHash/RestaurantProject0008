@@ -4,11 +4,18 @@ using Restaurant.Domain.Entities.Production;
 
 namespace Restaurant.Domain.Entities.Guests
 {
-    public class Customer : SoftDeletableEntity
+    public partial class Customer : SoftDeletableEntity
     {
         public Guid UserId { get; set; }
         public Guid? PersonalInformationId { get; set; }
 
+        public virtual User User { get; set; } = null!;
+        public virtual PersonalInformation? PersonalInformation { get; set; }
+        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+    }
+
+    public partial class Customer
+    {
         public Customer(Guid id, Guid userId, Guid? personalInformationId = null)
         {
             Id = id;
@@ -21,9 +28,5 @@ namespace Restaurant.Domain.Entities.Guests
             UserId = userId;
             PersonalInformationId = personalInformationId;
         }
-
-        public virtual User User { get; set; } = null!;
-        public virtual PersonalInformation? PersonalInformation { get; set; }
-        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
     }
 }

@@ -16,7 +16,7 @@ namespace Restaurant.Domain.Entities.Catalog
 
         public virtual Category Category { get; set; } = null!;
         public virtual ProductStock ProductStock { get; set; } = null!;
-        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public virtual IEnumerable<ProductImage> ProductImages { get; set; } = [];
 
     }
 
