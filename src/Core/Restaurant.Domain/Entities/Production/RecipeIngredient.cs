@@ -5,9 +5,9 @@ namespace Restaurant.Domain.Entities.Production
 {
     public class RecipeIngredient : Entity
     {
-        public int RecipeId { get; set; }
-        public int IngredientId { get; set; }
-        public int Quantity { get; set; }
+        public Guid RecipeId { get; set; }
+        public Guid IngredientId { get; set; }
+        public decimal Quantity { get; set; }
 
         // Navigation Properties
         public virtual Recipe Recipe { get; set; } = null!;

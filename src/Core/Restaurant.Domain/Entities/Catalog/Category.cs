@@ -2,13 +2,17 @@
 
 namespace Restaurant.Domain.Entities.Catalog
 {
-    public class Category : SoftDeletableEntity
+    public partial class Category : SoftDeletableEntity
     {
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
 
         public virtual ICollection<Product> Products { get; set; } = [];
+        public virtual ICollection<Ingredient> Ingredients { get; set; } = [];
+    }
 
+    public partial class Category
+    {
         public Category(string name, string? description = null)
         {
             Name = name;
