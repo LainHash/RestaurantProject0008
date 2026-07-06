@@ -1,9 +1,13 @@
-﻿using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+﻿using Restaurant.Application.Common.Enums;
+using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
+using Restaurant.Application.Mapping.Production;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Reservations;
+using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Production;
 using System.Net;
 
@@ -17,7 +21,8 @@ namespace Restaurant.Persistence.Services.Production
             _reservationRepository = reservationRepository;
         }
 
-        public async Task<Result<IEnumerable<ReservationResponse>>> GetAllAsync(GetAllReservationsSpecification specification, CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ReservationResponse>>>
+            GetAllAsync(GetAllReservationsSpecification specification, CancellationToken cancellationToken = default)
         {
             var reservations = await _reservationRepository.ToListAsync(specification, cancellationToken);
 
@@ -26,7 +31,18 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ReservationResponse>> GetByIdAsync(GetReservationByIdSpecification specification, CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ReservationResponse>>>
+            GetAllByWeekAsync(GetAllReservationsByWeekSpecification specification, CancellationToken cancellationToken = default)
+        {
+            var reservations = await _reservationRepository.ToListAsync(specification, cancellationToken);
+
+            var response = reservations.Select(r => new ReservationResponse(r));
+            return Result<IEnumerable<ReservationResponse>>
+                .Succeed(response, Success.Retrieved);
+        }
+
+        public async Task<Result<ReservationResponse>>
+            GetByIdAsync(GetReservationByIdSpecification specification, CancellationToken cancellationToken = default)
         {
             var reservation = await _reservationRepository.FindAsync(specification, cancellationToken);
             if (reservation is null)
@@ -38,6 +54,26 @@ namespace Restaurant.Persistence.Services.Production
             var response = new ReservationResponse(reservation);
             return Result<ReservationResponse>
                 .Succeed(response, Success.Retrieved);
+        }
+
+        public async Task<Result<ReservationResponse>> CreateForCustomerAsync(CreateReservationForCustomerRequest request, CancellationToken cancellationToken = default)
+        {
+            var reservation = new Reservation(request.ToInfo());
+            await _reservationRepository.AddAsync(reservation);
+
+            var response = new ReservationResponse(reservation);
+            return Result<ReservationResponse>
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<ReservationResponse>> CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default)
+        {
+            var reservation = new Reservation(request.ToInfo());
+            await _reservationRepository.AddAsync(reservation);
+
+            var response = new ReservationResponse(reservation);
+            return Result<ReservationResponse>
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
     }
 }

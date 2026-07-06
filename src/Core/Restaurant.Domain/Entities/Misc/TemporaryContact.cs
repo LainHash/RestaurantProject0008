@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Production;
 
 namespace Restaurant.Domain.Entities.Misc
 {
-    public class TemporaryContact : Entity
+    public partial class TemporaryContact : Entity
     {
         public string GuestName { get; set; } = string.Empty;
         public string GuestEmail { get; set; } = string.Empty;
@@ -11,7 +11,18 @@ namespace Restaurant.Domain.Entities.Misc
 
         public virtual Reservation Reservation { get; set; } = null!;
 
+    }
+
+    public partial class TemporaryContact
+    {
         public TemporaryContact() { }
+
+        public TemporaryContact(string guestName, string guestEmail, string guestPhone)
+        {
+            GuestName = guestName;
+            GuestEmail = guestEmail;
+            GuestPhone = guestPhone;
+        }
         public TemporaryContact(Guid id, string guestName, string guestEmail, string guestPhone)
         {
             Id = id;
@@ -19,5 +30,6 @@ namespace Restaurant.Domain.Entities.Misc
             GuestEmail = guestEmail;
             GuestPhone = guestPhone;
         }
+
     }
 }

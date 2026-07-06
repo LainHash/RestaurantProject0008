@@ -38,5 +38,17 @@ namespace Restaurant.Persistence.Repositories.Production
                 .GetQuery(_context.Reservations.AsQueryable().AsNoTracking(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
+
+        public async Task AddAsync(Reservation reservation, CancellationToken cancellationToken = default)
+        {
+            _context.Reservations.Add(reservation);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task UpdateAsync(Reservation reservation, CancellationToken cancellationToken = default)
+        {
+            _context.Reservations.Update(reservation);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }
