@@ -55,7 +55,7 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ReservationResponse>> CreateReservationAsync(CreateReservationRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<ReservationResponse>> CreateAsync(CreateReservationRequest request, CancellationToken cancellationToken = default)
         {
             var reservation = new Reservation(request.ToInfo());
             await _reservationRepository.AddAsync(reservation);
@@ -65,7 +65,7 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
-        public Task<Result<ReservationResponse>> UpdateReservationAsync(Guid id, UpdateReservationRequest request, CancellationToken cancellationToken = default)
+        public Task<Result<ReservationResponse>> UpdateAsync(Guid id, UpdateReservationRequest request, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
