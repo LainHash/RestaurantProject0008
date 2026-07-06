@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Persistence.Contexts;
@@ -27,16 +27,16 @@ namespace Restaurant.Persistence.Repositories.Guest
             return await _context.Customers.FirstOrDefaultAsync(c => c.UserId == userId, cancellationToken);
         }
 
-        public async Task AddAsync(Customer customer, CancellationToken cancellationToken = default)
+        public Task AddAsync(Customer customer, CancellationToken cancellationToken = default)
         {
             _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
-        public async Task UpdateAsync(Customer customer, CancellationToken cancellationToken = default)
+        public Task UpdateAsync(Customer customer, CancellationToken cancellationToken = default)
         {
             _context.Customers.Update(customer);
-            await _context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
     }
 }

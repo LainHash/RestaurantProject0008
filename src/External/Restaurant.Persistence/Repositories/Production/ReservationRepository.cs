@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Production;
 using Restaurant.Domain.Specifications;
@@ -39,16 +39,16 @@ namespace Restaurant.Persistence.Repositories.Production
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task AddAsync(Reservation reservation, CancellationToken cancellationToken = default)
+        public Task AddAsync(Reservation reservation, CancellationToken cancellationToken = default)
         {
             _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
-        public async Task UpdateAsync(Reservation reservation, CancellationToken cancellationToken = default)
+        public Task UpdateAsync(Reservation reservation, CancellationToken cancellationToken = default)
         {
             _context.Reservations.Update(reservation);
-            await _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
     }
 }

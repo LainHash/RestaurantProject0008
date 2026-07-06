@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Specifications;
@@ -32,22 +32,16 @@ namespace Restaurant.Persistence.Repositories.Catalog
             return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
         }
 
-        public async Task AddAsync(Category category, CancellationToken cancellationToken = default)
+        public Task AddAsync(Category category, CancellationToken cancellationToken = default)
         {
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
-        public async Task UpdateAsync(Category category, CancellationToken cancellationToken = default)
+        public Task UpdateAsync(Category category, CancellationToken cancellationToken = default)
         {
             _context.Categories.Update(category);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
-        public async Task DeleteAsync(CancellationToken cancellationToken = default)
-        {
-            _context.Categories.RemoveRange(_context.Categories);
-            await _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
         public async Task<int> CountAsync(ISpecification<Category> specification, CancellationToken cancellationToken = default)

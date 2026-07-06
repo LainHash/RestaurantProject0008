@@ -11,6 +11,5 @@ namespace Restaurant.Domain.Repositories.Catalog
         Task<Product?> FindAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default);
         Task AddAsync(Product product, CancellationToken cancellationToken = default);
         Task UpdateAsync(Product product, CancellationToken cancellationToken = default);
-        Task DeleteAsync(CancellationToken cancellationToken = default);
     }
 }

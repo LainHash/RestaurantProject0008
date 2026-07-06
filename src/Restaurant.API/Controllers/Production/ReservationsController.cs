@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer;
+using Restaurant.Application.Features.Production.Reservations.Command.CreateForGuest;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
@@ -46,6 +47,14 @@ namespace Restaurant.API.Controllers.Production
         public async Task<IActionResult> CreateForCustomer([FromBody] CreateReservationForCustomerRequest request, CancellationToken cancellationToken)
         {
             var command = new CreateReservationForCustomerCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("/for-guest")]
+        public async Task<IActionResult> CreateForGuest([FromBody] CreateReservationForGuestRequest request, CancellationToken cancellationToken)
+        {
+            var command = new CreateReservationForGuestCommand(request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

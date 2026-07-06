@@ -1,5 +1,6 @@
-﻿using Restaurant.Application.Models.Messages;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Territory;
 using Restaurant.Contract.DTOs.Territory.RestaurantTables;
 using Restaurant.Domain.Entities.Territory;
@@ -11,9 +12,11 @@ namespace Restaurant.Persistence.Services.Territory
     internal class RestaurantTableService : IRestaurantTableService
     {
         private readonly IRestaurantTableRepository _restaurantTableRepository;
-        public RestaurantTableService(IRestaurantTableRepository restaurantTableRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public RestaurantTableService(IRestaurantTableRepository restaurantTableRepository, IUnitOfWork unitOfWork)
         {
             _restaurantTableRepository = restaurantTableRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<RestaurantTableResponse>>>
@@ -44,7 +47,8 @@ namespace Restaurant.Persistence.Services.Territory
         public async Task<Result<RestaurantTableResponse>> CreateAsync(CreateRestaurantTableRequest request, CancellationToken cancellationToken = default)
         {
             var table = RestaurantTable.Create(request.TableNumber, request.Capacity, request.Status, request.AreaId);
-            await _restaurantTableRepository.AddAsync(table);
+            await _restaurantTableRepository.AddAsync(table, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new RestaurantTableResponse(table);
             return Result<RestaurantTableResponse>
@@ -61,7 +65,8 @@ namespace Restaurant.Persistence.Services.Territory
             }
 
             table.Update(request.TableNumber, request.Capacity, request.Status, request.AreaId);
-            await _restaurantTableRepository.UpdateAsync(table);
+            await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new RestaurantTableResponse(table);
             return Result<RestaurantTableResponse>
@@ -85,6 +90,7 @@ namespace Restaurant.Persistence.Services.Territory
 
             table.SoftDelete();
             await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
                     .Succeed(default, Success.Deleted, HttpStatusCode.OK);
@@ -107,6 +113,7 @@ namespace Restaurant.Persistence.Services.Territory
 
             table.Restore();
             await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
                     .Succeed(default, Success.Restored, HttpStatusCode.OK);
