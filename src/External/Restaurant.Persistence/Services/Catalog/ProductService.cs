@@ -23,13 +23,16 @@ namespace Restaurant.Persistence.Services.Catalog
         }
 
         public async Task<Result<IEnumerable<ProductResponse>>>
-            GetAllAsync(GetAllProductSpecification specification, CancellationToken cancellationToken = default)
+            GetAllAsync(GetAllProductsSpecification specification, CancellationToken cancellationToken = default)
         {
+            var totalItems = await _productRepository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var products = await _productRepository.ToListAsync(specification, cancellationToken);
 
             var response = products.Select(p => new ProductResponse(p));
             return Result<IEnumerable<ProductResponse>>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<ProductResponse>>
@@ -100,7 +103,7 @@ namespace Restaurant.Persistence.Services.Catalog
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            if(product.IsDeleted)
+            if (product.IsDeleted)
             {
                 return Result<object>
                     .Fail(Error.Deleted, HttpStatusCode.Conflict);
@@ -122,7 +125,7 @@ namespace Restaurant.Persistence.Services.Catalog
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            if(!product.IsDeleted)
+            if (!product.IsDeleted)
             {
                 return Result<object>
                     .Fail(Error.Restored, HttpStatusCode.Conflict);

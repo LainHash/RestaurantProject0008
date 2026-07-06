@@ -15,7 +15,7 @@ namespace Restaurant.Domain.Entities.Misc
 
         public bool IsPrimary { get; set; }
 
-        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public virtual ICollection<ProductImage> ProductImages { get; set; } = [];
 
     }
 

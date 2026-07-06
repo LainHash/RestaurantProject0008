@@ -54,6 +54,43 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Ingredient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Ingredients");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Product", b =>
                 {
                     b.Property<Guid>("Id")
@@ -404,6 +441,68 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("TemporaryContacts");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Inspiration")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.RecipeIngredient", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IngredientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeIngredients");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Reservation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -543,6 +642,17 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("RestaurantTables");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Ingredient", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Catalog.Category", "Category")
+                        .WithMany("Ingredients")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Product", b =>
                 {
                     b.HasOne("Restaurant.Domain.Entities.Catalog.Category", "Category")
@@ -613,6 +723,36 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Catalog.Product", "Product")
+                        .WithMany("Recipes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.RecipeIngredient", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Catalog.Ingredient", "Ingredient")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restaurant.Domain.Entities.Production.Recipe", "Recipe")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Reservation", b =>
                 {
                     b.HasOne("Restaurant.Domain.Entities.Guests.Customer", "Customer")
@@ -651,7 +791,14 @@ namespace Restaurant.Persistence.Migrations
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Category", b =>
                 {
+                    b.Navigation("Ingredients");
+
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Ingredient", b =>
+                {
+                    b.Navigation("RecipeIngredients");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Product", b =>
@@ -660,6 +807,8 @@ namespace Restaurant.Persistence.Migrations
 
                     b.Navigation("ProductStock")
                         .IsRequired();
+
+                    b.Navigation("Recipes");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Customer", b =>
@@ -693,6 +842,11 @@ namespace Restaurant.Persistence.Migrations
                 {
                     b.Navigation("Reservation")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
+                {
+                    b.Navigation("RecipeIngredients");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Territory.Area", b =>

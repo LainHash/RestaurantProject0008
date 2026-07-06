@@ -1,7 +1,9 @@
-﻿using Restaurant.Domain.Entities.Catalog;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Domain.Specifications;
 using Restaurant.Persistence.Contexts;
-using Microsoft.EntityFrameworkCore;
+using Restaurant.Persistence.Specifications;
 
 namespace Restaurant.Persistence.Repositories.Catalog
 {
@@ -16,6 +18,13 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<List<Category>> ToListAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Categories.ToListAsync(cancellationToken);
+        }
+
+        public async Task<List<Category>> ToListAsync(ISpecification<Category> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Categories.AsQueryable().AsNoTracking(), specification);
+            return await query.ToListAsync(cancellationToken);
         }
 
         public async Task<Category?> FindAsync(Guid id, CancellationToken cancellationToken = default)
@@ -39,6 +48,14 @@ namespace Restaurant.Persistence.Repositories.Catalog
         {
             _context.Categories.RemoveRange(_context.Categories);
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<int> CountAsync(ISpecification<Category> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Categories.AsQueryable().AsNoTracking(), specification, applyPaging: false);
+
+            return await query.CountAsync(cancellationToken);
         }
     }
 }

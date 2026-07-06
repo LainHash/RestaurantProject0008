@@ -20,6 +20,11 @@ namespace Restaurant.Persistence.Configurations.Catalog
                    .WithOne(x => x.Category)
                    .HasForeignKey(x => x.CategoryId)
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(x => x.Ingredients)
+                    .WithOne(x => x.Category)
+                    .HasForeignKey(x => x.CategoryId)
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

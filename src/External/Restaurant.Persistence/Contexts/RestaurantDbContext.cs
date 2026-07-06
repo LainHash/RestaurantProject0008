@@ -24,6 +24,7 @@ namespace Restaurant.Persistence.Contexts
         public DbSet<ProductStock> ProductStocks { get; set; } = null!;
         public DbSet<Image> Images { get; set; } = null!;
         public DbSet<ProductImage> ProductImages { get; set; } = null!;
+        public DbSet<Ingredient> Ingredients { get; set; } = null!;
 
         public DbSet<PersonalInformation> PersonalInformations { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
@@ -33,6 +34,8 @@ namespace Restaurant.Persistence.Contexts
         public DbSet<Area> Areas { get; set; } = null!;
         public DbSet<RestaurantTable> RestaurantTables { get; set; } = null!;
 
+        public DbSet<Recipe> Recipes { get; set; } = null!;
+        public DbSet<RecipeIngredient> RecipeIngredients { get; set; } = null!;
         public DbSet<Reservation> Reservations { get; set; } = null!;
         public DbSet<TemporaryContact> TemporaryContacts { get; set; } = null!;
 
