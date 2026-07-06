@@ -18,7 +18,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<List<Product>> ToListAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Products.AsQueryable(), specification);
+                .GetQuery(_context.Products.AsQueryable().AsNoTracking(), specification);
             return await query.ToListAsync(cancellationToken);
         }
 
@@ -30,7 +30,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<Product?> FindAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Products.AsQueryable(), specification);
+                .GetQuery(_context.Products.AsQueryable().AsNoTracking(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -50,6 +50,13 @@ namespace Restaurant.Persistence.Repositories.Catalog
         {
             _context.Products.RemoveRange(_context.Products);
             await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<int> CountAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Products.AsQueryable().AsNoTracking(), specification);
+            return await query.CountAsync(cancellationToken);
         }
     }
 }

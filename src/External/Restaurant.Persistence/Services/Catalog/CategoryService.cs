@@ -21,9 +21,10 @@ namespace Restaurant.Persistence.Services.Catalog
             GetAllAsync(GetAllCategoriesSpecification specification, CancellationToken cancellationToken = default)
         {
             var totalItems = await _categoryRepository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var categories = await _categoryRepository.ToListAsync(specification, cancellationToken);
 
-            var indexPage = (specification.Skip / specification.Take) + 1;
             var response = categories.Select(c => new CategoryResponse(c));
             return Result<IEnumerable<CategoryResponse>>
                 .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);

@@ -23,7 +23,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<List<Category>> ToListAsync(ISpecification<Category> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Categories.AsQueryable(), specification);
+                .GetQuery(_context.Categories.AsQueryable().AsNoTracking(), specification);
             return await query.ToListAsync(cancellationToken);
         }
 
@@ -53,7 +53,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<int> CountAsync(ISpecification<Category> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Categories.AsQueryable(), specification, applyPaging: false);
+                .GetQuery(_context.Categories.AsQueryable().AsNoTracking(), specification, applyPaging: false);
 
             return await query.CountAsync(cancellationToken);
         }
