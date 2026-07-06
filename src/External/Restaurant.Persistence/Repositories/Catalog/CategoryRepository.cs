@@ -44,12 +44,6 @@ namespace Restaurant.Persistence.Repositories.Catalog
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAsync(CancellationToken cancellationToken = default)
-        {
-            _context.Categories.RemoveRange(_context.Categories);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
-
         public async Task<int> CountAsync(ISpecification<Category> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator

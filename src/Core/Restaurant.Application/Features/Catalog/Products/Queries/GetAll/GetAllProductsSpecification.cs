@@ -29,11 +29,13 @@ namespace Restaurant.Application.Features.Catalog.Products.Queries.GetAll
             }
             else if (hasKeyword)
             {
-                Criteria = p => p.Name.Contains(query.Keyword!);
+                Criteria = p => p.Name.ToLower()
+                                .Contains(query.Keyword!.ToLower());
             }
             else if (hasCategoryName)
             {
-                Criteria = p => p.Category.Name.Contains(query.CategoryName!);
+                Criteria = p => p.Category.Name.ToLower()
+                                .Contains(query.CategoryName!.ToLower());
             }
 
             // OrderBy: sắp xếp theo SortBy
