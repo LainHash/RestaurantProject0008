@@ -16,6 +16,7 @@ namespace Restaurant.Domain.Entities.Guests
 
     public partial class Customer
     {
+        public Customer() { }
         public Customer(Guid id, Guid userId, Guid? personalInformationId = null)
         {
             Id = id;
