@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
@@ -25,9 +26,9 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ReservationResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result<ReservationResponse>> GetByIdAsync(GetReservationByIdSpecification specification, CancellationToken cancellationToken = default)
         {
-            var reservation = await _reservationRepository.FindAsync(id, cancellationToken);
+            var reservation = await _reservationRepository.FindAsync(specification, cancellationToken);
             if (reservation is null)
             {
                 return Result<ReservationResponse>

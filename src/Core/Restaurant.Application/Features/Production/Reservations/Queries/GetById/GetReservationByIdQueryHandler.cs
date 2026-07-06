@@ -15,7 +15,8 @@ namespace Restaurant.Application.Features.Production.Reservations.Queries.GetByI
 
         public async Task<Result<ReservationResponse>> Handle(GetReservationByIdQuery request, CancellationToken cancellationToken)
         {
-            var response = await _reservationService.GetByIdAsync(request.Id, cancellationToken);
+            var specification = new GetReservationByIdSpecification(request);
+            var response = await _reservationService.GetByIdAsync(specification, cancellationToken);
             return response;
         }
     }

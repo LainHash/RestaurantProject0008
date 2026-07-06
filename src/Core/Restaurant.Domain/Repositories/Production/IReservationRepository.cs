@@ -8,5 +8,6 @@ namespace Restaurant.Domain.Repositories.Production
         Task<List<Reservation>> ToListAsync(CancellationToken cancellationToken = default);
         Task<List<Reservation>> ToListAsync(ISpecification<Reservation> specification, CancellationToken cancellationToken = default);
         Task<Reservation?> FindAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<Reservation?> FindAsync(ISpecification<Reservation> specification, CancellationToken cancellationToken = default);
     }
 }
