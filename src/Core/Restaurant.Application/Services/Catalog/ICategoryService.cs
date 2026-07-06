@@ -1,14 +1,15 @@
-﻿using Restaurant.Application.Models.Results;
+﻿using Restaurant.Application.Features.Catalog.Categories.Queries.GetAll;
+using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Catalog.Categories;
 
 namespace Restaurant.Application.Services.Catalog
 {
     public interface ICategoryService
     {
-        Task<Result<IEnumerable<CategoryResponse>>> 
-            GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<CategoryResponse>>>
+            GetAllAsync(GetAllCategoriesSpecification specification, CancellationToken cancellationToken = default);
 
-        Task<Result<CategoryResponse>> 
+        Task<Result<CategoryResponse>>
             GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
         Task<Result<CategoryResponse>>

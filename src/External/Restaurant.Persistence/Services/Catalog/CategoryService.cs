@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Catalog.Categories.Queries.GetAll;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Contract.DTOs.Catalog.Categories;
@@ -16,16 +17,20 @@ namespace Restaurant.Persistence.Services.Catalog
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<IEnumerable<CategoryResponse>>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<CategoryResponse>>>
+            GetAllAsync(GetAllCategoriesSpecification specification, CancellationToken cancellationToken = default)
         {
-            var categories = await _categoryRepository.ToListAsync(cancellationToken);
+            var totalItems = await _categoryRepository.CountAsync(specification, cancellationToken);
+            var categories = await _categoryRepository.ToListAsync(specification, cancellationToken);
 
+            var indexPage = (specification.Skip / specification.Take) + 1;
             var response = categories.Select(c => new CategoryResponse(c));
             return Result<IEnumerable<CategoryResponse>>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
-        public async Task<Result<CategoryResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Result<CategoryResponse>>
+            GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var category = await _categoryRepository.FindAsync(id, cancellationToken);
             if (category == null)
@@ -80,7 +85,7 @@ namespace Restaurant.Persistence.Services.Catalog
                 return Result<object>
                     .Fail(Error.Deleted, HttpStatusCode.Conflict);
             }
-            
+
             category.SoftDelete();
 
             await _categoryRepository.UpdateAsync(category, cancellationToken);

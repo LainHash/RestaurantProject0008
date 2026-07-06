@@ -34,8 +34,16 @@ namespace Restaurant.Application.Models.Results
         public static Result<T> Succeed(T? data, string message, HttpStatusCode statusCode = HttpStatusCode.OK)
             => new(data, true, message, statusCode);
 
-        public static Result<T> Succeed(T? data, string message, int totalItems, int indexPage, int pageSize, HttpStatusCode statusCode = HttpStatusCode.OK)
-            => new(data, true, message, totalItems, indexPage, pageSize, statusCode);
+        public static Result<T> Succeed(
+            T? data,
+            string message,
+            int totalItems,
+            int indexPage = 1,
+            int pageSize = 12,
+            HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            return new(data, true, message, totalItems, indexPage, pageSize, statusCode);
+        }
 
         public static Result<T> Fail(string message, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
             => new(default, false, message, statusCode);

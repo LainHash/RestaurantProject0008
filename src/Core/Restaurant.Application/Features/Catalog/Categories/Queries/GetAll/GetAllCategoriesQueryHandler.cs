@@ -12,9 +12,11 @@ namespace Restaurant.Application.Features.Catalog.Categories.Queries.GetAll
         {
             _categoryService = categoryService;
         }
+
         public async Task<Result<IEnumerable<CategoryResponse>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var response = await _categoryService.GetAllAsync(cancellationToken);
+            var specification = new GetAllCategoriesSpecification(request);
+            var response = await _categoryService.GetAllAsync(specification, cancellationToken);
             return response;
         }
     }
