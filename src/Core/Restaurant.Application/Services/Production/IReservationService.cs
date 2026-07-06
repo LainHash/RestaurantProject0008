@@ -17,5 +17,10 @@ namespace Restaurant.Application.Services.Production
         Task<Result<ReservationResponse>> 
             GetByIdAsync(GetReservationByIdSpecification specification, CancellationToken cancellationToken = default);
 
+        Task<Result<ReservationResponse>>
+            CreateForCustomerAsync(CreateReservationForCustomerRequest request, CancellationToken cancellationToken = default);
+        
+        Task<Result<ReservationResponse>>
+            CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default);
     }
 }
