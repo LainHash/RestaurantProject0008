@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
+using Restaurant.Application.Features.Territory.RestaurantTables.Queries.GetAll;
 
 namespace Restaurant.API.Controllers.Production
 {
@@ -22,7 +24,15 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/schedule/{weekStart}")]
+        public async Task<IActionResult> GetAllByWeek([FromRoute] DateTime weekStart, CancellationToken cancellationToken)
+        {
+            var query = new GetAllReservationsByWeekQuery(weekStart);
+            var result = await _mediator.Send(query, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpGet("/{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var query = new GetReservationByIdQuery(id);
