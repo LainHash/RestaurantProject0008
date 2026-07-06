@@ -6,10 +6,11 @@ namespace Restaurant.Contract.DTOs.Production.Reservations
     {
         public DateTime ReservationTime { get; set; }
         public int NumberOfGuests { get; set; }
-        public string Status { get; set; } = string.Empty;
         public string? Note { get; set; }
 
         public Guid RestaurantTableId { get; set; }
-        public CreateTemporaryContactRequest TemporaryContact { get; set; } = null!;
+        public string GuestName { get; set; } = string.Empty;
+        public string GuestEmail { get; set; } = string.Empty;
+        public string GuestPhone { get; set; } = string.Empty;
     }
 }

@@ -21,7 +21,6 @@
   <ItemGroup>
     <Folder Include="Features\Production\Reservations\Command\" />
     <Folder Include="Features\Territory\Areas\Commands\" />
-    <Folder Include="Mapping\Production\" />
   </ItemGroup>
 
 </Project>
