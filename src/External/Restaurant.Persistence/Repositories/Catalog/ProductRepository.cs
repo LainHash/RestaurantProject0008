@@ -55,7 +55,7 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<int> CountAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Products.AsQueryable().AsNoTracking(), specification);
+                .GetQuery(_context.Products.AsQueryable().AsNoTracking(), specification, applyPaging: false);
             return await query.CountAsync(cancellationToken);
         }
     }

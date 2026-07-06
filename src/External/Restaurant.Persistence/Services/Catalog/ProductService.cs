@@ -25,11 +25,10 @@ namespace Restaurant.Persistence.Services.Catalog
         public async Task<Result<IEnumerable<ProductResponse>>>
             GetAllAsync(GetAllProductsSpecification specification, CancellationToken cancellationToken = default)
         {
-            var repo = _productRepository;
-            var totalItems = await repo.CountAsync(specification, cancellationToken);
+            var totalItems = await _productRepository.CountAsync(specification, cancellationToken);
             var indexPage = (specification.Skip / specification.Take) + 1;
 
-            var products = await repo.ToListAsync(specification, cancellationToken);
+            var products = await _productRepository.ToListAsync(specification, cancellationToken);
 
             var response = products.Select(p => new ProductResponse(p));
             return Result<IEnumerable<ProductResponse>>
