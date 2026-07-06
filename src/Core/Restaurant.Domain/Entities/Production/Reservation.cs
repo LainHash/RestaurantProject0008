@@ -2,8 +2,6 @@
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Entities.Territory;
-using Restaurant.Domain.Informations.Production.Reservations;
-using System.Net.NetworkInformation;
 
 namespace Restaurant.Domain.Entities.Production
 {
@@ -36,16 +34,6 @@ namespace Restaurant.Domain.Entities.Production
             CustomerId = customerId;
             TemporaryContactId = temporaryContactId;
             RestaurantTableId = restaurantTableId;
-        }
-
-        public Reservation(CreateReservationInformation information)
-        {
-            ReservationTime = information.ReservationTime;
-            NumberOfGuests = information.NumberOfGuests;
-            Status = information.Status;
-            Note = information.Note;
-            CustomerId = information.CustomerId;
-            TemporaryContact = information.TemporaryContact;
         }
     }
 }
