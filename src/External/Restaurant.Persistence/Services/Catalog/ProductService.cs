@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Features.Catalog.Products.Commands.Update;
+using Restaurant.Application.Features.Catalog.Products.Commands.Update;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
 using Restaurant.Application.Features.Inventory.ProductStocks.Commands.Update;
@@ -7,6 +7,7 @@ using Restaurant.Application.Mapping.Inventory;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Catalog.Products;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
@@ -17,9 +18,11 @@ namespace Restaurant.Persistence.Services.Catalog
     internal class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
-        public ProductService(IProductRepository productRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<ProductResponse>>>
@@ -54,6 +57,7 @@ namespace Restaurant.Persistence.Services.Catalog
         {
             var product = Product.Create(request.ToInfo());
             await _productRepository.AddAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new ProductResponse(product);
             return Result<ProductResponse>
@@ -71,6 +75,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             product.Update(specification.Body.ToInfo());
             await _productRepository.UpdateAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new ProductResponse(product);
             return Result<ProductResponse>
@@ -88,6 +93,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             product.ProductStock.Update(specification.Body.ToInfo());
             await _productRepository.UpdateAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new ProductResponse(product);
             return Result<ProductResponse>
@@ -111,6 +117,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             product.SoftDelete();
             await _productRepository.UpdateAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
                 .Succeed(default, Success.Deleted);
@@ -133,6 +140,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             product.Restore();
             await _productRepository.UpdateAsync(product, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
                 .Succeed(default, Success.Restored);

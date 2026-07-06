@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Identity;
 using Restaurant.Domain.Repositories.Identity;
 using Restaurant.Persistence.Contexts;
@@ -23,10 +23,10 @@ namespace Restaurant.Persistence.Repositories.Identity
             return await _context.PersonalInformations.ToListAsync(cancellationToken);
         }
 
-        public async Task AddAsync(PersonalInformation personalInformation, CancellationToken cancellationToken = default)
+        public Task AddAsync(PersonalInformation personalInformation, CancellationToken cancellationToken = default)
         {
             _context.PersonalInformations.Add(personalInformation);
-            await _context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
     }
 }

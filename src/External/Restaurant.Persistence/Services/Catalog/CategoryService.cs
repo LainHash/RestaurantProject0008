@@ -1,7 +1,8 @@
-﻿using Restaurant.Application.Features.Catalog.Categories.Queries.GetAll;
+using Restaurant.Application.Features.Catalog.Categories.Queries.GetAll;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Catalog.Categories;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
@@ -12,9 +13,11 @@ namespace Restaurant.Persistence.Services.Catalog
     internal class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryService(ICategoryRepository categoryRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryService(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
         {
             _categoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<CategoryResponse>>>
@@ -49,6 +52,7 @@ namespace Restaurant.Persistence.Services.Catalog
         {
             var category = new Category(request.Name, request.Description);
             await _categoryRepository.AddAsync(category, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new CategoryResponse(category);
             return Result<CategoryResponse>
@@ -66,6 +70,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             category.Update(request.Name, request.Description);
             await _categoryRepository.UpdateAsync(category, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new CategoryResponse(category);
             return Result<CategoryResponse>
@@ -90,6 +95,7 @@ namespace Restaurant.Persistence.Services.Catalog
             category.SoftDelete();
 
             await _categoryRepository.UpdateAsync(category, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result<object>
                 .Succeed(null, Success.Deleted);
         }
@@ -112,6 +118,7 @@ namespace Restaurant.Persistence.Services.Catalog
             category.Restore();
 
             await _categoryRepository.UpdateAsync(category, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result<object>
                 .Succeed(null, Success.Restored);
         }

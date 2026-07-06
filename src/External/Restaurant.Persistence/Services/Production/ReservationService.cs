@@ -1,10 +1,11 @@
-﻿using Restaurant.Application.Common.Enums;
+using Restaurant.Application.Common.Enums;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
 using Restaurant.Application.Mapping.Production;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Reservations;
 using Restaurant.Domain.Entities.Production;
@@ -16,9 +17,11 @@ namespace Restaurant.Persistence.Services.Production
     internal class ReservationService : IReservationService
     {
         private readonly IReservationRepository _reservationRepository;
-        public ReservationService(IReservationRepository reservationRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ReservationService(IReservationRepository reservationRepository, IUnitOfWork unitOfWork)
         {
             _reservationRepository = reservationRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<ReservationResponse>>>
@@ -59,7 +62,8 @@ namespace Restaurant.Persistence.Services.Production
         public async Task<Result<ReservationResponse>> CreateForCustomerAsync(CreateReservationForCustomerRequest request, CancellationToken cancellationToken = default)
         {
             var reservation = new Reservation(request.ToInfo());
-            await _reservationRepository.AddAsync(reservation);
+            await _reservationRepository.AddAsync(reservation, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new ReservationResponse(reservation);
             return Result<ReservationResponse>
@@ -69,7 +73,8 @@ namespace Restaurant.Persistence.Services.Production
         public async Task<Result<ReservationResponse>> CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default)
         {
             var reservation = new Reservation(request.ToInfo());
-            await _reservationRepository.AddAsync(reservation);
+            await _reservationRepository.AddAsync(reservation, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new ReservationResponse(reservation);
             return Result<ReservationResponse>

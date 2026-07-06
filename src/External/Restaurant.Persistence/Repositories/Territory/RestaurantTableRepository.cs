@@ -1,4 +1,4 @@
-﻿using Restaurant.Domain.Entities.Territory;
+using Restaurant.Domain.Entities.Territory;
 using Restaurant.Domain.Repositories.Territory;
 using Restaurant.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -23,16 +23,16 @@ namespace Restaurant.Persistence.Repositories.Territory
             return await _context.RestaurantTables.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public async Task AddAsync(RestaurantTable table, CancellationToken cancellationToken = default)
+        public Task AddAsync(RestaurantTable table, CancellationToken cancellationToken = default)
         {
             _context.RestaurantTables.Add(table);
-            await _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
 
-        public async Task UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default)
+        public Task UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default)
         {
             _context.RestaurantTables.Update(table);
-            await _context.SaveChangesAsync(cancellationToken);
+            return Task.CompletedTask;
         }
     }
 }
