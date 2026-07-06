@@ -1,11 +1,13 @@
-﻿using Restaurant.Application.Models.Results;
+﻿using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Production.Reservations;
 
 namespace Restaurant.Application.Services.Production
 {
     public interface IReservationService
     {
-        Task<Result<IEnumerable<ReservationResponse>>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<Result<IEnumerable<ReservationResponse>>> 
+            GetAllAsync(GetAllReservationsSpecification specification, CancellationToken cancellationToken = default);
         Task<Result<ReservationResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

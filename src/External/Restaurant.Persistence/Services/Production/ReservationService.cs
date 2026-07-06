@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Reservations;
@@ -15,9 +16,9 @@ namespace Restaurant.Persistence.Services.Production
             _reservationRepository = reservationRepository;
         }
 
-        public async Task<Result<IEnumerable<ReservationResponse>>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<ReservationResponse>>> GetAllAsync(GetAllReservationsSpecification specification, CancellationToken cancellationToken = default)
         {
-            var reservations = await _reservationRepository.ToListAsync(cancellationToken);
+            var reservations = await _reservationRepository.ToListAsync(specification, cancellationToken);
 
             var response = reservations.Select(r => new ReservationResponse(r));
             return Result<IEnumerable<ReservationResponse>>
@@ -27,7 +28,7 @@ namespace Restaurant.Persistence.Services.Production
         public async Task<Result<ReservationResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             var reservation = await _reservationRepository.FindAsync(id, cancellationToken);
-            if(reservation is null)
+            if (reservation is null)
             {
                 return Result<ReservationResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
