@@ -6,6 +6,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Command.Create
     {
         public CreateReservationForCustomerValidator()
         {
+
             RuleFor(x => x.Body.NumberOfGuests)
                 .GreaterThan(0).WithMessage("Number of guests must be greater than 0.");
 

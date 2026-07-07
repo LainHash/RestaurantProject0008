@@ -16,7 +16,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Command.Create
 
         public async Task<Result<ReservationResponse>> Handle(CreateReservationForCustomerCommand request, CancellationToken cancellationToken)
         {
-            var response = await _reservationService.CreateForCustomerAsync(request.Body, cancellationToken);
+            var response = await _reservationService.CreateForCustomerAsync(request.Body, request.UserId, cancellationToken);
             return response;
         }
     }

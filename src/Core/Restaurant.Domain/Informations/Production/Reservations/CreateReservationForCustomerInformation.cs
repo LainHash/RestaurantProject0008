@@ -6,6 +6,5 @@ namespace Restaurant.Domain.Informations.Production.Reservations
         TimeSpan DurationHours,
         string Status,
         string? Note,
-        Guid CustomerId,
         string AreaType);
 }

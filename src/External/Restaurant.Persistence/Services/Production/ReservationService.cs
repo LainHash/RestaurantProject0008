@@ -12,6 +12,7 @@ using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Production;
 using Restaurant.Domain.Repositories.Territory;
+using Restaurant.Domain.Specifications;
 using System.Net;
 
 namespace Restaurant.Persistence.Services.Production
@@ -70,7 +71,7 @@ namespace Restaurant.Persistence.Services.Production
         }
 
         public async Task<Result<ReservationResponse>> 
-            CreateForCustomerAsync(CreateReservationForCustomerRequest request, CancellationToken cancellationToken = default)
+            CreateForCustomerAsync(CreateReservationForCustomerRequest request, Guid userId, CancellationToken cancellationToken = default)
         {
             var availableTables = await _restaurantTableRepository
                 .GetAvailableTablesAsync(
@@ -90,6 +91,13 @@ namespace Restaurant.Persistence.Services.Production
 
             var reservation = new Reservation(request.ToInfo());
             reservation.AddTable(selectedTable.Id);
+
+            var customer = await _customerRepository.FindByUserIdAsync(userId, cancellationToken);
+
+            if (customer is not null)
+            {
+                reservation.AddCustomer(customer.Id);
+            }
 
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

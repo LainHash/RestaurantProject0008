@@ -14,8 +14,7 @@ namespace Restaurant.Application.Mapping.Production
                     DurationHours: request.DurationHours,
                     Status: nameof(ReservationStatus.Pending),
                     Note: request.Note,
-                    AreaType: request.AreaType,
-                    CustomerId: request.CustomerId);
+                    AreaType: request.AreaType);
         }
 
         public static CreateReservationForGuestInformation ToInfo(this CreateReservationForGuestRequest request) 

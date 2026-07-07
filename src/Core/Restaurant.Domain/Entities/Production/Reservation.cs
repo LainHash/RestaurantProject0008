@@ -68,7 +68,6 @@ namespace Restaurant.Domain.Entities.Production
             DurationHours = information.DurationHours;
             Status = information.Status;
             Note = information.Note;
-            CustomerId = information.CustomerId;
         }
 
         public Reservation(CreateReservationForGuestInformation information)
@@ -84,6 +83,11 @@ namespace Restaurant.Domain.Entities.Production
         public void AddTable(Guid tableId)
         {
             RestaurantTableId = tableId;
+        }
+
+        public void AddCustomer(Guid customerId)
+        {
+            CustomerId = customerId;
         }
     }
 }
