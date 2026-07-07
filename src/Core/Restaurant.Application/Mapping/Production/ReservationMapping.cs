@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Common.Enums;
+using Restaurant.Application.Common.Enums;
 using Restaurant.Contract.DTOs.Production.Reservations;
 using Restaurant.Domain.Informations.Production.Reservations;
 
@@ -11,6 +11,7 @@ namespace Restaurant.Application.Mapping.Production
             return new CreateReservationForCustomerInformation(
                     ReservationTime: request.ReservationTime,
                     NumberOfGuests: request.NumberOfGuests,
+                    DurationHours: request.DurationHours,
                     Status: nameof(ReservationStatus.Pending),
                     Note: request.Note,
                     AreaType: request.AreaType,
@@ -22,6 +23,7 @@ namespace Restaurant.Application.Mapping.Production
             return new CreateReservationForGuestInformation(
                 ReservationTime: request.ReservationTime,
                     NumberOfGuests: request.NumberOfGuests,
+                    DurationHours: request.DurationHours,
                     Status: nameof(ReservationStatus.Pending),
                     Note: request.Note,
                     AreaType: request.AreaType,

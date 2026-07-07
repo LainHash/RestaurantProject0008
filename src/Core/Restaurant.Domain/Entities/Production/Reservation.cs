@@ -1,4 +1,4 @@
-﻿using Restaurant.Domain.Abstraction;
+using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Entities.Territory;
@@ -10,6 +10,7 @@ namespace Restaurant.Domain.Entities.Production
     {
         public DateTime ReservationTime { get; private set; }
         public int NumberOfGuests { get; private set; }
+        public TimeSpan DurationHours { get; private set; }
         public string Status { get; private set; } = string.Empty;
         public string? Note { get; private set; }
 
@@ -25,11 +26,12 @@ namespace Restaurant.Domain.Entities.Production
 
     public partial class Reservation
     {
-        public Reservation(Guid id, DateTime reservationTime, int numberOfGuests, string status, Guid restaurantTableId, string? note = null, Guid? customerId = null, Guid? temporaryContactId = null)
+        public Reservation(Guid id, DateTime reservationTime, int numberOfGuests, TimeSpan durationHours, string status, Guid restaurantTableId, string? note = null, Guid? customerId = null, Guid? temporaryContactId = null)
         {
             Id = id;
             ReservationTime = reservationTime;
             NumberOfGuests = numberOfGuests;
+            DurationHours = durationHours;
             Status = status;
             Note = note;
             CustomerId = customerId;
@@ -37,23 +39,24 @@ namespace Restaurant.Domain.Entities.Production
             RestaurantTableId = restaurantTableId;
         }
 
-        public Reservation(DateTime reservationTime, int numberOfGuests, string status, Guid restaurantTableId, string? note)
+        public Reservation(DateTime reservationTime, int numberOfGuests, TimeSpan durationHours, string status, Guid restaurantTableId, string? note)
         {
             ReservationTime = reservationTime;
             NumberOfGuests = numberOfGuests;
+            DurationHours = durationHours;
             Status = status;
             Note = note;
             RestaurantTableId = restaurantTableId;
         }
 
-        public Reservation(DateTime reservationTime, int numberOfGuests, string status, Guid restaurantTableId, string? note, Guid customerId)
-            : this(reservationTime, numberOfGuests, status, restaurantTableId, note)
+        public Reservation(DateTime reservationTime, int numberOfGuests, TimeSpan durationHours, string status, Guid restaurantTableId, string? note, Guid customerId)
+            : this(reservationTime, numberOfGuests, durationHours, status, restaurantTableId, note)
         {
             CustomerId = customerId;
         }
 
-        public Reservation(DateTime reservationTime, int numberOfGuests, string status, Guid restaurantTableId, string? note, TemporaryContact temporaryContact)
-            : this(reservationTime, numberOfGuests, status, restaurantTableId, note)
+        public Reservation(DateTime reservationTime, int numberOfGuests, TimeSpan durationHours, string status, Guid restaurantTableId, string? note, TemporaryContact temporaryContact)
+            : this(reservationTime, numberOfGuests, durationHours, status, restaurantTableId, note)
         {
             TemporaryContact = temporaryContact;
         }
@@ -62,6 +65,7 @@ namespace Restaurant.Domain.Entities.Production
         {
             ReservationTime = information.ReservationTime;
             NumberOfGuests = information.NumberOfGuests;
+            DurationHours = information.DurationHours;
             Status = information.Status;
             Note = information.Note;
             CustomerId = information.CustomerId;
@@ -71,6 +75,7 @@ namespace Restaurant.Domain.Entities.Production
         {
             ReservationTime = information.ReservationTime;
             NumberOfGuests = information.NumberOfGuests;
+            DurationHours = information.DurationHours;
             Status = information.Status;
             Note = information.Note;
             TemporaryContact = new TemporaryContact(information.GuestName, information.GuestEmail, information.GuestPhone);

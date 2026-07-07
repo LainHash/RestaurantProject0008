@@ -1,4 +1,4 @@
-﻿using Restaurant.Contract.DTOs.Guests.Customers;
+using Restaurant.Contract.DTOs.Guests.Customers;
 using Restaurant.Contract.DTOs.Misc.TempContacts;
 using Restaurant.Contract.DTOs.Territory.RestaurantTables;
 using Restaurant.Domain.Entities.Guests;
@@ -12,6 +12,7 @@ namespace Restaurant.Contract.DTOs.Production.Reservations
         public Guid Id { get; set; }
         public DateTime ReservationTime { get; set; }
         public int NumberOfGuests { get; set; }
+        public TimeSpan DurationHours { get; set; }
         public string Status { get; set; } = string.Empty;
         public string? Note { get; set; }
 
@@ -25,6 +26,7 @@ namespace Restaurant.Contract.DTOs.Production.Reservations
             Id = reservation.Id;
             ReservationTime = reservation.ReservationTime;
             NumberOfGuests = reservation.NumberOfGuests;
+            DurationHours = reservation.DurationHours;
             Status = reservation.Status;
             Note = reservation.Note;
             Customer = new CustomerReponse(reservation.Customer ?? new Customer());

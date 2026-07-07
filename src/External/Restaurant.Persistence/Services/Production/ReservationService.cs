@@ -77,7 +77,7 @@ namespace Restaurant.Persistence.Services.Production
                     areaType: request.AreaType,
                     minCapacity: request.NumberOfGuests,
                     reservationTime: request.ReservationTime,
-                    duration: TimeSpan.FromHours(2),
+                    duration: request.DurationHours,
                     cancellationToken);
 
             var selectedTable = availableTables.FirstOrDefault();
@@ -107,7 +107,7 @@ namespace Restaurant.Persistence.Services.Production
                     areaType: request.AreaType,
                     minCapacity: request.NumberOfGuests,
                     reservationTime: request.ReservationTime,
-                    duration: TimeSpan.FromHours(2),
+                    duration: request.DurationHours,
                     cancellationToken);
 
             var selectedTable = availableTables.FirstOrDefault();
