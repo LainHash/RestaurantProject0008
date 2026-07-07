@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
 using Restaurant.Domain.Entities.Catalog;
+using Restaurant.Domain.Entities.Inventory;
 
 namespace Restaurant.Persistence.Configurations.Catalog
 {
@@ -20,8 +21,14 @@ namespace Restaurant.Persistence.Configurations.Catalog
 
             builder.Property(x => x.CategoryId)
                     .IsRequired();
+
             // Soft delete filter
             builder.HasQueryFilter(x => !x.IsDeleted);
+
+            builder.HasOne(x => x.IngredientStock)
+                   .WithOne(x => x.Ingredient)
+                   .HasForeignKey<IngredientStock>(x => x.IngredientId)
+                   .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

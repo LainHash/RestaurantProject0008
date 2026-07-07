@@ -324,6 +324,34 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.IngredientStock", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IngredientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("StockQuantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId")
+                        .IsUnique();
+
+                    b.ToTable("IngredientStock");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.ProductStock", b =>
                 {
                     b.Property<Guid>("Id")
@@ -703,6 +731,17 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.IngredientStock", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Catalog.Ingredient", "Ingredient")
+                        .WithOne("IngredientStock")
+                        .HasForeignKey("Restaurant.Domain.Entities.Inventory.IngredientStock", "IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.ProductStock", b =>
                 {
                     b.HasOne("Restaurant.Domain.Entities.Catalog.Product", "Product")
@@ -808,6 +847,9 @@ namespace Restaurant.Persistence.Migrations
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Ingredient", b =>
                 {
+                    b.Navigation("IngredientStock")
+                        .IsRequired();
+
                     b.Navigation("RecipeIngredients");
                 });
 

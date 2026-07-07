@@ -14,6 +14,9 @@ namespace Restaurant.Application.Features.Production.Recipes.Queries.GetById
             AddIncludeAggregator(x => x.Include(r => r.RecipeIngredients)
                                         .ThenInclude(ri => ri.Ingredient)
                                         .ThenInclude(i => i.Category));
+            AddIncludeAggregator(x => x.Include(r => r.RecipeIngredients)
+                                        .ThenInclude(ri => ri.Ingredient)
+                                        .ThenInclude(i => i.IngredientStock));
         }
     }
 }
