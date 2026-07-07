@@ -31,5 +31,12 @@ namespace Restaurant.Persistence.Repositories.Production
         {
             return await _context.Recipes.FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
         }
+
+        public async Task<Recipe?> FindAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Recipes.AsQueryable().AsNoTracking(), specification);
+            return await query.FirstOrDefaultAsync(cancellationToken);
+        }
     }
 }

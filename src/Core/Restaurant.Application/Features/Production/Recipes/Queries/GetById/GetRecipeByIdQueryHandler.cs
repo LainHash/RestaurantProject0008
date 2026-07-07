@@ -15,7 +15,8 @@ namespace Restaurant.Application.Features.Production.Recipes.Queries.GetById
 
         public async Task<Result<RecipeResponse>> Handle(GetRecipeByIdQuery request, CancellationToken cancellationToken)
         {
-            var response = await _recipeService.GetByIdAsync(request.Id, cancellationToken);
+            var specification = new GetRecipeByIdSpecification(request);
+            var response = await _recipeService.GetByIdAsync(specification, cancellationToken);
             return response;
         }
     }

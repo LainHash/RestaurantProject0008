@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
+using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
@@ -26,9 +27,9 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<RecipeResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Result<RecipeResponse>> GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken)
         {
-            var recipe = await _recipeRespository.FindAsync(id, cancellationToken);
+            var recipe = await _recipeRespository.FindAsync(specification, cancellationToken);
             if (recipe is null)
             {
                 return Result<RecipeResponse>
