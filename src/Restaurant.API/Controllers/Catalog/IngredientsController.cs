@@ -1,23 +1,23 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
-using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
+using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
+using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 
-namespace Restaurant.API.Controllers.Production
+namespace Restaurant.API.Controllers.Catalog
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecipesController : ControllerBase
+    public class IngredientsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public RecipesController(IMediator mediator)
+        public IngredientsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllRecipesQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllIngredientsQuery query, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);
@@ -26,7 +26,7 @@ namespace Restaurant.API.Controllers.Production
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
-            var query = new GetRecipeByIdQuery(id);
+            var query = new GetIngredientByIdQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
