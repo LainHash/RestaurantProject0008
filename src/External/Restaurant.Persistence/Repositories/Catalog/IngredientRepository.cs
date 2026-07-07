@@ -1,0 +1,37 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Domain.Entities.Catalog;
+using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Persistence.Contexts;
+
+namespace Restaurant.Persistence.Repositories.Catalog
+{
+    internal class IngredientRepository : IIngredientRepository
+    {
+        private readonly RestaurantDbContext _context;
+        public IngredientRepository(RestaurantDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<Ingredient>> ToListAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Ingredients.ToListAsync(cancellationToken);
+        }
+
+        public async Task<Ingredient?> FindAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Ingredients.FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
+        }
+        public Task AddAsync(Ingredient ingredient, CancellationToken cancellationToken = default)
+        {
+            _context.Ingredients.Add(ingredient);
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateAsync(Ingredient ingredient, CancellationToken cancellationToken = default)
+        {
+            _context.Ingredients.Update(ingredient);
+            return Task.CompletedTask;
+        }
+    }
+}
