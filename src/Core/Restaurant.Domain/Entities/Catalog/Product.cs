@@ -8,17 +8,17 @@ namespace Restaurant.Domain.Entities.Catalog
 {
     public partial class Product : SoftDeletableEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public bool IsMadeToOrder { get; set; }
-        public bool IsAvailable { get; set; }
+        public string Name { get; private set; } = string.Empty;
+        public string? Description { get; private set; }
+        public bool IsMadeToOrder { get; private set; }
+        public bool IsAvailable { get; private set; }
 
-        public Guid CategoryId { get; set; }
+        public Guid CategoryId { get; private set; }
 
-        public virtual Category Category { get; set; } = null!;
-        public virtual ProductStock ProductStock { get; set; } = null!;
-        public virtual ICollection<ProductImage> ProductImages { get; set; } = [];
-        public virtual ICollection<Recipe> Recipes { get; set; } = [];
+        public virtual Category Category { get; private set; } = null!;
+        public virtual ProductStock ProductStock { get; private set; } = null!;
+        public virtual ICollection<ProductImage> ProductImages { get; private set; } = [];
+        public virtual ICollection<Recipe> Recipes { get; private set; } = [];
 
     }
 

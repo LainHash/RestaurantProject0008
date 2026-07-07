@@ -5,13 +5,13 @@ namespace Restaurant.Domain.Entities.Misc
 {
     public partial class ProductImage : Entity
     {
-        public int DisplayOrder { get; set; }
+        public int DisplayOrder { get; private set; }
 
-        public Guid ProductId { get; set; }
-        public Guid ImageId { get; set; }
+        public Guid ProductId { get; private set; }
+        public Guid ImageId { get; private set; }
 
-        public virtual Product Product { get; set; } = null!;
-        public virtual Image Image { get; set; } = null!;
+        public virtual Product Product { get; private set; } = null!;
+        public virtual Image Image { get; private set; } = null!;
 
     }
 

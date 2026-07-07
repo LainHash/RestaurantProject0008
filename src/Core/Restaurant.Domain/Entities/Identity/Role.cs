@@ -4,10 +4,10 @@ namespace Restaurant.Domain.Entities.Identity
 {
     public class Role : SoftDeletableEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
+        public string Name { get; private set; } = string.Empty;
+        public string? Description { get; private set; }
 
-        public virtual ICollection<User> Users { get; set; } = [];
+        public virtual ICollection<User> Users { get; private set; } = [];
 
         public Role(Guid id, string name, string? description = null)
         {

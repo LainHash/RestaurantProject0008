@@ -115,9 +115,7 @@ namespace Restaurant.Persistence.Services.Authentication
                     .Fail("Verification code has expired. Please request a new one.", HttpStatusCode.RequestTimeout);
             }
 
-            user.IsActive = true;
-            user.VerificationCode = null;
-            user.VerificationCodeExpiresAt = null;
+            user.CompleteVerification();
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -159,7 +157,7 @@ namespace Restaurant.Persistence.Services.Authentication
             await _personalInfoRepository.AddAsync(personalInfo, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            customer.PersonalInformationId = personalInfo.Id;
+            customer.CompleteProfile(personalInfo.Id);
             await _customerRepository.UpdateAsync(customer);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

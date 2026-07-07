@@ -5,17 +5,17 @@ namespace Restaurant.Domain.Entities.Misc
 {
     public partial class Image : AuditableEntity
     {
-        public string AltText { get; set; } = null!;
+        public string AltText { get; private set; } = null!;
 
-        public string Url { get; set; } = null!;           // URL truy cập ảnh
-        public string StoragePath { get; set; } = null!;   // đường dẫn vật lý hoặc cloud
+        public string Url { get; private set; } = null!;           // URL truy cập ảnh
+        public string StoragePath { get; private set; } = null!;   // đường dẫn vật lý hoặc cloud
 
-        public decimal FileSize { get; set; }                 // byte
-        public string ContentType { get; set; } = null!;   // image/jpeg
+        public decimal FileSize { get; private set; }                 // byte
+        public string ContentType { get; private set; } = null!;   // image/jpeg
 
-        public bool IsPrimary { get; set; }
+        public bool IsPrimary { get; private set; }
 
-        public virtual ICollection<ProductImage> ProductImages { get; set; } = [];
+        public virtual ICollection<ProductImage> ProductImages { get; private set; } = [];
 
     }
 
@@ -52,5 +52,9 @@ namespace Restaurant.Domain.Entities.Misc
             IsPrimary = isPrimary;
         }
 
+        public void RemovePrimary()
+        {
+            IsPrimary = false;
+        }
     }
 }

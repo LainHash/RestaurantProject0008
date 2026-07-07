@@ -1,29 +1,26 @@
 ﻿using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Informations.Identity.PersonalInformations;
-using System.Diagnostics.Metrics;
-using System.Net;
-using System.Reflection;
 
 namespace Restaurant.Domain.Entities.Identity
 {
     public partial class PersonalInformation : SoftDeletableEntity
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public string FirstName { get; private set; } = string.Empty;
+        public string LastName { get; private set; } = string.Empty;
 
-        public DateOnly Dob { get; set; }
-        public bool Gender { get; set; }
+        public DateOnly Dob { get; private set; }
+        public bool Gender { get; private set; }
 
-        public string Address { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string Country { get; set; } = string.Empty;
+        public string Address { get; private set; } = string.Empty;
+        public string City { get; private set; } = string.Empty;
+        public string Country { get; private set; } = string.Empty;
 
-        public string Phone { get; set; } = string.Empty;
-        public string CitizenCardId { get; set; } = string.Empty;
+        public string Phone { get; private set; } = string.Empty;
+        public string CitizenCardId { get; private set; } = string.Empty;
 
 
-        public virtual Customer Customer { get; set; } = null!;
+        public virtual Customer Customer { get; private set; } = null!;
     }
 
     public partial class PersonalInformation

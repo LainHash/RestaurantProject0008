@@ -6,12 +6,12 @@ namespace Restaurant.Domain.Entities.Inventory
 {
     public partial class ProductStock : Entity
     {
-        public decimal UnitPrice { get; set; }
-        public string Unit { get; set; } = string.Empty;
-        public decimal StockQuantity { get; set; }
-        public Guid ProductId { get; set; }
+        public decimal UnitPrice { get; private set; }
+        public string Unit { get; private set; } = string.Empty;
+        public decimal StockQuantity { get; private set; }
+        public Guid ProductId { get; private set; }
 
-        public virtual Product Product { get; set; } = null!;
+        public virtual Product Product { get; private set; } = null!;
     }
 
     public partial class ProductStock

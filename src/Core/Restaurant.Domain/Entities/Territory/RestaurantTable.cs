@@ -1,19 +1,18 @@
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Production;
-using System.Runtime.InteropServices;
 
 namespace Restaurant.Domain.Entities.Territory
 {
     public partial class RestaurantTable : SoftDeletableEntity
     {
-        public string TableNumber { get; set; } = string.Empty;
-        public int Capacity { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public string TableNumber { get; private set; } = string.Empty;
+        public int Capacity { get; private set; }
+        public string Status { get; private set; } = string.Empty;
 
-        public Guid AreaId { get; set; }
+        public Guid AreaId { get; private set; }
 
-        public virtual Area Area { get; set; } = null!;
-        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+        public virtual Area Area { get; private set; } = null!;
+        public virtual ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
 
     }
 

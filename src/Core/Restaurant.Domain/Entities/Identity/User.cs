@@ -6,17 +6,17 @@ namespace Restaurant.Domain.Entities.Identity
 {
     public partial class User : SoftDeletableEntity
     {
-        public string UserName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-        public bool IsActive { get; set; }
+        public string UserName { get; private set; } = string.Empty;
+        public string Email { get; private set; } = string.Empty;
+        public string PasswordHash { get; private set; } = string.Empty;
+        public bool IsActive { get; private set; }
 
-        public string? VerificationCode { get; set; }
-        public DateTime? VerificationCodeExpiresAt { get; set; }
-        public Guid RoleId { get; set; }
+        public string? VerificationCode { get; private set; }
+        public DateTime? VerificationCodeExpiresAt { get; private set; }
+        public Guid RoleId { get; private set; }
 
-        public virtual Customer Customer { get; set; } = null!;
-        public virtual Role Role { get; set; } = null!;
+        public virtual Customer Customer { get; private set; } = null!;
+        public virtual Role Role { get; private set; } = null!;
 
     }
 
@@ -58,6 +58,13 @@ namespace Restaurant.Domain.Entities.Identity
             RoleId = information.RoleId;
             VerificationCode = information.VerificationCode;
             VerificationCodeExpiresAt = information.VerificationCodeExpiresAt;
+        }
+
+        public void CompleteVerification()
+        {
+            IsActive = true;
+            VerificationCode = null;
+            VerificationCodeExpiresAt = null;
         }
     }
 }

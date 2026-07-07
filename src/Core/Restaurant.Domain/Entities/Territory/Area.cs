@@ -4,12 +4,12 @@ namespace Restaurant.Domain.Entities.Territory
 {
     public partial class Area : SoftDeletableEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
-        public string Type { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+        public string Name { get; private set; } = string.Empty;
+        public string? Description { get; private set; }
+        public string Type { get; private set; } = string.Empty;
+        public string Status { get; private set; } = string.Empty;
 
-        public virtual ICollection<RestaurantTable> RestaurantTables { get; set; } = new List<RestaurantTable>();
+        public virtual ICollection<RestaurantTable> RestaurantTables { get; private set; } = new List<RestaurantTable>();
 
     }
 
