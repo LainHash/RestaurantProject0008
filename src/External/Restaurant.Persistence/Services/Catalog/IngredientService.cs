@@ -40,5 +40,10 @@ namespace Restaurant.Persistence.Services.Catalog
             return Result<IngredientResponse>
                 .Succeed(response, Success.Retrieved);
         }
+
+        public Task<Result<IngredientResponse>> CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
