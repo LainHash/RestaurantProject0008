@@ -1,6 +1,7 @@
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Domain.Entities.Production;
+using Restaurant.Domain.Informations.Catalog.Ingredients;
 
 namespace Restaurant.Domain.Entities.Catalog
 {
@@ -18,6 +19,12 @@ namespace Restaurant.Domain.Entities.Catalog
 
     public partial class Ingredient
     {
-        
+        public Ingredient(CreateIngredientInformation information)
+        {
+            Name = information.Name;
+            Description = information.Desctiption;
+            CategoryId = information.CategoryId;
+            IngredientStock = new IngredientStock(information.UnitPrice, information.Unit, information.StockQuantity);
+        }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
+using Restaurant.Application.Mapping.Catalog;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
 using System.Net;
 
@@ -12,9 +15,11 @@ namespace Restaurant.Persistence.Services.Catalog
     internal class IngredientService : IIngredientService
     {
         private readonly IIngredientRepository _ingredientRepository;
-        public IngredientService(IIngredientRepository ingredientRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public IngredientService(IIngredientRepository ingredientRepository, IUnitOfWork unitOfWork)
         {
             _ingredientRepository = ingredientRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<IngredientResponse>>>
@@ -41,9 +46,15 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public Task<Result<IngredientResponse>> CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var ingredient = new Ingredient(request.ToInfo());
+            await _ingredientRepository.AddAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new IngredientResponse(ingredient);
+            return Result<IngredientResponse>
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
     }
 }
