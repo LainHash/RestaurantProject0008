@@ -1,4 +1,5 @@
 ﻿using Restaurant.Domain.Entities.Production;
+using Restaurant.Domain.Entities.Territory;
 using Restaurant.Domain.Specifications;
 
 namespace Restaurant.Domain.Repositories.Production
@@ -11,5 +12,6 @@ namespace Restaurant.Domain.Repositories.Production
         Task<Reservation?> FindAsync(ISpecification<Reservation> specification, CancellationToken cancellationToken = default);
         Task AddAsync(Reservation reservation, CancellationToken cancellationToken = default);
         Task UpdateAsync(Reservation reservation, CancellationToken cancellationToken = default);
+
     }
 }

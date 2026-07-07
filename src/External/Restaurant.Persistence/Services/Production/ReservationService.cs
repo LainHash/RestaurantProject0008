@@ -9,7 +9,9 @@ using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Reservations;
 using Restaurant.Domain.Entities.Production;
+using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Production;
+using Restaurant.Domain.Repositories.Territory;
 using System.Net;
 
 namespace Restaurant.Persistence.Services.Production
@@ -17,11 +19,19 @@ namespace Restaurant.Persistence.Services.Production
     internal class ReservationService : IReservationService
     {
         private readonly IReservationRepository _reservationRepository;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly IRestaurantTableRepository _restaurantTableRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public ReservationService(IReservationRepository reservationRepository, IUnitOfWork unitOfWork)
+        public ReservationService(
+            IReservationRepository reservationRepository,
+            IUnitOfWork unitOfWork,
+            IRestaurantTableRepository restaurantTableRepository,
+            ICustomerRepository customerRepository)
         {
             _reservationRepository = reservationRepository;
             _unitOfWork = unitOfWork;
+            _restaurantTableRepository = restaurantTableRepository;
+            _customerRepository = customerRepository;
         }
 
         public async Task<Result<IEnumerable<ReservationResponse>>>
@@ -59,9 +69,28 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ReservationResponse>> CreateForCustomerAsync(CreateReservationForCustomerRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<ReservationResponse>> 
+            CreateForCustomerAsync(CreateReservationForCustomerRequest request, CancellationToken cancellationToken = default)
         {
+            var availableTables = await _restaurantTableRepository
+                .GetAvailableTablesAsync(
+                    areaType: request.AreaType,
+                    minCapacity: request.NumberOfGuests,
+                    reservationTime: request.ReservationTime,
+                    duration: TimeSpan.FromHours(2),
+                    cancellationToken);
+
+            var selectedTable = availableTables.FirstOrDefault();
+            if (selectedTable is null)
+            {
+                return Result<ReservationResponse>.Fail(
+                    "Không có bàn trống phù hợp trong khoảng thời gian này.",
+                    HttpStatusCode.Conflict);
+            }
+
             var reservation = new Reservation(request.ToInfo());
+            reservation.AddTable(selectedTable.Id);
+
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -70,9 +99,28 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<ReservationResponse>> CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<ReservationResponse>> 
+            CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default)
         {
+            var availableTables = await _restaurantTableRepository
+                .GetAvailableTablesAsync(
+                    areaType: request.AreaType,
+                    minCapacity: request.NumberOfGuests,
+                    reservationTime: request.ReservationTime,
+                    duration: TimeSpan.FromHours(2),
+                    cancellationToken);
+
+            var selectedTable = availableTables.FirstOrDefault();
+            if (selectedTable is null)
+            {
+                return Result<ReservationResponse>.Fail(
+                    "Không có bàn trống phù hợp trong khoảng thời gian này.",
+                    HttpStatusCode.Conflict);
+            }
+
             var reservation = new Reservation(request.ToInfo());
+            reservation.AddTable(selectedTable.Id);
+
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

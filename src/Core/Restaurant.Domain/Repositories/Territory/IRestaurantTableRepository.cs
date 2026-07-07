@@ -13,5 +13,14 @@ namespace Restaurant.Domain.Repositories.Territory
         Task AddAsync(RestaurantTable table, CancellationToken cancellationToken = default);
 
         Task UpdateAsync(RestaurantTable table, CancellationToken cancellationToken = default);
+
+
+        Task<IEnumerable<RestaurantTable>>
+            GetAvailableTablesAsync(
+                string areaType,
+                int minCapacity,
+                DateTime reservationTime,
+                TimeSpan duration,           // ví dụ: 2 tiếng
+                CancellationToken cancellationToken = default);
     }
 }
