@@ -10,5 +10,8 @@
   <Folder Name="/Shared/">
     <Project Path="src/Shared/Restaurant.Contract/Restaurant.Contract.csproj" Id="366f7637-98f6-4aad-af44-4cc37a501620" />
   </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
   <Project Path="src/Restaurant.API/Restaurant.API.csproj" />
 </Solution>

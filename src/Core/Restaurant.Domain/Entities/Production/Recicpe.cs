@@ -7,8 +7,10 @@ namespace Restaurant.Domain.Entities.Production
     {
         public string Inspiration { get; private set; } = string.Empty;
         public string Note { get; private set; } = string.Empty;
+
         // Foreign Keys
         public Guid ProductId { get; private set; }
+
 
         // Navigation Properties
         public virtual Product Product { get; private set; } = null!;
