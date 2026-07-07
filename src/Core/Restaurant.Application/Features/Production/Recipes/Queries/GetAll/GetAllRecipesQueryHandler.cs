@@ -15,7 +15,8 @@ namespace Restaurant.Application.Features.Production.Recipes.Queries.GetAll
 
         public async Task<Result<IEnumerable<RecipeResponse>>> Handle(GetAllRecipesQuery request, CancellationToken cancellationToken)
         {
-            var response = await _recipeService.GetAllAsync(cancellationToken);
+            var specification = new GetAllRecipesSpecification(request);
+            var response = await _recipeService.GetAllAsync(specification, cancellationToken);
             return response;
         }
     }

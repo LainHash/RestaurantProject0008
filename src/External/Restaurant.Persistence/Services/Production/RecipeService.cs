@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Recipes;
@@ -15,9 +16,10 @@ namespace Restaurant.Persistence.Services.Production
             _recipeRespository = recipeRespository;
         }
 
-        public async Task<Result<IEnumerable<RecipeResponse>>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<RecipeResponse>>>
+            GetAllAsync(GetAllRecipesSpecification specification, CancellationToken cancellationToken)
         {
-            var recipe = await _recipeRespository.ToListAsync(cancellationToken);
+            var recipe = await _recipeRespository.ToListAsync(specification, cancellationToken);
 
             var response = recipe.Select(r => new RecipeResponse(r));
             return Result<IEnumerable<RecipeResponse>>
