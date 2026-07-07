@@ -22,6 +22,11 @@ namespace Restaurant.Persistence.Configurations.Identity
                 .IsRequired()
                 .HasMaxLength(255);
 
+            builder.Property(x => x.Balance)
+                .HasColumnType("decimal(12,2)")
+                .IsRequired()
+                .HasDefaultValue(0);
+
             builder.Property(x => x.IsActive)
                 .IsRequired()
                 .HasDefaultValue(true);

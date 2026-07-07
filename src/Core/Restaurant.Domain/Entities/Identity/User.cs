@@ -9,6 +9,7 @@ namespace Restaurant.Domain.Entities.Identity
         public string UserName { get; private set; } = string.Empty;
         public string Email { get; private set; } = string.Empty;
         public string PasswordHash { get; private set; } = string.Empty;
+        public decimal Balance { get; private set; }
         public bool IsActive { get; private set; }
 
         public string? VerificationCode { get; private set; }
