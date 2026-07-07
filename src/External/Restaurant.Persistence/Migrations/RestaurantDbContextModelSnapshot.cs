@@ -271,6 +271,11 @@ namespace Restaurant.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("Balance")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(12,2)")
+                        .HasDefaultValue(0m);
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -517,6 +522,11 @@ namespace Restaurant.Persistence.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<TimeSpan>("DurationHours")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("time")
+                        .HasDefaultValue(new TimeSpan(0, 2, 0, 0, 0));
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");

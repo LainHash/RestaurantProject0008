@@ -1,12 +1,13 @@
-﻿namespace Restaurant.Domain.Informations.Production.Reservations
+namespace Restaurant.Domain.Informations.Production.Reservations
 {
     public sealed record CreateReservationForGuestInformation(
         DateTime ReservationTime,
         int NumberOfGuests,
+        TimeSpan DurationHours,
         string Status,
         string? Note,
-        Guid RestaurantTableId,
         string GuestName,
         string GuestEmail,
-        string GuestPhone);
+        string GuestPhone,
+        string AreaType);
 }

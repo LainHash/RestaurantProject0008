@@ -7,7 +7,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Command.Create
         public CreateReservationForGuestValidator()
         {
             RuleFor(x => x.Body.GuestName)
-                    .NotEmpty().WithMessage("Guest name is required.");
+                .NotEmpty().WithMessage("Guest name is required.");
 
             RuleFor(x => x.Body.GuestEmail)
                 .NotEmpty().WithMessage("Guest email is required.");

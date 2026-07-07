@@ -32,7 +32,7 @@ namespace Restaurant.Persistence.Repositories.Misc
 
             foreach (var image in primaryImages)
             {
-                image.IsPrimary = false;
+                image.RemovePrimary();
             }
         }
 

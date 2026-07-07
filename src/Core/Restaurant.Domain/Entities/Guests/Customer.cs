@@ -6,12 +6,12 @@ namespace Restaurant.Domain.Entities.Guests
 {
     public partial class Customer : SoftDeletableEntity
     {
-        public Guid UserId { get; set; }
-        public Guid? PersonalInformationId { get; set; }
+        public Guid UserId { get; private set; }
+        public Guid? PersonalInformationId { get; private set; }
 
-        public virtual User User { get; set; } = null!;
-        public virtual PersonalInformation? PersonalInformation { get; set; }
-        public virtual ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+        public virtual User User { get; private set; } = null!;
+        public virtual PersonalInformation? PersonalInformation { get; private set; }
+        public virtual ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
     }
 
     public partial class Customer
@@ -28,6 +28,11 @@ namespace Restaurant.Domain.Entities.Guests
         {
             UserId = userId;
             PersonalInformationId = personalInformationId;
+        }
+
+        public void CompleteProfile(Guid piId)
+        {
+            PersonalInformationId = piId;
         }
     }
 }

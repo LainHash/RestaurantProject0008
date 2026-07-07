@@ -5,11 +5,11 @@ namespace Restaurant.Domain.Entities.Misc
 {
     public partial class TemporaryContact : Entity
     {
-        public string GuestName { get; set; } = string.Empty;
-        public string GuestEmail { get; set; } = string.Empty;
-        public string GuestPhone { get; set; } = string.Empty;
+        public string GuestName { get; private set; } = string.Empty;
+        public string GuestEmail { get; private set; } = string.Empty;
+        public string GuestPhone { get; private set; } = string.Empty;
 
-        public virtual Reservation Reservation { get; set; } = null!;
+        public virtual Reservation Reservation { get; private set; } = null!;
 
     }
 

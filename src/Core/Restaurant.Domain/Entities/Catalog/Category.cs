@@ -4,11 +4,11 @@ namespace Restaurant.Domain.Entities.Catalog
 {
     public partial class Category : SoftDeletableEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public string? Description { get; set; }
+        public string Name { get; private set; } = string.Empty;
+        public string? Description { get; private set; }
 
-        public virtual ICollection<Product> Products { get; set; } = [];
-        public virtual ICollection<Ingredient> Ingredients { get; set; } = [];
+        public virtual ICollection<Product> Products { get; private set; } = [];
+        public virtual ICollection<Ingredient> Ingredients { get; private set; } = [];
     }
 
     public partial class Category

@@ -6,7 +6,8 @@ using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
 using Restaurant.Contract.DTOs.Production.Reservations;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Restaurant.API.Controllers.Production
 {
@@ -46,7 +47,19 @@ namespace Restaurant.API.Controllers.Production
         [HttpPost]
         public async Task<IActionResult> CreateForCustomer([FromBody] CreateReservationForCustomerRequest request, CancellationToken cancellationToken)
         {
-            var command = new CreateReservationForCustomerCommand(request);
+            Guid? userId = null!;
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                   ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+                if (Guid.TryParse(userIdString, out Guid parsedId))
+                {
+                    userId = parsedId;
+                }
+            }
+
+            var command = new CreateReservationForCustomerCommand(request, userId.Value);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

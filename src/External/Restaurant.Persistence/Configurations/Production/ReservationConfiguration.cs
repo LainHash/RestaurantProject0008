@@ -12,6 +12,10 @@ namespace Restaurant.Persistence.Configurations.Production
 
             builder.Property(x => x.ReservationTime).IsRequired();
             builder.Property(x => x.NumberOfGuests).IsRequired();
+            builder.Property(x => x.DurationHours)
+                    .HasColumnType("time")
+                    .IsRequired()
+                    .HasDefaultValue(TimeSpan.FromHours(2));
             builder.Property(x => x.Status).HasMaxLength(50).IsRequired();
             builder.Property(x => x.Note).HasMaxLength(500);
 
