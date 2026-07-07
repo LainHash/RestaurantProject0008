@@ -85,6 +85,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IRestaurantTableService, RestaurantTableService>();
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IIngredientService, IngredientService>();
 
             return services;
         }
