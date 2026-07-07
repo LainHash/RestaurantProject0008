@@ -17,7 +17,7 @@ namespace Restaurant.API.Controllers.Production
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(GetAllRecipesQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllRecipesQuery query, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);

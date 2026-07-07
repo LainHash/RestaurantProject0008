@@ -349,7 +349,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("IngredientId")
                         .IsUnique();
 
-                    b.ToTable("IngredientStock");
+                    b.ToTable("IngredientStocks");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.ProductStock", b =>
