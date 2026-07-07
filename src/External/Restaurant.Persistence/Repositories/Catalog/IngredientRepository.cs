@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Domain.Specifications;
 using Restaurant.Persistence.Contexts;
+using Restaurant.Persistence.Specifications;
 
 namespace Restaurant.Persistence.Repositories.Catalog
 {
@@ -16,6 +18,13 @@ namespace Restaurant.Persistence.Repositories.Catalog
         public async Task<List<Ingredient>> ToListAsync(CancellationToken cancellationToken = default)
         {
             return await _context.Ingredients.ToListAsync(cancellationToken);
+        }
+
+        public Task<List<Ingredient>> ToListAsync(ISpecification<Ingredient> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Ingredients.AsQueryable().AsNoTracking(), specification);
+            return query.ToListAsync(cancellationToken);
         }
 
         public async Task<Ingredient?> FindAsync(Guid id, CancellationToken cancellationToken = default)

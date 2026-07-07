@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
@@ -15,9 +16,10 @@ namespace Restaurant.Persistence.Services.Catalog
             _ingredientRepository = ingredientRepository;
         }
 
-        public async Task<Result<IEnumerable<IngredientResponse>>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<IngredientResponse>>>
+            GetAllAsync(GetAllIngredientsSpecification specification, CancellationToken cancellationToken)
         {
-            var ingredients = await _ingredientRepository.ToListAsync(cancellationToken);
+            var ingredients = await _ingredientRepository.ToListAsync(specification, cancellationToken);
 
             var response = ingredients.Select(i => new IngredientResponse(i));
             return Result<IEnumerable<IngredientResponse>>
@@ -27,7 +29,7 @@ namespace Restaurant.Persistence.Services.Catalog
         public async Task<Result<IngredientResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
-            if(ingredient is null)
+            if (ingredient is null)
             {
                 return Result<IngredientResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);

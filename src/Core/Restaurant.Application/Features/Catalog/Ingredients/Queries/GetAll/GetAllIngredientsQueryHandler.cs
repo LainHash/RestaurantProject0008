@@ -15,7 +15,8 @@ namespace Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll
 
         public async Task<Result<IEnumerable<IngredientResponse>>> Handle(GetAllIngredientsQuery request, CancellationToken cancellationToken)
         {
-            var response = await _ingredientService.GetAllAsync(cancellationToken);
+            var specification = new GetAllIngredientsSpecification(request);
+            var response = await _ingredientService.GetAllAsync(specification, cancellationToken);
             return response;
         }
     }
