@@ -5,6 +5,6 @@
         int NumberOfGuests,
         string Status,
         string? Note,
-        Guid RestaurantTableId,
-        Guid CustomerId);
+        Guid CustomerId,
+        string AreaType);
 }

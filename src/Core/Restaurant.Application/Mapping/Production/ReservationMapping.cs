@@ -13,7 +13,7 @@ namespace Restaurant.Application.Mapping.Production
                     NumberOfGuests: request.NumberOfGuests,
                     Status: nameof(ReservationStatus.Pending),
                     Note: request.Note,
-                    RestaurantTableId: request.RestaurantTableId,
+                    AreaType: request.AreaType,
                     CustomerId: request.CustomerId);
         }
 
@@ -24,7 +24,7 @@ namespace Restaurant.Application.Mapping.Production
                     NumberOfGuests: request.NumberOfGuests,
                     Status: nameof(ReservationStatus.Pending),
                     Note: request.Note,
-                    RestaurantTableId: request.RestaurantTableId,
+                    AreaType: request.AreaType,
                     GuestEmail: request.GuestEmail,
                     GuestName: request.GuestName,
                     GuestPhone: request.GuestPhone);

@@ -64,7 +64,6 @@ namespace Restaurant.Domain.Entities.Production
             NumberOfGuests = information.NumberOfGuests;
             Status = information.Status;
             Note = information.Note;
-            RestaurantTableId = information.RestaurantTableId;
             CustomerId = information.CustomerId;
         }
 
@@ -74,8 +73,12 @@ namespace Restaurant.Domain.Entities.Production
             NumberOfGuests = information.NumberOfGuests;
             Status = information.Status;
             Note = information.Note;
-            RestaurantTableId = information.RestaurantTableId;
             TemporaryContact = new TemporaryContact(information.GuestName, information.GuestEmail, information.GuestPhone);
+        }
+
+        public void AddTable(Guid tableId)
+        {
+            RestaurantTableId = tableId;
         }
     }
 }

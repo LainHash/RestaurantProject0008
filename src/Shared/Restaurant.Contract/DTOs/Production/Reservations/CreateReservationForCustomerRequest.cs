@@ -6,7 +6,8 @@
         public int NumberOfGuests { get; set; }
         public string? Note { get; set; }
 
-        public Guid RestaurantTableId { get; set; }
         public Guid CustomerId { get; set; }
+
+        public string AreaType { get; set; } = string.Empty;
     }
 }
