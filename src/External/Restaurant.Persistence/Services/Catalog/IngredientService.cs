@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
+using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
@@ -26,9 +27,9 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<IngredientResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken)
         {
-            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
             if (ingredient is null)
             {
                 return Result<IngredientResponse>

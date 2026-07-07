@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Catalog\Ingredients\Commands\" />
-    <Folder Include="Features\Catalog\Ingredients\Queries\GetById\" />
     <Folder Include="Features\Production\Recipes\Commands\" />
     <Folder Include="Features\Territory\Areas\Commands\" />
   </ItemGroup>

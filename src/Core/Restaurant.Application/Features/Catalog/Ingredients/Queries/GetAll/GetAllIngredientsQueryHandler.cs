@@ -5,7 +5,7 @@ using Restaurant.Contract.DTOs.Catalog.Ingredients;
 
 namespace Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll
 {
-    internal class GetAllIngredientsQueryHandler : IRequestHandler<GetAllIngredientsQuery, Result<IEnumerable<IngredientResponse>
+    internal class GetAllIngredientsQueryHandler : IRequestHandler<GetAllIngredientsQuery, Result<IEnumerable<IngredientResponse>>>
     {
         private readonly IIngredientService _ingredientService;
         public GetAllIngredientsQueryHandler(IIngredientService ingredientService)

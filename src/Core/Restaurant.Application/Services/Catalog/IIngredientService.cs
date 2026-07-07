@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
+using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
 
@@ -10,6 +11,6 @@ namespace Restaurant.Application.Services.Catalog
             GetAllAsync(GetAllIngredientsSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<IngredientResponse>> 
-            GetByIdAsync(Guid id, CancellationToken cancellationToken);
+            GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken);
     }
 }
