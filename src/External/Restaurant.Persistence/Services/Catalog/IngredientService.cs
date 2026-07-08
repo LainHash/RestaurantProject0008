@@ -11,6 +11,7 @@ using Restaurant.Contract.DTOs.Catalog.Ingredients;
 using Restaurant.Contract.DTOs.Inventory.IngredientStocks;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Domain.Specifications;
 using System.Net;
 
 namespace Restaurant.Persistence.Services.Catalog
@@ -98,6 +99,52 @@ namespace Restaurant.Persistence.Services.Catalog
             var response = new IngredientResponse(ingredient);
             return Result<IngredientResponse>
                 .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
+        }
+
+        public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if (ingredient.IsDeleted)
+            {
+                return Result<object>
+                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+            }
+
+            ingredient.SoftDelete();
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Deleted);
+        }
+
+        public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if (!ingredient.IsDeleted)
+            {
+                return Result<object>
+                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+            }
+
+            ingredient.Restore();
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Restored);
         }
     }
 }

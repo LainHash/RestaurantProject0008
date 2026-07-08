@@ -19,6 +19,8 @@ namespace Restaurant.Domain.Entities.Catalog
 
     public partial class Ingredient
     {
+        public Ingredient() { }
+
         public Ingredient(CreateIngredientInformation information)
         {
             Name = information.Name;

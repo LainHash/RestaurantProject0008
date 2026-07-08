@@ -24,5 +24,11 @@ namespace Restaurant.Application.Services.Catalog
 
         Task<Result<IngredientResponse>>
             UpdateStockAsync(UpdateIngredientStockSpecification specification, CancellationToken cancellationToken);
+
+        Task<Result<object>>
+            DeleteAsync(Guid id,  CancellationToken cancellationToken);
+
+        Task<Result<object>>
+            RestoreAsync(Guid id, CancellationToken cancellationToken);
     }
 }
