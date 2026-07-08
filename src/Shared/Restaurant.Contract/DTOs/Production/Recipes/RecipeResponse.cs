@@ -6,6 +6,7 @@ namespace Restaurant.Contract.DTOs.Production.Recipes
 {
     public class RecipeResponse
     {
+        public string Name { get; set; } = string.Empty;
         public string Inspiration { get; set; } = string.Empty;
         public string Note { get; set; } = string.Empty;
 
@@ -16,6 +17,7 @@ namespace Restaurant.Contract.DTOs.Production.Recipes
 
         public RecipeResponse(Recipe recipe)
         {
+            Name = recipe.Name;
             Inspiration = recipe.Inspiration;
             Note = recipe.Note;
             ProductName = recipe.Product.Name;
