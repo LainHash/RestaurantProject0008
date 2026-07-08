@@ -8,11 +8,13 @@ namespace Restaurant.Application.Features.Production.Recipes.Commands.AddIngredi
     public class AddIngredientSpecification : BaseSpecification<Recipe>
     {
         public Guid RecipeId { get; set; }
-        public AddIngredientRequest Body { get; set; }
+        public IEnumerable<AddIngredientRequest> Body { get; set; }
         public AddIngredientSpecification(AddIngredientCommand command)
         {
             Criteria = r => r.Id == command.RecipeId;
+
             RecipeId = command.RecipeId;
+
             Body = command.Body;
 
             AddInclude(r => r.Product);

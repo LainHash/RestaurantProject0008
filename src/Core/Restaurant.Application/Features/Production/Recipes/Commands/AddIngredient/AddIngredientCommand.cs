@@ -5,7 +5,7 @@ using Restaurant.Contract.DTOs.Production.Recipes;
 
 namespace Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient
 {
-    public record AddIngredientCommand(Guid RecipeId, AddIngredientRequest Body) 
+    public record AddIngredientCommand(Guid RecipeId, IEnumerable<AddIngredientRequest> Body) 
         : IRequest<Result<RecipeResponse>>
     {
     }

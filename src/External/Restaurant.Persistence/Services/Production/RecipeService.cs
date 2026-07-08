@@ -73,7 +73,7 @@ namespace Restaurant.Persistence.Services.Production
         public async Task<Result<RecipeResponse>> 
             AddIngredientAsync(AddIngredientSpecification specification, CancellationToken cancellationToken)
         {
-            var recipeIngredients = specification.Body.IngredientIds.Select(i => new RecipeIngredient(specification.RecipeId, i));
+            var recipeIngredients = specification.Body.Select(i => new RecipeIngredient(specification.RecipeId, i.IngredientId));
             await _recipeIngredientRepository.AddRangeAsync(recipeIngredients, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
