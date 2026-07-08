@@ -6,6 +6,7 @@ using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
+using Restaurant.Contract.DTOs.Inventory.IngredientStocks;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
 using System.Net;
@@ -67,6 +68,24 @@ namespace Restaurant.Persistence.Services.Catalog
             }
 
             ingredient.Update(request.Name, request.Description, request.CategoryId);
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new IngredientResponse(ingredient);
+            return Result<IngredientResponse>
+                .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
+        }
+
+        public async Task<Result<IngredientResponse>> UpdateStockAsync(Guid id, UpdateIngredientStockRequest request, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<IngredientResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            ingredient.IngredientStock.Update(request.UnitPrice, request.Unit, request.StockQuantity);
             await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
