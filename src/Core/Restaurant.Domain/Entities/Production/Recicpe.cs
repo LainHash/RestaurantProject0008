@@ -15,5 +15,6 @@ namespace Restaurant.Domain.Entities.Production
         // Navigation Properties
         public virtual Product Product { get; private set; } = null!;
         public virtual ICollection<RecipeIngredient> RecipeIngredients { get; private set; } = [];
+        public virtual ICollection<RecipeStep> RecipeSteps { get; private set;} = [];
     }
 }
