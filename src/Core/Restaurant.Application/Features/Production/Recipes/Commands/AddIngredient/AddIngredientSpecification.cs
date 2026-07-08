@@ -7,10 +7,14 @@ namespace Restaurant.Application.Features.Production.Recipes.Commands.AddIngredi
 {
     public class AddIngredientSpecification : BaseSpecification<Recipe>
     {
+        public Guid RecipeId { get; set; }
         public AddIngredientRequest Body { get; set; }
         public AddIngredientSpecification(AddIngredientCommand command)
         {
+            Criteria = r => r.Id == command.RecipeId;
+            RecipeId = command.RecipeId;
             Body = command.Body;
+
             AddInclude(r => r.Product);
             AddInclude(r => r.RecipeSteps);
             AddIncludeAggregator(x => x.Include(r => r.RecipeIngredients)
@@ -19,11 +23,6 @@ namespace Restaurant.Application.Features.Production.Recipes.Commands.AddIngredi
             AddIncludeAggregator(x => x.Include(r => r.RecipeIngredients)
                                         .ThenInclude(ri => ri.Ingredient)
                                         .ThenInclude(i => i.IngredientStock));
-        }
-
-        public void ApplyCriteria(Guid id)
-        {
-            Criteria = p => p.Id == id;
         }
     }
 }

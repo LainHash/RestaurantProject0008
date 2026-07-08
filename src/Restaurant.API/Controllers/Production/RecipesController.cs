@@ -46,10 +46,9 @@ namespace Restaurant.API.Controllers.Production
 
         [HttpPost("{id}/add-ingredients")]
         public async Task<IActionResult>
-            AddIngredient([FromRoute] Guid id, [FromBody] List<Guid> ingredientIds, CancellationToken cancellationToken)
+            AddIngredient([FromRoute] Guid id, [FromBody] AddIngredientRequest request, CancellationToken cancellationToken)
         {
-            var request = new AddIngredientRequest(id, ingredientIds);
-            var command = new AddIngredientCommand(request);
+            var command = new AddIngredientCommand(id, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
