@@ -13,7 +13,7 @@ namespace Restaurant.Persistence.Repositories.Production
             _context = context;
         }
 
-        public Task AddRangeAsync(IEnumerable<RecipeIngredient> recipeIngredients, CancellationToken cancellationToken)
+        public Task AddRangeAsync(IEnumerable<RecipeIngredient> recipeIngredients, CancellationToken cancellationToken = default)
         {
             _context.RecipeIngredients.AddRange(recipeIngredients);
             return Task.CompletedTask;
