@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
+﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
@@ -50,13 +51,15 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<RecipeResponse>> AddIngredientAsync(Guid recipeId, IEnumerable<Guid> ingredientIds, CancellationToken cancellationToken)
+        public async Task<Result<RecipeResponse>> 
+            AddIngredientAsync(AddIngredientSpecification specification, CancellationToken cancellationToken)
         {
-            var recipeIngredient = ingredientIds.Select(i => new RecipeIngredient(recipeId, i));
-            await _recipeIngredientRepository.AddRangeAsync(recipeIngredient, cancellationToken);
+            var recipeIngredients = specification.Body.IngredientIds.Select(i => new RecipeIngredient(specification.Body.RecipeId, i));
+            await _recipeIngredientRepository.AddRangeAsync(recipeIngredients, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var recipe = await _recipeRespository.FindAsync(recipeId, cancellationToken);
+            specification.ApplyCriteria(specification.Body.RecipeId);
+            var recipe = await _recipeRespository.FindAsync(specification, cancellationToken);
 
             var response = new RecipeResponse(recipe!);
             return Result<RecipeResponse>
