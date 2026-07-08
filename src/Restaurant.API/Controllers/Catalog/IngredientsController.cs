@@ -49,7 +49,7 @@ namespace Restaurant.API.Controllers.Catalog
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("/many")]
+        [HttpPost("create-many")]
         public async Task<IActionResult> CreateMany(
             [FromBody] List<CreateIngredientRequest> requests,
             CancellationToken cancellationToken)

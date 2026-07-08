@@ -28,7 +28,7 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("/schedule/{weekStart}")]
+        [HttpGet("schedule/{weekStart}")]
         public async Task<IActionResult> GetAllByWeek([FromRoute] DateTime weekStart, CancellationToken cancellationToken)
         {
             var query = new GetAllReservationsByWeekQuery(weekStart);
@@ -36,7 +36,7 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
             var query = new GetReservationByIdQuery(id);
@@ -64,7 +64,7 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("/for-guest")]
+        [HttpPost("for-guest")]
         public async Task<IActionResult> CreateForGuest([FromBody] CreateReservationForGuestRequest request, CancellationToken cancellationToken)
         {
             var command = new CreateReservationForGuestCommand(request);
