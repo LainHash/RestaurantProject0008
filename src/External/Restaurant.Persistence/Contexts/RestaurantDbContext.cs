@@ -37,6 +37,7 @@ namespace Restaurant.Persistence.Contexts
 
         public DbSet<Recipe> Recipes { get; set; } = null!;
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; } = null!;
+        public DbSet<RecipeStep> RecipeSteps { get; set; } = null!;
         public DbSet<Reservation> Reservations { get; set; } = null!;
         public DbSet<TemporaryContact> TemporaryContacts { get; set; } = null!;
 

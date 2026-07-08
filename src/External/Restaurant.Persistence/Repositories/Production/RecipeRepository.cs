@@ -38,5 +38,17 @@ namespace Restaurant.Persistence.Repositories.Production
                 .GetQuery(_context.Recipes.AsQueryable().AsNoTracking(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
+
+        public Task AddAsync(Recipe recipe, CancellationToken cancellationToken = default)
+        {
+            _context.Recipes.Add(recipe);
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateAsync(Recipe recipe, CancellationToken cancellationToken = default)
+        {
+            _context.Recipes.Update(recipe);
+            return Task.CompletedTask;
+        }
     }
 }

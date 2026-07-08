@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.CreateMany;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Delete;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Restore;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
@@ -44,6 +45,16 @@ namespace Restaurant.API.Controllers.Catalog
             CancellationToken cancellationToken)
         {
             var command = new CreateIngredientCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("create-many")]
+        public async Task<IActionResult> CreateMany(
+            [FromBody] List<CreateIngredientRequest> requests,
+            CancellationToken cancellationToken)
+        {
+            var command = new CreateManyIngredientsCommand(requests);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

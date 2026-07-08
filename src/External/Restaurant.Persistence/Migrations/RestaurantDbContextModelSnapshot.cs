@@ -46,6 +46,13 @@ namespace Restaurant.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasDefaultValue("Meal");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -536,6 +543,33 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("RecipeIngredients");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.RecipeStep", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<int>("DurationSeconds")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("StepNumber")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeSteps");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Reservation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -802,6 +836,17 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Production.RecipeStep", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Production.Recipe", "Recipe")
+                        .WithMany("RecipeSteps")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Reservation", b =>
                 {
                     b.HasOne("Restaurant.Domain.Entities.Guests.Customer", "Customer")
@@ -899,6 +944,8 @@ namespace Restaurant.Persistence.Migrations
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
                 {
                     b.Navigation("RecipeIngredients");
+
+                    b.Navigation("RecipeSteps");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Territory.Area", b =>

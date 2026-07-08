@@ -1,23 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Contract.DTOs.Catalog.Products;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Specifications;
 
-namespace Restaurant.Application.Features.Catalog.Products.Commands.Update
+namespace Restaurant.Application.Features.Catalog.Products.Commands.Create
 {
-    public class UpdateProductSpecification : BaseSpecification<Product>
+    public class CreateProductSpecification : BaseSpecification<Product>
     {
-        public UpdateProductRequest Body { get; set; }
-        public UpdateProductSpecification(UpdateProductCommand command)
+        public CreateProductRequest Body { get; set; }
+
+        public CreateProductSpecification(CreateProductCommand command)
         {
-            Criteria = p => p.Id == command.Id;
             Body = command.Body;
 
             AddInclude(p => p.Category);
             AddInclude(p => p.ProductStock);
             AddIncludeAggregator(q => q.Include(p => p.ProductImages)
                                        .ThenInclude((ProductImage pi) => pi.Image));
+        }
+
+        public void ApplyCriteria(Guid id)
+        {
+            Criteria = p => p.Id == id;
         }
     }
 }

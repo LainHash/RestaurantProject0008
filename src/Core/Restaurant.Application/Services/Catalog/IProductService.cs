@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Catalog.Products.Commands.Update;
+﻿using Restaurant.Application.Features.Catalog.Products.Commands.Create;
+using Restaurant.Application.Features.Catalog.Products.Commands.Update;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
 using Restaurant.Application.Features.Inventory.ProductStocks.Commands.Update;
@@ -16,7 +17,7 @@ namespace Restaurant.Application.Services.Catalog
             GetByIdAsync(GetProductByIdSpecification specification, CancellationToken cancellationToken = default);
 
         Task<Result<ProductResponse>>
-            CreateAsync(CreateProductRequest request, CancellationToken cancellationToken = default);
+            CreateAsync(CreateProductSpecification specification, CancellationToken cancellationToken = default);
 
         Task<Result<ProductResponse>>
             UpdateAsync(UpdateProductSpecification specification, CancellationToken cancellationToken = default);

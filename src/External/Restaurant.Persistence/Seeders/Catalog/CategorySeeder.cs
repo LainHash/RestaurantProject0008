@@ -29,7 +29,7 @@ namespace Restaurant.Persistence.Seeders.Catalog
 
                 foreach (var record in records)
                 {
-                    context.Categories.Add(new Category(record.Id, record.Name, record.Description ?? string.Empty));
+                    context.Categories.Add(new Category(record.Id, record.Name, record.Description, "Meal"));
                 }
 
                 await context.SaveChangesAsync();

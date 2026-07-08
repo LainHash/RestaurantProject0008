@@ -1,4 +1,6 @@
-﻿using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.CreateMany;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
@@ -17,7 +19,10 @@ namespace Restaurant.Application.Services.Catalog
             GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken);
         
         Task<Result<IngredientResponse>>
-            CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken);
+            CreateAsync(CreateIngredientSpecification specification, CancellationToken cancellationToken);
+
+        Task<Result<IEnumerable<IngredientResponse>>>
+            CreateManyAsync(CreateManyIngredientsSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<IngredientResponse>>
             UpdateAsync(UpdateIngredientSpecification specification, CancellationToken cancellationToken);

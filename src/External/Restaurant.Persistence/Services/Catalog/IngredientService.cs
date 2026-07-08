@@ -1,4 +1,6 @@
-﻿using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.CreateMany;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
@@ -52,14 +54,32 @@ namespace Restaurant.Persistence.Services.Catalog
         }
 
         public async Task<Result<IngredientResponse>> 
-            CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
+            CreateAsync(CreateIngredientSpecification specification, CancellationToken cancellationToken)
         {
-            var ingredient = new Ingredient(request.ToInfo());
+            var ingredient = new Ingredient(specification.Body.ToInfo());
             await _ingredientRepository.AddAsync(ingredient, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var response = new IngredientResponse(ingredient);
+            specification.ApplyCriteria(ingredient.Id);
+            var createdIngredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
+
+            var response = new IngredientResponse(createdIngredient!);
             return Result<IngredientResponse>
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<IEnumerable<IngredientResponse>>> CreateManyAsync(CreateManyIngredientsSpecification specification, CancellationToken cancellationToken)
+        {
+            var ingredients = specification.Bodies.Select(x => new Ingredient(x.ToInfo())).ToList();
+            await _ingredientRepository.AddRangeAsync(ingredients, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var ids = ingredients.Select(i => i.Id).ToHashSet();
+            specification.ApplyCriteria(ids);
+            var createdIngredients = await _ingredientRepository.ToListAsync(specification, cancellationToken);
+
+            var response = createdIngredients.Select(i => new IngredientResponse(i));
+            return Result<IEnumerable<IngredientResponse>>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 

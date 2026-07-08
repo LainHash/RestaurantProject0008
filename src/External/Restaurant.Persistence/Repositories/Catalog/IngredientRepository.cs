@@ -45,6 +45,12 @@ namespace Restaurant.Persistence.Repositories.Catalog
             return Task.CompletedTask;
         }
 
+        public Task AddRangeAsync(IEnumerable<Ingredient> ingredients, CancellationToken cancellationToken = default)
+        {
+            _context.Ingredients.AddRange(ingredients);
+            return Task.CompletedTask;
+        }
+
         public Task UpdateAsync(Ingredient ingredient, CancellationToken cancellationToken = default)
         {
             _context.Ingredients.Update(ingredient);
