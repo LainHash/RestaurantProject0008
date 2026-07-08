@@ -12,5 +12,8 @@ namespace Restaurant.Application.Services.Production
 
         Task<Result<RecipeResponse>> 
             GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken);
+
+        Task<Result<RecipeResponse>>
+            CreateAsync();
     }
 }

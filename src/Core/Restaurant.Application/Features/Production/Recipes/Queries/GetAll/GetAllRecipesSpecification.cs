@@ -9,6 +9,7 @@ namespace Restaurant.Application.Features.Production.Recipes.Queries.GetAll
         public GetAllRecipesSpecification(GetAllRecipesQuery query)
         {
             AddInclude(r => r.Product);
+            AddInclude(r => r.RecipeSteps);
             AddIncludeAggregator(x => x.Include(r => r.RecipeIngredients)
                                         .ThenInclude(ri => ri.Ingredient)
                                         .ThenInclude(i => i.Category));

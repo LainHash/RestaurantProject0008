@@ -11,6 +11,7 @@ namespace Restaurant.Application.Features.Production.Recipes.Queries.GetById
             Criteria = r => r.Id == query.Id;
 
             AddInclude(r => r.Product);
+            AddInclude(r => r.RecipeSteps);
             AddIncludeAggregator(x => x.Include(r => r.RecipeIngredients)
                                         .ThenInclude(ri => ri.Ingredient)
                                         .ThenInclude(i => i.Category));

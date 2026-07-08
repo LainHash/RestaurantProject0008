@@ -9,5 +9,7 @@ namespace Restaurant.Domain.Repositories.Production
         Task<List<Recipe>> ToListAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default);
         Task<Recipe?> FindAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Recipe?> FindAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default);
+        Task AddAsync(Recipe recipe, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Recipe recipe, CancellationToken cancellationToken = default);
     }
 }
