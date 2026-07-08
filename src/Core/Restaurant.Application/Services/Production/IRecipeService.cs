@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Commands.Create;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
 using Restaurant.Application.Models.Results;
@@ -15,9 +16,10 @@ namespace Restaurant.Application.Services.Production
             GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<RecipeResponse>>
-            AddIngredientAsync(AddIngredientSpecification specification, CancellationToken cancellationToken);
+            CreateAsync(CreateRecipeSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<RecipeResponse>>
-            CreateAsync();
+            AddIngredientAsync(AddIngredientSpecification specification, CancellationToken cancellationToken);
+
     }
 }
