@@ -50,7 +50,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
         public async Task<Result<CategoryResponse>> CreateAsync(CreateCategoryRequest request, CancellationToken cancellationToken = default)
         {
-            var category = new Category(request.Name, request.Description);
+            var category = new Category(request.Name, request.Description, request.Type);
             await _categoryRepository.AddAsync(category, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -68,7 +68,7 @@ namespace Restaurant.Persistence.Services.Catalog
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            category.Update(request.Name, request.Description);
+            category.Update(request.Name, request.Description, request.Type);
             await _categoryRepository.UpdateAsync(category, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

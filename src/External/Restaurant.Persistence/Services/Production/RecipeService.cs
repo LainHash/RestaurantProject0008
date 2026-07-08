@@ -40,5 +40,10 @@ namespace Restaurant.Persistence.Services.Production
             return Result<RecipeResponse>
                 .Succeed(response, Success.Retrieved);
         }
+
+        public Task<Result<RecipeResponse>> CreateAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

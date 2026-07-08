@@ -7,6 +7,7 @@ namespace Restaurant.Contract.DTOs.Catalog.Categories
     {
         public Guid Id {  get; init; }
         public string Name { get; init; } = string.Empty;
+        public string Type { get; init; } = string.Empty;
         public string? Description { get; init; }
 
         public CategoryResponse(Category category)
@@ -14,6 +15,7 @@ namespace Restaurant.Contract.DTOs.Catalog.Categories
             Id = category.Id;
             Name = category.Name;
             Description = category.Description;
+            Type = category.Type;
         }
     }
 }
