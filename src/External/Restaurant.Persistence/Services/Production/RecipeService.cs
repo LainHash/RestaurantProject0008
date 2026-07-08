@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Commands.AddStep;
 using Restaurant.Application.Features.Production.Recipes.Commands.Create;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
@@ -18,15 +19,18 @@ namespace Restaurant.Persistence.Services.Production
     {
         private readonly IRecipeRespository _recipeRespository;
         private readonly IRecipeIngredientRepository _recipeIngredientRepository;
+        private readonly IRecipeStepRepository _recipeStepRepository;
         private readonly IUnitOfWork _unitOfWork;
         public RecipeService(
             IRecipeRespository recipeRespository,
             IRecipeIngredientRepository recipeIngredientRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IRecipeStepRepository recipeStepRepository)
         {
             _recipeRespository = recipeRespository;
             _recipeIngredientRepository = recipeIngredientRepository;
             _unitOfWork = unitOfWork;
+            _recipeStepRepository = recipeStepRepository;
         }
 
         public async Task<Result<IEnumerable<RecipeResponse>>>
@@ -71,6 +75,19 @@ namespace Restaurant.Persistence.Services.Production
         {
             var recipeIngredients = specification.Body.IngredientIds.Select(i => new RecipeIngredient(specification.RecipeId, i));
             await _recipeIngredientRepository.AddRangeAsync(recipeIngredients, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var recipe = await _recipeRespository.FindAsync(specification, cancellationToken);
+
+            var response = new RecipeResponse(recipe!);
+            return Result<RecipeResponse>
+                .Succeed(response, Success.Retrieved);
+        }
+
+        public async Task<Result<RecipeResponse>> AddStepAsync(AddStepSpecification specification, CancellationToken cancellationToken)
+        {
+            var recipeStep = specification.Body.Select(s => new RecipeStep(specification.RecipeId, s.ToInfo()));
+            await _recipeStepRepository.AddRangeAsync(recipeStep, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var recipe = await _recipeRespository.FindAsync(specification, cancellationToken);
