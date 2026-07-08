@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
+﻿using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
+using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Application.Mapping.Catalog;
 using Restaurant.Application.Models.Messages;
@@ -33,7 +34,8 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<IngredientResponse>> GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> 
+            GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken)
         {
             var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
             if (ingredient is null)
@@ -47,7 +49,8 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<IngredientResponse>> CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> 
+            CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
         {
             var ingredient = new Ingredient(request.ToInfo());
             await _ingredientRepository.AddAsync(ingredient, cancellationToken);
@@ -58,16 +61,17 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<IngredientResponse>> UpdateAsync(Guid id, UpdateIngredientRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> 
+            UpdateAsync(UpdateIngredientSpecification specification, CancellationToken cancellationToken)
         {
-            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
             if (ingredient is null)
             {
                 return Result<IngredientResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            ingredient.Update(request.Name, request.Description, request.CategoryId);
+            ingredient.Update(specification.Body.Name, specification.Body.Description, specification.Body.CategoryId);
             await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

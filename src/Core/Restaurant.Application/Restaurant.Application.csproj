@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Inventory\IngredientStocks\Commands\Update\" />
     <Folder Include="Features\Production\Recipes\Commands\" />
     <Folder Include="Features\Territory\Areas\Commands\" />
   </ItemGroup>
