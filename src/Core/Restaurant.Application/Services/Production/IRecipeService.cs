@@ -14,6 +14,9 @@ namespace Restaurant.Application.Services.Production
             GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<RecipeResponse>>
+            AddIngredient(Guid recipeId, IEnumerable<Guid> ingredientIds, CancellationToken cancellationToken);
+
+        Task<Result<RecipeResponse>>
             CreateAsync();
     }
 }
