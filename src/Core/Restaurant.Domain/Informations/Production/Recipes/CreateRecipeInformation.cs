@@ -2,7 +2,7 @@
 {
     public record CreateRecipeInformation(
         string Name,
-        string Inspiration,
+        string? Inspiration,
         string Note,
         Guid ProductId);
 }

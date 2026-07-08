@@ -7,7 +7,7 @@ namespace Restaurant.Domain.Entities.Production
     public partial class Recipe : SoftDeletableEntity
     {
         public string Name { get; private set; } = string.Empty;
-        public string Inspiration { get; private set; } = string.Empty;
+        public string? Inspiration { get; private set; }
         public string Note { get; private set; } = string.Empty;
 
         // Foreign Keys
@@ -22,7 +22,7 @@ namespace Restaurant.Domain.Entities.Production
 
     public partial class Recipe
     {
-        public Recipe(string name, string inspiration, string note, Guid productId)
+        public Recipe(string name, string? inspiration, string note, Guid productId)
         {
             Name = name;
             Inspiration = inspiration;

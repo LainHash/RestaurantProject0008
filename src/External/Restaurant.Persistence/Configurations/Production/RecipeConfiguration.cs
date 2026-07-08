@@ -15,7 +15,6 @@ namespace Restaurant.Persistence.Configurations.Production
                 .HasMaxLength(200);
 
             builder.Property(r => r.Inspiration)
-                .IsRequired()
                 .HasMaxLength(100);
 
             builder.Property(r => r.Note)
