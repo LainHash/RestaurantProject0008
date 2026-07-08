@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
@@ -37,6 +38,14 @@ namespace Restaurant.API.Controllers.Catalog
         public async Task<IActionResult> Create([FromBody] CreateIngredientRequest request, CancellationToken cancellationToken)
         {
             var command = new CreateIngredientCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateIngredientRequest request, CancellationToken cancellationToken)
+        {
+            var command = new UpdateIngredientCommand(id, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
