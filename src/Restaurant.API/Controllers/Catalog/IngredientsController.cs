@@ -2,9 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Delete;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Restore;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
+using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
+using Restaurant.Contract.DTOs.Inventory.IngredientStocks;
 
 namespace Restaurant.API.Controllers.Catalog
 {
@@ -34,9 +39,49 @@ namespace Restaurant.API.Controllers.Catalog
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateIngredientRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create(
+            [FromBody] CreateIngredientRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new CreateIngredientCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(
+            [FromRoute] Guid id,
+            [FromBody] UpdateIngredientRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new UpdateIngredientCommand(id, request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/stock")]
+        public async Task<IActionResult> UpdateStock(
+            [FromRoute] Guid id,
+            [FromBody] UpdateIngredientStockRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new UpdateIngredientStockCommand(id, request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var command = new DeleteIngredientCommand(id);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<IActionResult> Restore([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var command = new RestoreIngredientCommand(id);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

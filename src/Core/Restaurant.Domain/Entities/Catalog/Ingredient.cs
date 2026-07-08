@@ -19,12 +19,21 @@ namespace Restaurant.Domain.Entities.Catalog
 
     public partial class Ingredient
     {
+        public Ingredient() { }
+
         public Ingredient(CreateIngredientInformation information)
         {
             Name = information.Name;
             Description = information.Desctiption;
             CategoryId = information.CategoryId;
             IngredientStock = new IngredientStock(information.UnitPrice, information.Unit, information.StockQuantity);
+        }
+
+        public void Update(string name, string? description, Guid categoryId)
+        {
+            Name = name;
+            Description = description;
+            CategoryId = categoryId;
         }
     }
 }

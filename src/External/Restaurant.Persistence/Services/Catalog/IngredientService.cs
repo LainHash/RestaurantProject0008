@@ -1,13 +1,17 @@
-﻿using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
+﻿using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
+using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
+using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
 using Restaurant.Application.Mapping.Catalog;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
+using Restaurant.Contract.DTOs.Inventory.IngredientStocks;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
+using Restaurant.Domain.Specifications;
 using System.Net;
 
 namespace Restaurant.Persistence.Services.Catalog
@@ -32,7 +36,8 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<IngredientResponse>> GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> 
+            GetByIdAsync(GetIngredientByIdSpecification specification, CancellationToken cancellationToken)
         {
             var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
             if (ingredient is null)
@@ -46,7 +51,8 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<IngredientResponse>> CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> 
+            CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken)
         {
             var ingredient = new Ingredient(request.ToInfo());
             await _ingredientRepository.AddAsync(ingredient, cancellationToken);
@@ -55,6 +61,90 @@ namespace Restaurant.Persistence.Services.Catalog
             var response = new IngredientResponse(ingredient);
             return Result<IngredientResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<IngredientResponse>> 
+            UpdateAsync(UpdateIngredientSpecification specification, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<IngredientResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            ingredient.Update(specification.Body.Name, specification.Body.Description, specification.Body.CategoryId);
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new IngredientResponse(ingredient);
+            return Result<IngredientResponse>
+                .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
+        }
+
+        public async Task<Result<IngredientResponse>> 
+            UpdateStockAsync(UpdateIngredientStockSpecification specification, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<IngredientResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            ingredient.IngredientStock.Update(specification.Body.UnitPrice, specification.Body.Unit, specification.Body.StockQuantity);
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new IngredientResponse(ingredient);
+            return Result<IngredientResponse>
+                .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
+        }
+
+        public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if (ingredient.IsDeleted)
+            {
+                return Result<object>
+                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+            }
+
+            ingredient.SoftDelete();
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Deleted);
+        }
+
+        public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            if (ingredient is null)
+            {
+                return Result<object>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if (!ingredient.IsDeleted)
+            {
+                return Result<object>
+                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+            }
+
+            ingredient.Restore();
+            await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Restored);
         }
     }
 }
