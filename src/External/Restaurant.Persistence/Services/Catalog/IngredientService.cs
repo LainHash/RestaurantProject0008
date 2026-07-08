@@ -63,6 +63,17 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
+        public async Task<Result<IEnumerable<IngredientResponse>>> CreateManyAsync(IEnumerable<CreateIngredientRequest> requests, CancellationToken cancellationToken)
+        {
+            var ingredients = requests.Select(x => new Ingredient(x.ToInfo()));
+            await _ingredientRepository.AddRangeAsync(ingredients, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = ingredients.Select(x => new IngredientResponse(x));
+            return Result<IEnumerable<IngredientResponse>>
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
         public async Task<Result<IngredientResponse>> 
             UpdateAsync(UpdateIngredientSpecification specification, CancellationToken cancellationToken)
         {

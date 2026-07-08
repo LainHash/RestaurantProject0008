@@ -19,6 +19,9 @@ namespace Restaurant.Application.Services.Catalog
         Task<Result<IngredientResponse>>
             CreateAsync(CreateIngredientRequest request, CancellationToken cancellationToken);
 
+        Task<Result<IEnumerable<IngredientResponse>>>
+            CreateManyAsync(IEnumerable<CreateIngredientRequest> requests, CancellationToken cancellationToken);
+
         Task<Result<IngredientResponse>>
             UpdateAsync(UpdateIngredientSpecification specification, CancellationToken cancellationToken);
 
