@@ -5,7 +5,9 @@ using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
+using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
+using Restaurant.Contract.DTOs.Inventory.IngredientStocks;
 
 namespace Restaurant.API.Controllers.Catalog
 {
@@ -43,9 +45,19 @@ namespace Restaurant.API.Controllers.Catalog
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateIngredientRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> 
+            Update([FromRoute] Guid id, [FromBody] UpdateIngredientRequest request, CancellationToken cancellationToken)
         {
             var command = new UpdateIngredientCommand(id, request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/stock")]
+        public async Task<IActionResult> 
+            UpdateStock([FromRoute] Guid id, [FromBody] UpdateIngredientStockRequest request, CancellationToken cancellationToken)
+        {
+            var command = new UpdateIngredientStockCommand(id, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

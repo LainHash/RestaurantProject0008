@@ -16,7 +16,8 @@ namespace Restaurant.Application.Features.Catalog.Ingredients.Commands.Update
 
         public async Task<Result<IngredientResponse>> Handle(UpdateIngredientCommand request, CancellationToken cancellationToken)
         {
-            var response = await _ingredientService.UpdateAsync(request.Id, request.Body, cancellationToken);
+            var specification = new UpdateIngredientSpecification(request);
+            var response = await _ingredientService.UpdateAsync(specification, cancellationToken);
             return response;
         }
     }

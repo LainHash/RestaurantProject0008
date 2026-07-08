@@ -1,6 +1,7 @@
 ﻿using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
+using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
 using Restaurant.Application.Mapping.Catalog;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
@@ -80,16 +81,17 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
         }
 
-        public async Task<Result<IngredientResponse>> UpdateStockAsync(Guid id, UpdateIngredientStockRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IngredientResponse>> 
+            UpdateStockAsync(UpdateIngredientStockSpecification specification, CancellationToken cancellationToken)
         {
-            var ingredient = await _ingredientRepository.FindAsync(id, cancellationToken);
+            var ingredient = await _ingredientRepository.FindAsync(specification, cancellationToken);
             if (ingredient is null)
             {
                 return Result<IngredientResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            ingredient.IngredientStock.Update(request.UnitPrice, request.Unit, request.StockQuantity);
+            ingredient.IngredientStock.Update(specification.Body.UnitPrice, specification.Body.Unit, specification.Body.StockQuantity);
             await _ingredientRepository.UpdateAsync(ingredient, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
