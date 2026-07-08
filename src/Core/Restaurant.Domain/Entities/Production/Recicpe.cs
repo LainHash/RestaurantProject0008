@@ -5,6 +5,7 @@ namespace Restaurant.Domain.Entities.Production
 {
     public class Recipe : SoftDeletableEntity
     {
+        public string Name { get; private set; } = string.Empty;
         public string Inspiration { get; private set; } = string.Empty;
         public string Note { get; private set; } = string.Empty;
 

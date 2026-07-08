@@ -70,6 +70,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IRecipeRespository, RecipeRepository>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
+            services.AddScoped<IRecipeStepRepository, RecipeStepRepository>();
 
             // ── AutoMapper ───────────────────────────────────────────────────
             services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
@@ -86,6 +87,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IRecipeIngredientRepository,  RecipeIngredientRepository>();
 
             return services;
         }

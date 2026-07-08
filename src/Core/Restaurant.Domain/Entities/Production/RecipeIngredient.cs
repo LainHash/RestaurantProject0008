@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Domain.Entities.Production
 {
-    public class RecipeIngredient : Entity
+    public partial class RecipeIngredient : Entity
     {
         public Guid RecipeId { get; private set; }
         public Guid IngredientId { get; private set; }
@@ -12,5 +12,14 @@ namespace Restaurant.Domain.Entities.Production
         // Navigation Properties
         public virtual Recipe Recipe { get; private set; } = null!;
         public virtual Ingredient Ingredient { get; private set; } = null!;
+    }
+
+    public partial class RecipeIngredient
+    {
+        public RecipeIngredient(Guid recipeId, Guid ingredientId)
+        {
+            RecipeId = recipeId;
+            IngredientId = ingredientId;
+        }
     }
 }

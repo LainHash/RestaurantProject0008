@@ -10,6 +10,10 @@ namespace Restaurant.Persistence.Configurations.Production
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(200);
+
             builder.Property(r => r.Inspiration)
                 .IsRequired()
                 .HasMaxLength(100);

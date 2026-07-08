@@ -1,9 +1,12 @@
-﻿using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
+﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Recipes;
+using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Production;
 using System.Net;
 
@@ -12,9 +15,16 @@ namespace Restaurant.Persistence.Services.Production
     internal class RecipeService : IRecipeService
     {
         private readonly IRecipeRespository _recipeRespository;
-        public RecipeService(IRecipeRespository recipeRespository)
+        private readonly IRecipeIngredientRepository _recipeIngredientRepository;
+        private readonly IUnitOfWork _unitOfWork;
+        public RecipeService(
+            IRecipeRespository recipeRespository,
+            IRecipeIngredientRepository recipeIngredientRepository,
+            IUnitOfWork unitOfWork)
         {
             _recipeRespository = recipeRespository;
+            _recipeIngredientRepository = recipeIngredientRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<RecipeResponse>>>
@@ -37,6 +47,21 @@ namespace Restaurant.Persistence.Services.Production
             }
 
             var response = new RecipeResponse(recipe);
+            return Result<RecipeResponse>
+                .Succeed(response, Success.Retrieved);
+        }
+
+        public async Task<Result<RecipeResponse>> 
+            AddIngredientAsync(AddIngredientSpecification specification, CancellationToken cancellationToken)
+        {
+            var recipeIngredients = specification.Body.IngredientIds.Select(i => new RecipeIngredient(specification.Body.RecipeId, i));
+            await _recipeIngredientRepository.AddRangeAsync(recipeIngredients, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            specification.ApplyCriteria(specification.Body.RecipeId);
+            var recipe = await _recipeRespository.FindAsync(specification, cancellationToken);
+
+            var response = new RecipeResponse(recipe!);
             return Result<RecipeResponse>
                 .Succeed(response, Success.Retrieved);
         }

@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
+using Restaurant.Contract.DTOs.Production.RecipeIngredients;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Production
 {
@@ -28,6 +31,16 @@ namespace Restaurant.API.Controllers.Production
         {
             var query = new GetRecipeByIdQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("{id}/add-ingredients")]
+        public async Task<IActionResult> 
+            AddIngredient([FromRoute] Guid id, [FromBody] List<Guid> ingredientIds, CancellationToken cancellationToken)
+        {
+            var request = new AddIngredientRequest(id, ingredientIds);
+            var command = new AddIngredientCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
     }
