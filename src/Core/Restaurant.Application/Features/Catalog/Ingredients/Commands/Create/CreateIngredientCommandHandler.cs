@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
@@ -16,7 +16,8 @@ namespace Restaurant.Application.Features.Catalog.Ingredients.Commands.Create
 
         public async Task<Result<IngredientResponse>> Handle(CreateIngredientCommand request, CancellationToken cancellationToken)
         {
-            var response = await _ingredientService.CreateAsync(request.Body, cancellationToken);
+            var specification = new CreateIngredientSpecification(request);
+            var response = await _ingredientService.CreateAsync(specification, cancellationToken);
             return response;
         }
     }

@@ -1,4 +1,6 @@
 using Restaurant.Application.Common.Enums;
+using Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer;
+using Restaurant.Application.Features.Production.Reservations.Command.CreateForGuest;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
@@ -71,14 +73,14 @@ namespace Restaurant.Persistence.Services.Production
         }
 
         public async Task<Result<ReservationResponse>> 
-            CreateForCustomerAsync(CreateReservationForCustomerRequest request, Guid userId, CancellationToken cancellationToken = default)
+            CreateForCustomerAsync(CreateReservationForCustomerSpecification specification, CancellationToken cancellationToken = default)
         {
             var availableTables = await _restaurantTableRepository
                 .GetAvailableTablesAsync(
-                    areaType: request.AreaType,
-                    minCapacity: request.NumberOfGuests,
-                    reservationTime: request.ReservationTime,
-                    duration: request.DurationHours,
+                    areaType: specification.Body.AreaType,
+                    minCapacity: specification.Body.NumberOfGuests,
+                    reservationTime: specification.Body.ReservationTime,
+                    duration: specification.Body.DurationHours,
                     cancellationToken);
 
             var selectedTable = availableTables.FirstOrDefault();
@@ -89,10 +91,10 @@ namespace Restaurant.Persistence.Services.Production
                     HttpStatusCode.Conflict);
             }
 
-            var reservation = new Reservation(request.ToInfo());
+            var reservation = new Reservation(specification.Body.ToInfo());
             reservation.AddTable(selectedTable.Id);
 
-            var customer = await _customerRepository.FindByUserIdAsync(userId, cancellationToken);
+            var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
 
             if (customer is not null)
             {
@@ -102,8 +104,8 @@ namespace Restaurant.Persistence.Services.Production
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var createdReservation = await _reservationRepository.FindAsync(
-                new GetReservationByIdSpecification(reservation.Id), cancellationToken);
+            specification.ApplyCriteria(reservation.Id);
+            var createdReservation = await _reservationRepository.FindAsync(specification, cancellationToken);
 
             var response = new ReservationResponse(createdReservation!);
             return Result<ReservationResponse>
@@ -111,14 +113,14 @@ namespace Restaurant.Persistence.Services.Production
         }
 
         public async Task<Result<ReservationResponse>> 
-            CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default)
+            CreateForGuestAsync(CreateReservationForGuestSpecification specification, CancellationToken cancellationToken = default)
         {
             var availableTables = await _restaurantTableRepository
                 .GetAvailableTablesAsync(
-                    areaType: request.AreaType,
-                    minCapacity: request.NumberOfGuests,
-                    reservationTime: request.ReservationTime,
-                    duration: request.DurationHours,
+                    areaType: specification.Body.AreaType,
+                    minCapacity: specification.Body.NumberOfGuests,
+                    reservationTime: specification.Body.ReservationTime,
+                    duration: specification.Body.DurationHours,
                     cancellationToken);
 
             var selectedTable = availableTables.FirstOrDefault();
@@ -129,14 +131,14 @@ namespace Restaurant.Persistence.Services.Production
                     HttpStatusCode.Conflict);
             }
 
-            var reservation = new Reservation(request.ToInfo());
+            var reservation = new Reservation(specification.Body.ToInfo());
             reservation.AddTable(selectedTable.Id);
 
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var createdReservation = await _reservationRepository.FindAsync(
-                new GetReservationByIdSpecification(reservation.Id), cancellationToken);
+            specification.ApplyCriteria(reservation.Id);
+            var createdReservation = await _reservationRepository.FindAsync(specification, cancellationToken);
 
             var response = new ReservationResponse(createdReservation!);
             return Result<ReservationResponse>

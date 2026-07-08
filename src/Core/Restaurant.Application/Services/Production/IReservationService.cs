@@ -1,4 +1,6 @@
-﻿using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
+using Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer;
+using Restaurant.Application.Features.Production.Reservations.Command.CreateForGuest;
+using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
 using Restaurant.Application.Models.Results;
@@ -18,9 +20,9 @@ namespace Restaurant.Application.Services.Production
             GetByIdAsync(GetReservationByIdSpecification specification, CancellationToken cancellationToken = default);
 
         Task<Result<ReservationResponse>>
-            CreateForCustomerAsync(CreateReservationForCustomerRequest request, Guid userId, CancellationToken cancellationToken = default);
+            CreateForCustomerAsync(CreateReservationForCustomerSpecification specification, CancellationToken cancellationToken = default);
         
         Task<Result<ReservationResponse>>
-            CreateForGuestAsync(CreateReservationForGuestRequest request, CancellationToken cancellationToken = default);
+            CreateForGuestAsync(CreateReservationForGuestSpecification specification, CancellationToken cancellationToken = default);
     }
 }

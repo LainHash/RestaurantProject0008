@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Reservations;
@@ -16,7 +16,8 @@ namespace Restaurant.Application.Features.Production.Reservations.Command.Create
 
         public async Task<Result<ReservationResponse>> Handle(CreateReservationForGuestCommand request, CancellationToken cancellationToken)
         {
-            var response = await _reservationService.CreateForGuestAsync(request.Body, cancellationToken);
+            var specification = new CreateReservationForGuestSpecification(request);
+            var response = await _reservationService.CreateForGuestAsync(specification, cancellationToken);
             return response;
         }
     }
