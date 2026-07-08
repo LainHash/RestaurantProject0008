@@ -1,6 +1,8 @@
 ﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Commands.Create;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
+using Restaurant.Application.Mapping.Production;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Persistence;
@@ -51,6 +53,19 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
+        public async Task<Result<RecipeResponse>> CreateAsync(CreateRecipeSpecification specification, CancellationToken cancellationToken)
+        {
+            var recipe = new Recipe(specification.Body.ToInfo());
+            await _recipeRespository.AddAsync(recipe, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            specification.ApplyCriteria(recipe.Id);
+            var createdRecipe = await _recipeRespository.FindAsync(specification, cancellationToken);
+            var response = new RecipeResponse(createdRecipe!);
+            return Result<RecipeResponse>
+                .Succeed(response, Success.Retrieved);
+        }
+
         public async Task<Result<RecipeResponse>> 
             AddIngredientAsync(AddIngredientSpecification specification, CancellationToken cancellationToken)
         {
@@ -64,11 +79,6 @@ namespace Restaurant.Persistence.Services.Production
             var response = new RecipeResponse(recipe!);
             return Result<RecipeResponse>
                 .Succeed(response, Success.Retrieved);
-        }
-
-        public Task<Result<RecipeResponse>> CreateAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }
