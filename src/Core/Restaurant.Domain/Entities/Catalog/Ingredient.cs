@@ -26,5 +26,12 @@ namespace Restaurant.Domain.Entities.Catalog
             CategoryId = information.CategoryId;
             IngredientStock = new IngredientStock(information.UnitPrice, information.Unit, information.StockQuantity);
         }
+
+        public void Update(string name, string? description, Guid categoryId)
+        {
+            Name = name;
+            Description = description;
+            CategoryId = categoryId;
+        }
     }
 }
