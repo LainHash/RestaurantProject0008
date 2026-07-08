@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
+using Restaurant.Application.Features.Catalog.Ingredients.Commands.Update;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Ingredients.Queries.GetById;
 using Restaurant.Application.Features.Inventory.IngredientStocks.Commands.Update;
@@ -58,18 +58,25 @@ namespace Restaurant.Persistence.Services.Catalog
             await _ingredientRepository.AddAsync(ingredient, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var response = new IngredientResponse(ingredient);
+            var createdIngredient = await _ingredientRepository.FindAsync(
+                new GetIngredientByIdSpecification(ingredient.Id), cancellationToken);
+
+            var response = new IngredientResponse(createdIngredient!);
             return Result<IngredientResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<IEnumerable<IngredientResponse>>> CreateManyAsync(IEnumerable<CreateIngredientRequest> requests, CancellationToken cancellationToken)
         {
-            var ingredients = requests.Select(x => new Ingredient(x.ToInfo()));
+            var ingredients = requests.Select(x => new Ingredient(x.ToInfo())).ToList();
             await _ingredientRepository.AddRangeAsync(ingredients, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var response = ingredients.Select(x => new IngredientResponse(x));
+            var ids = ingredients.Select(i => i.Id).ToHashSet();
+            var createdIngredients = await _ingredientRepository.ToListAsync(
+                new GetIngredientsByIdsSpecification(ids), cancellationToken);
+
+            var response = createdIngredients.Select(i => new IngredientResponse(i));
             return Result<IEnumerable<IngredientResponse>>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }

@@ -102,7 +102,10 @@ namespace Restaurant.Persistence.Services.Production
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var response = new ReservationResponse(reservation);
+            var createdReservation = await _reservationRepository.FindAsync(
+                new GetReservationByIdSpecification(reservation.Id), cancellationToken);
+
+            var response = new ReservationResponse(createdReservation!);
             return Result<ReservationResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
@@ -132,7 +135,10 @@ namespace Restaurant.Persistence.Services.Production
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var response = new ReservationResponse(reservation);
+            var createdReservation = await _reservationRepository.FindAsync(
+                new GetReservationByIdSpecification(reservation.Id), cancellationToken);
+
+            var response = new ReservationResponse(createdReservation!);
             return Result<ReservationResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }

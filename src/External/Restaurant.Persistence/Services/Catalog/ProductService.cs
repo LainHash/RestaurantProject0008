@@ -1,3 +1,4 @@
+using Restaurant.Application.Features.Catalog.Products.Commands.Create;
 using Restaurant.Application.Features.Catalog.Products.Commands.Update;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetAll;
 using Restaurant.Application.Features.Catalog.Products.Queries.GetById;
@@ -53,13 +54,17 @@ namespace Restaurant.Persistence.Services.Catalog
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<ProductResponse>> CreateAsync(CreateProductRequest request, CancellationToken cancellationToken = default)
+        public async Task<Result<ProductResponse>> 
+            CreateAsync(CreateProductSpecification specification, CancellationToken cancellationToken = default)
         {
-            var product = Product.Create(request.ToInfo());
+            var product = Product.Create(specification.Body.ToInfo());
             await _productRepository.AddAsync(product, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            var response = new ProductResponse(product);
+            specification.ApplyCriteria(product.Id);
+            var createdProduct = await _productRepository.FindAsync(specification, cancellationToken);
+
+            var response = new ProductResponse(createdProduct!);
             return Result<ProductResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
