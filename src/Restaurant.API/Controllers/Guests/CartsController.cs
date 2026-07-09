@@ -22,7 +22,7 @@ namespace Restaurant.API.Controllers.Guests
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(GetAllCartsQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllCartsQuery query, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);

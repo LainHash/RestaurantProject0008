@@ -64,7 +64,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new CartResponse(createdCart!);
             return Result<CartResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<CartResponse>> 
@@ -80,7 +80,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new CartResponse(createdCart!);
             return Result<CartResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
     }
 }

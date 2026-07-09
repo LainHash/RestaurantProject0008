@@ -45,5 +45,19 @@ namespace Restaurant.Persistence.Repositories.Guest
             _context.Carts.Add(cart);
             return Task.CompletedTask;
         }
+
+        public async Task RemoveAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            await _context.Carts
+                    .Where(x => x.Id == id)
+                    .ExecuteDeleteAsync(cancellationToken);
+        }
+
+        public async Task RemoveRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+        {
+            await _context.Carts
+                    .Where(x => ids.Contains(x.Id))
+                    .ExecuteDeleteAsync(cancellationToken);
+        }
     }
 }
