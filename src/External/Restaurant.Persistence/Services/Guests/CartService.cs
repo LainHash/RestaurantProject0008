@@ -1,4 +1,6 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
+using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Guests;
 using Restaurant.Contract.DTOs.Guests.Carts;
@@ -17,19 +19,21 @@ namespace Restaurant.Persistence.Services.Guests
             _cartRepository = cartRepository;
         }
 
-        public async Task<Result<IEnumerable<CartResponse>>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<CartResponse>>>
+            GetAllAsync(GetAllCartsSpecification specification, CancellationToken cancellationToken)
         {
-            var carts = await _cartRepository.ToListAsync(cancellationToken);
+            var carts = await _cartRepository.ToListAsync(specification, cancellationToken);
 
             var response = carts.Select(x => new CartResponse(x));
             return Result<IEnumerable<CartResponse>>
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<CartResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Result<CartResponse>> 
+            GetByIdAsync(GetCartByIdSpecification specification, CancellationToken cancellationToken)
         {
-            var cart = await _cartRepository.FindAsync(id);
-            if(cart is null)
+            var cart = await _cartRepository.FindAsync(specification, cancellationToken);
+            if (cart is null)
             {
                 return Result<CartResponse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);

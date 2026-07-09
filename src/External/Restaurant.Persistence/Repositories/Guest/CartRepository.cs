@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Repositories.Guest;
+using Restaurant.Domain.Specifications;
 using Restaurant.Persistence.Contexts;
+using Restaurant.Persistence.Specifications;
 
 namespace Restaurant.Persistence.Repositories.Guest
 {
@@ -19,9 +21,23 @@ namespace Restaurant.Persistence.Repositories.Guest
             return await _context.Carts.ToListAsync(cancellationToken);
         }
 
+        public async Task<IEnumerable<Cart>> ToListAsync(ISpecification<Cart> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Carts.AsQueryable().AsNoTracking(), specification);
+            return await query.ToListAsync(cancellationToken);
+        }
+
         public async Task<Cart?> FindAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await _context.Carts.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        }
+
+        public async Task<Cart?> FindAsync(ISpecification<Cart> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Carts.AsQueryable().AsNoTracking(), specification);
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public Task AddAsync(Cart cart, CancellationToken cancellationToken = default)
