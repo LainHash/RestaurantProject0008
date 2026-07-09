@@ -1,4 +1,5 @@
 ﻿using Restaurant.Domain.Abstraction;
+using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Entities.Production;
@@ -17,6 +18,7 @@ namespace Restaurant.Domain.Entities.Catalog
 
         public virtual Category Category { get; private set; } = null!;
         public virtual ProductStock ProductStock { get; private set; } = null!;
+        public virtual ICollection<CartItem> CartItems { get; private set; } = [];
         public virtual ICollection<ProductImage> ProductImages { get; private set; } = [];
         public virtual ICollection<Recipe> Recipes { get; private set; } = [];
 
