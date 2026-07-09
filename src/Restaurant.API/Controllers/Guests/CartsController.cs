@@ -1,8 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
+using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
+using Restaurant.Contract.DTOs.Guests.Carts;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Guests
 {
@@ -18,7 +23,7 @@ namespace Restaurant.API.Controllers.Guests
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(GetAllCartsQuery query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllCartsQuery query, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);
@@ -29,6 +34,36 @@ namespace Restaurant.API.Controllers.Guests
         {
             var query = new GetCartByIdQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("for-customer")]
+        public async Task<IActionResult> CreateForCustomer(
+            [FromBody] CreateCartForCustomerRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new CreateCartForCustomerCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("for-guest")]
+        public async Task<IActionResult> CreateForGuest(
+            [FromBody] CreateCartForGuestRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new CreateCartForGuestCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpDelete("clear-expired-cart")]
+        public async Task<IActionResult> DeleteExpired(
+            [FromBody] DeleteExpiredCartRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new DeleteExpiredCartCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
     }
