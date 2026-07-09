@@ -20,7 +20,7 @@ namespace Restaurant.Persistence.Services.Catalog
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<IEnumerable<CategoryResponse>>>
+        public async Task<PageResult<IEnumerable<CategoryResponse>>>
             GetAllAsync(GetAllCategoriesSpecification specification, CancellationToken cancellationToken = default)
         {
             var totalItems = await _categoryRepository.CountAsync(specification, cancellationToken);
@@ -29,7 +29,7 @@ namespace Restaurant.Persistence.Services.Catalog
             var categories = await _categoryRepository.ToListAsync(specification, cancellationToken);
 
             var response = categories.Select(c => new CategoryResponse(c));
-            return Result<IEnumerable<CategoryResponse>>
+            return PageResult<IEnumerable<CategoryResponse>>
                 .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
