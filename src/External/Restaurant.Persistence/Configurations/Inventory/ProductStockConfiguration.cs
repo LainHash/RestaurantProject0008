@@ -9,10 +9,19 @@ namespace Restaurant.Persistence.Configurations.Inventory
         public void Configure(EntityTypeBuilder<ProductStock> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.UnitPrice).HasColumnType("decimal(18,2)");
-            builder.Property(x => x.StockQuantity).HasColumnType("decimal(18,2)");
-            builder.Property(x => x.Unit).IsRequired().HasMaxLength(50);
-            builder.HasIndex(x => x.ProductId).IsUnique();
+
+            builder.Property(x => x.UnitPrice)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(x => x.StockQuantity)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(x => x.Unit)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder.HasIndex(x => x.ProductId)
+                .IsUnique();
 
             // Relationships
             // Product relationship is already configured in ProductConfiguration

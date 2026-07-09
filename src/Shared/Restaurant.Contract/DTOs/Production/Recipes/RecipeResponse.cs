@@ -25,7 +25,7 @@ namespace Restaurant.Contract.DTOs.Production.Recipes
             Note = recipe.Note;
             ProductName = recipe.Product.Name;
             RecipeIngredients = recipe.RecipeIngredients
-                .Select(x => new RecipeIngredientResponse(x.Ingredient, x.Quantity))
+                .Select(x => new RecipeIngredientResponse(x.Ingredient, x.Quantity, x.Unit))
                 .ToList();
             RecipeSteps = recipe.RecipeSteps
                 .Select(x => new RecipeStepResponse(x))

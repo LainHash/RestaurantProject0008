@@ -9,16 +9,16 @@ namespace Restaurant.Contract.DTOs.Production.RecipeIngredients
 
         public string CategoryName { get; set; } = string.Empty;
 
-        public decimal StockQuantity { get; init; }
         public decimal Quantity { get; init; }
+        public string Unit {  get; set; } = string.Empty;
 
-        public RecipeIngredientResponse(Ingredient ingredient, decimal quantity)
+        public RecipeIngredientResponse(Ingredient ingredient, decimal quantity, string unit)
         {
             IngredientId = ingredient.Id;
             Name = ingredient.Name;
             CategoryName = ingredient.Category.Name;
-            StockQuantity = ingredient.IngredientStock.StockQuantity;
             Quantity = quantity;
+            Unit = unit;
         }
     }
 }
