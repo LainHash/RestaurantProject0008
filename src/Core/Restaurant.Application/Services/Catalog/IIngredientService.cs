@@ -12,7 +12,7 @@ namespace Restaurant.Application.Services.Catalog
 {
     public interface IIngredientService
     {
-        Task<Result<IEnumerable<IngredientResponse>>> 
+        Task<PageResult<IEnumerable<IngredientResponse>>> 
             GetAllAsync(GetAllIngredientsSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<IngredientResponse>> 

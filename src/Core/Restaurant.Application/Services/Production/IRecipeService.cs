@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
 using Restaurant.Application.Features.Production.Recipes.Commands.AddStep;
 using Restaurant.Application.Features.Production.Recipes.Commands.Create;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
@@ -10,7 +10,7 @@ namespace Restaurant.Application.Services.Production
 {
     public interface IRecipeService
     {
-        Task<Result<IEnumerable<RecipeResponse>>> 
+        Task<PageResult<IEnumerable<RecipeResponse>>> 
             GetAllAsync(GetAllRecipesSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<RecipeResponse>> 

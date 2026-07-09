@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Specifications;
@@ -55,6 +55,13 @@ namespace Restaurant.Persistence.Repositories.Catalog
         {
             _context.Ingredients.Update(ingredient);
             return Task.CompletedTask;
+        }
+
+        public async Task<int> CountAsync(ISpecification<Ingredient> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Ingredients.AsQueryable().AsNoTracking(), specification, applyPaging: false);
+            return await query.CountAsync(cancellationToken);
         }
     }
 }

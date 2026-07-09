@@ -1,4 +1,4 @@
-﻿using Restaurant.Domain.Entities.Territory;
+using Restaurant.Domain.Entities.Territory;
 using Restaurant.Domain.Specifications;
 
 namespace Restaurant.Domain.Repositories.Territory
@@ -7,6 +7,7 @@ namespace Restaurant.Domain.Repositories.Territory
     {
         Task<IEnumerable<Area>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<IEnumerable<Area>> GetAllAsync(ISpecification<Area> specification, CancellationToken cancellationToken = default);
+        Task<int> CountAsync(ISpecification<Area> specification, CancellationToken cancellationToken = default);
         Task<Area?> FindAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Area?> FindAsync(ISpecification<Area> specification, CancellationToken cancellationToken = default);
     }

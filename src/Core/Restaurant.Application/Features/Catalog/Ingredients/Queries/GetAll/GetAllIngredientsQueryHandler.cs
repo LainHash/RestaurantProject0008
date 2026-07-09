@@ -1,11 +1,11 @@
-﻿using MediatR;
+using MediatR;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Catalog;
 using Restaurant.Contract.DTOs.Catalog.Ingredients;
 
 namespace Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll
 {
-    internal class GetAllIngredientsQueryHandler : IRequestHandler<GetAllIngredientsQuery, Result<IEnumerable<IngredientResponse>>>
+    internal class GetAllIngredientsQueryHandler : IRequestHandler<GetAllIngredientsQuery, PageResult<IEnumerable<IngredientResponse>>>
     {
         private readonly IIngredientService _ingredientService;
         public GetAllIngredientsQueryHandler(IIngredientService ingredientService)
@@ -13,7 +13,7 @@ namespace Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll
             _ingredientService = ingredientService;
         }
 
-        public async Task<Result<IEnumerable<IngredientResponse>>> Handle(GetAllIngredientsQuery request, CancellationToken cancellationToken)
+        public async Task<PageResult<IEnumerable<IngredientResponse>>> Handle(GetAllIngredientsQuery request, CancellationToken cancellationToken)
         {
             var specification = new GetAllIngredientsSpecification(request);
             var response = await _ingredientService.GetAllAsync(specification, cancellationToken);
@@ -21,3 +21,4 @@ namespace Restaurant.Application.Features.Catalog.Ingredients.Queries.GetAll
         }
     }
 }
+

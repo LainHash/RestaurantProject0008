@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
 using Restaurant.Application.Features.Production.Recipes.Commands.AddStep;
 using Restaurant.Application.Features.Production.Recipes.Commands.Create;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
@@ -33,14 +33,17 @@ namespace Restaurant.Persistence.Services.Production
             _recipeStepRepository = recipeStepRepository;
         }
 
-        public async Task<Result<IEnumerable<RecipeResponse>>>
+        public async Task<PageResult<IEnumerable<RecipeResponse>>>
             GetAllAsync(GetAllRecipesSpecification specification, CancellationToken cancellationToken)
         {
+            var totalItems = await _recipeRespository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var recipe = await _recipeRespository.ToListAsync(specification, cancellationToken);
 
             var response = recipe.Select(r => new RecipeResponse(r));
-            return Result<IEnumerable<RecipeResponse>>
-                .Succeed(response, Success.Retrieved);
+            return PageResult<IEnumerable<RecipeResponse>>
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<RecipeResponse>> GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken)

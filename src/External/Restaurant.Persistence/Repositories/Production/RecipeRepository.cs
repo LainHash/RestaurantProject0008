@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Production;
 using Restaurant.Domain.Specifications;
@@ -49,6 +49,13 @@ namespace Restaurant.Persistence.Repositories.Production
         {
             _context.Recipes.Update(recipe);
             return Task.CompletedTask;
+        }
+
+        public async Task<int> CountAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Recipes.AsQueryable().AsNoTracking(), specification, applyPaging: false);
+            return await query.CountAsync(cancellationToken);
         }
     }
 }
