@@ -18,7 +18,7 @@ namespace Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustome
         public async Task<Result<CartResponse>> Handle(CreateCartForCustomerCommand request, CancellationToken cancellationToken)
         {
             var specification = new CreateCartForCustomerSpecification(request);
-            var response = await _cartService.CreateForCustomer(specification, cancellationToken);
+            var response = await _cartService.CreateForCustomerAsync(specification, cancellationToken);
             return response;
         }
     }

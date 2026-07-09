@@ -52,7 +52,7 @@ namespace Restaurant.Persistence.Services.Guests
         }
 
         public async Task<Result<CartResponse>> 
-            CreateForCustomer(CreateCartForCustomerSpecification specification, CancellationToken cancellationToken)
+            CreateForCustomerAsync(CreateCartForCustomerSpecification specification, CancellationToken cancellationToken)
         {
             var cart = new Cart();
             cart.SetCustomerId(specification.Body.CustomerId);
@@ -81,6 +81,16 @@ namespace Restaurant.Persistence.Services.Guests
             var response = new CartResponse(createdCart!);
             return Result<CartResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<object>> DeleteExpiredCartAsync(DeleteExpiredCartRequest request, CancellationToken cancellationToken)
+        {
+            await _cartRepository.RemoveRangeAsync(request.Ids, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Deleted);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
 using Restaurant.Contract.DTOs.Guests.Carts;
@@ -52,6 +53,16 @@ namespace Restaurant.API.Controllers.Guests
             CancellationToken cancellationToken)
         {
             var command = new CreateCartForGuestCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpDelete("clear-expired-cart")]
+        public async Task<IActionResult> DeleteExpired(
+            [FromBody] DeleteExpiredCartRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new DeleteExpiredCartCommand(request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
