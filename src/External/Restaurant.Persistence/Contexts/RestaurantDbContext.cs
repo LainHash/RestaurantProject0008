@@ -41,6 +41,9 @@ namespace Restaurant.Persistence.Contexts
         public DbSet<Reservation> Reservations { get; set; } = null!;
         public DbSet<TemporaryContact> TemporaryContacts { get; set; } = null!;
 
+        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<CartItem> CartItems { get; set; } = null!;
+
         // ── Model building ──────────────────────────────────────────────────
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
