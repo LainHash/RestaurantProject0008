@@ -16,10 +16,11 @@ namespace Restaurant.Domain.Entities.Production
 
     public partial class RecipeIngredient
     {
-        public RecipeIngredient(Guid recipeId, Guid ingredientId)
+        public RecipeIngredient(Guid recipeId, Guid ingredientId, decimal quantity)
         {
             RecipeId = recipeId;
             IngredientId = ingredientId;
+            Quantity = quantity;
         }
     }
 }

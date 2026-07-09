@@ -4,6 +4,7 @@ namespace Restaurant.Contract.DTOs.Catalog.Ingredients
 {
     public class IngredientResponse
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
 
@@ -15,6 +16,7 @@ namespace Restaurant.Contract.DTOs.Catalog.Ingredients
 
         public IngredientResponse(Ingredient ingredient)
         {
+            Id = ingredient.Id;
             Name = ingredient.Name;
             Description = ingredient.Description;
             CategoryName = ingredient.Category.Name;

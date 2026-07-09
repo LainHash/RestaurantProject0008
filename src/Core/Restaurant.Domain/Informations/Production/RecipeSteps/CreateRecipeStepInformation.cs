@@ -3,6 +3,5 @@
     public record CreateRecipeStepInformation(
         string Description,
         int StepNumber,
-        int DurationSeconds,
-        Guid RecipeId);
+        int DurationSeconds);
 }
