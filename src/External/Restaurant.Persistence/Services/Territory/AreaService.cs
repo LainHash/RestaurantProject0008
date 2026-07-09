@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Features.Territory.Areas.Queries.GetAll;
+using Restaurant.Application.Features.Territory.Areas.Queries.GetAll;
 using Restaurant.Application.Features.Territory.Areas.Queries.GetById;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
@@ -17,13 +17,16 @@ namespace Restaurant.Persistence.Services.Territory
             _areaRepository = areaRepository;
         }
 
-        public async Task<Result<IEnumerable<AreaResponse>>> GetAllAsync(GetAllAreasSpecification specification, CancellationToken cancellationToken = default)
+        public async Task<PageResult<IEnumerable<AreaResponse>>> GetAllAsync(GetAllAreasSpecification specification, CancellationToken cancellationToken = default)
         {
+            var totalItems = await _areaRepository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var areas = await _areaRepository.GetAllAsync(specification, cancellationToken);
 
             var response = areas.Select(a => new AreaResponse(a));
-            return Result<IEnumerable<AreaResponse>>
-                .Succeed(response, Success.Retrieved);
+            return PageResult<IEnumerable<AreaResponse>>
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<AreaResponse>> GetByIdAsync(GetAreaByIdSpecification specification, CancellationToken cancellationToken = default)

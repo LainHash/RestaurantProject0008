@@ -533,10 +533,17 @@ namespace Restaurant.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("Quantity")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("RecipeId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasDefaultValue("unknown");
 
                     b.HasKey("Id");
 

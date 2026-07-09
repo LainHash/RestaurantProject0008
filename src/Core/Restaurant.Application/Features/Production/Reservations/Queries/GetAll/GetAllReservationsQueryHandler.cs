@@ -1,11 +1,11 @@
-﻿using MediatR;
+using MediatR;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Reservations;
 
 namespace Restaurant.Application.Features.Production.Reservations.Queries.GetAll
 {
-    internal class GetAllReservationsQueryHandler : IRequestHandler<GetAllReservationsQuery, Result<IEnumerable<ReservationResponse>>>
+    internal class GetAllReservationsQueryHandler : IRequestHandler<GetAllReservationsQuery, PageResult<IEnumerable<ReservationResponse>>>
     {
         private readonly IReservationService _reservationService;
         public GetAllReservationsQueryHandler(IReservationService reservationService)
@@ -13,7 +13,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Queries.GetAll
             _reservationService = reservationService;
         }
 
-        public async Task<Result<IEnumerable<ReservationResponse>>> Handle(GetAllReservationsQuery request, CancellationToken cancellationToken)
+        public async Task<PageResult<IEnumerable<ReservationResponse>>> Handle(GetAllReservationsQuery request, CancellationToken cancellationToken)
         {
             var specification = new GetAllReservationsSpecification(request);
             var response = await _reservationService.GetAllAsync(specification, cancellationToken);

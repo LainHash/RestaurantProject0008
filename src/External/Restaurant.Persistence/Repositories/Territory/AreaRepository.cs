@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Territory;
 using Restaurant.Domain.Repositories.Territory;
 using Restaurant.Domain.Specifications;
@@ -37,6 +37,13 @@ namespace Restaurant.Persistence.Repositories.Territory
             var query = SpecificationEvaluator
                 .GetQuery(_context.Areas.AsQueryable(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<int> CountAsync(ISpecification<Area> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Areas.AsQueryable().AsNoTracking(), specification, applyPaging: false);
+            return await query.CountAsync(cancellationToken);
         }
     }
 }

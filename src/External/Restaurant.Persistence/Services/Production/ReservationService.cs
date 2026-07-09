@@ -37,24 +37,30 @@ namespace Restaurant.Persistence.Services.Production
             _customerRepository = customerRepository;
         }
 
-        public async Task<Result<IEnumerable<ReservationResponse>>>
+        public async Task<PageResult<IEnumerable<ReservationResponse>>>
             GetAllAsync(GetAllReservationsSpecification specification, CancellationToken cancellationToken = default)
         {
+            var totalItems = await _reservationRepository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var reservations = await _reservationRepository.ToListAsync(specification, cancellationToken);
 
             var response = reservations.Select(r => new ReservationResponse(r));
-            return Result<IEnumerable<ReservationResponse>>
-                .Succeed(response, Success.Retrieved);
+            return PageResult<IEnumerable<ReservationResponse>>
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
-        public async Task<Result<IEnumerable<ReservationResponse>>>
+        public async Task<PageResult<IEnumerable<ReservationResponse>>>
             GetAllByWeekAsync(GetAllReservationsByWeekSpecification specification, CancellationToken cancellationToken = default)
         {
+            var totalItems = await _reservationRepository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var reservations = await _reservationRepository.ToListAsync(specification, cancellationToken);
 
             var response = reservations.Select(r => new ReservationResponse(r));
-            return Result<IEnumerable<ReservationResponse>>
-                .Succeed(response, Success.Retrieved);
+            return PageResult<IEnumerable<ReservationResponse>>
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<ReservationResponse>>

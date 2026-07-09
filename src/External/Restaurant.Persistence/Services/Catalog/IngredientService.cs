@@ -28,14 +28,17 @@ namespace Restaurant.Persistence.Services.Catalog
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<IEnumerable<IngredientResponse>>>
+        public async Task<PageResult<IEnumerable<IngredientResponse>>>
             GetAllAsync(GetAllIngredientsSpecification specification, CancellationToken cancellationToken)
         {
+            var totalItems = await _ingredientRepository.CountAsync(specification, cancellationToken);
+            var indexPage = (specification.Skip / specification.Take) + 1;
+
             var ingredients = await _ingredientRepository.ToListAsync(specification, cancellationToken);
 
             var response = ingredients.Select(i => new IngredientResponse(i));
-            return Result<IEnumerable<IngredientResponse>>
-                .Succeed(response, Success.Retrieved);
+            return PageResult<IEnumerable<IngredientResponse>>
+                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<IngredientResponse>> 

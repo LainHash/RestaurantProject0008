@@ -2,13 +2,8 @@
 {
     public class AddIngredientRequest
     {
-        public Guid RecipeId { get; set; }
-        public IEnumerable<Guid> IngredientIds { get; set; } = [];
-
-        public AddIngredientRequest(Guid recipeId, IEnumerable<Guid> ingredientIds)
-        {
-            RecipeId = recipeId;
-            IngredientIds = ingredientIds;
-        }
+        public Guid IngredientId { get; set; }
+        public decimal Quantity { get; set; }
+        public string Unit { get; set; } = string.Empty;
     }
 }

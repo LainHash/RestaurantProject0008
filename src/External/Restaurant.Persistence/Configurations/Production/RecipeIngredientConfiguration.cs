@@ -14,6 +14,14 @@ namespace Restaurant.Persistence.Configurations.Production
             builder.Property(ri => ri.IngredientId)
                 .IsRequired();
 
+            builder.Property(x => x.Quantity)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(x => x.Unit)
+                .IsRequired()
+                .HasMaxLength(50)
+                .HasDefaultValue("unknown");
+
             // Relationships
             builder.HasOne(ri => ri.Recipe)
                 .WithMany(r => r.RecipeIngredients)

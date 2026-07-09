@@ -10,10 +10,10 @@ namespace Restaurant.Application.Services.Production
 {
     public interface IReservationService
     {
-        Task<Result<IEnumerable<ReservationResponse>>> 
+        Task<PageResult<IEnumerable<ReservationResponse>>> 
             GetAllAsync(GetAllReservationsSpecification specification, CancellationToken cancellationToken = default);
 
-        Task<Result<IEnumerable<ReservationResponse>>>
+        Task<PageResult<IEnumerable<ReservationResponse>>>
             GetAllByWeekAsync(GetAllReservationsByWeekSpecification specification, CancellationToken cancellationToken = default);
 
         Task<Result<ReservationResponse>> 

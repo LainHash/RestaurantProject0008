@@ -6,7 +6,7 @@ namespace Restaurant.Application.Services.Catalog
 {
     public interface ICategoryService
     {
-        Task<Result<IEnumerable<CategoryResponse>>>
+        Task<PageResult<IEnumerable<CategoryResponse>>>
             GetAllAsync(GetAllCategoriesSpecification specification, CancellationToken cancellationToken = default);
 
         Task<Result<CategoryResponse>>

@@ -52,5 +52,12 @@ namespace Restaurant.Persistence.Repositories.Production
             _context.Reservations.Update(reservation);
             return Task.CompletedTask;
         }
+
+        public async Task<int> CountAsync(ISpecification<Reservation> specification, CancellationToken cancellationToken = default)
+        {
+            var query = SpecificationEvaluator
+                .GetQuery(_context.Reservations.AsQueryable().AsNoTracking(), specification, applyPaging: false);
+            return await query.CountAsync(cancellationToken);
+        }
     }
 }

@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
+using Restaurant.Application.Features.Production.Recipes.Commands.AddStep;
 using Restaurant.Application.Features.Production.Recipes.Commands.Create;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetAll;
 using Restaurant.Application.Features.Production.Recipes.Queries.GetById;
 using Restaurant.Contract.DTOs.Production.RecipeIngredients;
 using Restaurant.Contract.DTOs.Production.Recipes;
+using Restaurant.Contract.DTOs.Production.RecipeSteps;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Production
@@ -46,10 +48,18 @@ namespace Restaurant.API.Controllers.Production
 
         [HttpPost("{id}/add-ingredients")]
         public async Task<IActionResult>
-            AddIngredient([FromRoute] Guid id, [FromBody] List<Guid> ingredientIds, CancellationToken cancellationToken)
+            AddIngredient([FromRoute] Guid id, [FromBody] IEnumerable<AddIngredientRequest> request, CancellationToken cancellationToken)
         {
-            var request = new AddIngredientRequest(id, ingredientIds);
-            var command = new AddIngredientCommand(request);
+            var command = new AddIngredientCommand(id, request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("{id}/add-steps")]
+        public async Task<IActionResult>
+            AddStep([FromRoute] Guid id, [FromBody] IEnumerable<AddStepRequest> request, CancellationToken cancellationToken)
+        {
+            var command = new AddStepCommand(id, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

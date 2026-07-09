@@ -1,4 +1,4 @@
-﻿using Restaurant.Domain.Entities.Production;
+using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Specifications;
 
 namespace Restaurant.Domain.Repositories.Production
@@ -7,6 +7,7 @@ namespace Restaurant.Domain.Repositories.Production
     {
         Task<List<Recipe>> ToListAsync(CancellationToken cancellationToken = default);
         Task<List<Recipe>> ToListAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default);
+        Task<int> CountAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default);
         Task<Recipe?> FindAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Recipe?> FindAsync(ISpecification<Recipe> specification, CancellationToken cancellationToken = default);
         Task AddAsync(Recipe recipe, CancellationToken cancellationToken = default);
