@@ -36,13 +36,19 @@ namespace Restaurant.Persistence.Repositories.Guest
         public async Task<Wishlist?> FindAsync(ISpecification<Wishlist> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Wishlists.AsQueryable().AsNoTracking(), specification);
+                .GetQuery(_context.Wishlists.AsQueryable(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public Task AddAsync(Wishlist wishlist, CancellationToken cancellationToken = default)
         {
             _context.Wishlists.Add(wishlist);
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateAsync(Wishlist wishlist, CancellationToken cancelToken = default)
+        {
+            _context.Wishlists.Update(wishlist);
             return Task.CompletedTask;
         }
 

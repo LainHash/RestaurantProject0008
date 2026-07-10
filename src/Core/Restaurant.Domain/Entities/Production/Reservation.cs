@@ -80,12 +80,12 @@ namespace Restaurant.Domain.Entities.Production
             TemporaryContact = new TemporaryContact(information.GuestName, information.GuestEmail, information.GuestPhone);
         }
 
-        public void AddTable(Guid tableId)
+        public void SetTable(Guid tableId)
         {
             RestaurantTableId = tableId;
         }
 
-        public void AddCustomer(Guid customerId)
+        public void SetCustomer(Guid customerId)
         {
             CustomerId = customerId;
         }

@@ -10,6 +10,12 @@ namespace Restaurant.Persistence.Configurations.Guests
         {
             builder.HasKey(x => x.Id);
 
+            builder.HasIndex(x => x.SessionId)
+                .IsUnique();
+
+            builder.HasIndex(x => x.CustomerId)
+                .IsUnique();
+
             builder.HasOne(x => x.Customer)
                 .WithOne(x => x.Cart)
                 .HasForeignKey<Cart>(x => x.CustomerId)

@@ -24,7 +24,7 @@ namespace Restaurant.Persistence.Repositories.Guest
         public async Task<IEnumerable<Cart>> ToListAsync(ISpecification<Cart> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Carts.AsQueryable().AsNoTracking(), specification);
+                .GetQuery(_context.Carts.AsQueryable(), specification);
             return await query.ToListAsync(cancellationToken);
         }
 
@@ -36,7 +36,7 @@ namespace Restaurant.Persistence.Repositories.Guest
         public async Task<Cart?> FindAsync(ISpecification<Cart> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Carts.AsQueryable().AsNoTracking(), specification);
+                .GetQuery(_context.Carts.AsQueryable(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 

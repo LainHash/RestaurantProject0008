@@ -10,6 +10,7 @@ namespace Restaurant.Domain.Repositories.Guest
         Task<Wishlist?> FindAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Wishlist?> FindAsync(ISpecification<Wishlist> specification, CancellationToken cancellationToken = default);
         Task AddAsync(Wishlist wishlist, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Wishlist wishlist, CancellationToken cancelToken = default);
         Task RemoveAsync(Guid id, CancellationToken cancellationToken = default);
         Task RemoveRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
     }

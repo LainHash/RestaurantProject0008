@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.Application.Features.Guests.Carts.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
@@ -65,6 +66,17 @@ namespace Restaurant.API.Controllers.Guests
             CancellationToken cancellationToken)
         {
             var command = new CreateCartForGuestCommand(sessionId);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/add-item")]
+        public async Task<IActionResult> AddItem(
+            [FromRoute] Guid id,
+            [FromBody] Guid productId,
+            CancellationToken cancellationToken)
+        {
+            var command = new AddCartItemCommand(id, productId);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

@@ -10,17 +10,6 @@ namespace Restaurant.Persistence.Configurations.Guests
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Quantity)
-                .IsRequired();
-
-            builder.Property(x => x.LineTotal)
-                .HasPrecision(18, 2)
-                .IsRequired();
-
-            builder.Property(x => x.AddedAt)
-                .HasDefaultValueSql("NOW()")
-                .IsRequired();
-
             builder.HasOne(x => x.Wishlist)
                 .WithMany(x => x.WishlistItems)
                 .HasForeignKey(x => x.WishlistId)

@@ -1,4 +1,4 @@
-﻿namespace Restaurant.Domain.Abstraction
+namespace Restaurant.Domain.Abstraction
 {
     public abstract class Entity
     {
@@ -11,8 +11,8 @@
 
     public abstract class AuditableEntity : Entity
     {
-        public DateTime CreatedAt { get; protected set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; protected set; } = DateTime.Now;
+        public DateTime CreatedAt { get; protected set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; protected set; } = DateTime.UtcNow;
 
         public void MarkCreated(DateTime now)
         {
@@ -33,7 +33,7 @@
         public void SoftDelete()
         {
             IsDeleted = true;
-            DeletedAt = DateTime.Now;
+            DeletedAt = DateTime.UtcNow;
         }
 
         public void Restore()

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Specifications;
 
@@ -11,7 +12,8 @@ namespace Restaurant.Application.Features.Guests.Carts.Queries.GetById
             Criteria = c => c.Id == query.Id;
 
             AddIncludeAggregator(x => x.Include(c => c.CartItems)
-                                            .ThenInclude(ci => ci.Product));
+                                            .ThenInclude((CartItem ci) => ci.Product)
+                                            .ThenInclude((Product p) => p.ProductStock));
         }
     }
 }
