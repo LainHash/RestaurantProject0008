@@ -74,6 +74,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<IRecipeStepRepository, RecipeStepRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IWishlistRepository, WishlistRepository>();
             services.AddScoped<IWishlistItemRepository, WishlistItemRepository>();
 

@@ -17,6 +17,7 @@
         public const string Logout = "Logout successful.";
 
         public const string WishlistAdded = "Item added successfully.";
+        public const string CartAdded = "Item added successfully.";
 
         public const string PasswordChanged = "Password changed successfully.";
         public const string PasswordReset = "Password reset successfully.";

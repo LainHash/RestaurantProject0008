@@ -107,8 +107,8 @@ namespace Restaurant.Persistence.Services.Guests
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            var existedItem = wishlist.WishlistItems.Any(x => x.ProductId == specification.ProductId);
-            if (existedItem)
+            var existingItem = wishlist.WishlistItems.Any(x => x.ProductId == specification.ProductId);
+            if (existingItem)
             {
                 return Result<WishlistRepsonse>
                     .Fail(Error.WishlistAdded, HttpStatusCode.Conflict);

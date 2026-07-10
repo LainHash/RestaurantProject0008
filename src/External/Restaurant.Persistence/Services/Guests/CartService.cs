@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
+﻿using Restaurant.Application.Features.Guests.Carts.Commands.AddItem;
+using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
@@ -7,8 +8,11 @@ using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Guests;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Guests.Carts;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Guest;
+using Restaurant.Domain.Specifications;
 using System.Net;
 
 namespace Restaurant.Persistence.Services.Guests
@@ -16,17 +20,20 @@ namespace Restaurant.Persistence.Services.Guests
     internal class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
+        private readonly ICartItemRepository _cartItemRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CartService(
             ICartRepository cartRepository,
             IUnitOfWork unitOfWork,
-            ICustomerRepository customerRepository)
+            ICustomerRepository customerRepository,
+            ICartItemRepository cartItemRepository)
         {
             _cartRepository = cartRepository;
             _unitOfWork = unitOfWork;
             _customerRepository = customerRepository;
+            _cartItemRepository = cartItemRepository;
         }
 
         public async Task<Result<IEnumerable<CartResponse>>>
@@ -94,6 +101,40 @@ namespace Restaurant.Persistence.Services.Guests
             var response = new CartResponse(createdCart!);
             return Result<CartResponse>
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<CartResponse>> AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken)
+        {
+            var cart = await _cartRepository.FindAsync(specification, cancellationToken);
+            if (cart is null)
+            {
+                return Result<CartResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            var existingItem = cart.CartItems.FirstOrDefault(x => x.ProductId == specification.ProductId);
+            if(existingItem is null)
+            {
+                var cartItem = new CartItem(cart.Id, specification.ProductId);
+                await _cartItemRepository.AddAsync(cartItem, cancellationToken);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                cartItem.SetLineTotal();
+            }
+            else
+            {
+                existingItem.IncreaseQuantity();
+                await _cartItemRepository.UpdateAsync(existingItem, cancellationToken);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+                existingItem.SetLineTotal();
+            }
+
+            var response = new CartResponse(cart);
+            return Result<CartResponse>
+                .Succeed(response, Success.CartAdded);
         }
 
         public async Task<Result<object>> DeleteExpiredCartAsync(IEnumerable<Guid> cartIds, CancellationToken cancellationToken)
