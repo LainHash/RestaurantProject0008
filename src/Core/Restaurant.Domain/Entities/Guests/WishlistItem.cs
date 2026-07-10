@@ -5,8 +5,6 @@ namespace Restaurant.Domain.Entities.Guests
 {
     public class WishlistItem : AuditableEntity
     {
-        public int Quantity { get; private set; }
-        public decimal LineTotal { get; private set; }
         public DateTime AddedAt { get; private set; }
 
         public Guid WishlistId { get; private set; }
