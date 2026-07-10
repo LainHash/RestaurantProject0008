@@ -61,20 +61,20 @@ namespace Restaurant.API.Controllers.Guests
 
         [HttpPost("for-guest")]
         public async Task<IActionResult> CreateForGuest(
-            [FromBody] CreateCartForGuestRequest request,
+            [FromBody] Guid sessionId,
             CancellationToken cancellationToken)
         {
-            var command = new CreateCartForGuestCommand(request);
+            var command = new CreateCartForGuestCommand(sessionId);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpDelete("clear-expired-cart")]
         public async Task<IActionResult> DeleteExpired(
-            [FromBody] DeleteExpiredCartRequest request,
+            [FromBody] IEnumerable<Guid> cardIds,
             CancellationToken cancellationToken)
         {
-            var command = new DeleteExpiredCartCommand(request);
+            var command = new DeleteExpiredCartCommand(cardIds);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

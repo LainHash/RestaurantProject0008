@@ -22,6 +22,6 @@ namespace Restaurant.Application.Services.Guests
             CreateForCustomerAsync(CreateCartForCustomerSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<object>>
-            DeleteExpiredCartAsync(DeleteExpiredCartRequest request, CancellationToken cancellationToken);
+            DeleteExpiredCartAsync(IEnumerable<Guid> cartIds, CancellationToken cancellationToken);
     }
 }
