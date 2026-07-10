@@ -13,12 +13,12 @@ namespace Restaurant.Domain.Entities.Guests
 
     public partial class Cart
     {
-        public void SetCustomerId(Guid id)
+        public void AddCustomer(Guid id)
         {
             CustomerId = id;
         }
 
-        public void SetGuestId(Guid id)
+        public void AddGuest(Guid id)
         {
             SessionId = id;
         }

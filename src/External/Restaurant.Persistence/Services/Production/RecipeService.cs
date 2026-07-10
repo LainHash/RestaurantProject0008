@@ -87,7 +87,8 @@ namespace Restaurant.Persistence.Services.Production
                 .Succeed(response, Success.Retrieved);
         }
 
-        public async Task<Result<RecipeResponse>> AddStepAsync(AddStepSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<RecipeResponse>> 
+            AddStepAsync(AddStepSpecification specification, CancellationToken cancellationToken)
         {
             var recipeStep = specification.Body.Select(s => new RecipeStep(specification.RecipeId, s.ToInfo()));
             await _recipeStepRepository.AddRangeAsync(recipeStep, cancellationToken);

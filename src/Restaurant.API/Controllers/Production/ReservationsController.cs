@@ -45,7 +45,9 @@ namespace Restaurant.API.Controllers.Production
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateForCustomer([FromBody] CreateReservationForCustomerRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateForCustomer(
+            [FromBody] CreateReservationForCustomerRequest request,
+            CancellationToken cancellationToken)
         {
             Guid? userId = null!;
 
@@ -65,7 +67,9 @@ namespace Restaurant.API.Controllers.Production
         }
 
         [HttpPost("for-guest")]
-        public async Task<IActionResult> CreateForGuest([FromBody] CreateReservationForGuestRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateForGuest(
+            [FromBody] CreateReservationForGuestRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new CreateReservationForGuestCommand(request);
             var result = await _mediator.Send(command, cancellationToken);

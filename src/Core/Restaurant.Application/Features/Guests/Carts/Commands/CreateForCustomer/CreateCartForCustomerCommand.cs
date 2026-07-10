@@ -4,7 +4,7 @@ using Restaurant.Contract.DTOs.Guests.Carts;
 
 namespace Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer
 {
-    public record CreateCartForCustomerCommand(CreateCartForCustomerRequest Body)
+    public record CreateCartForCustomerCommand(Guid UserId)
         : IRequest<Result<CartResponse>>
     {
     }

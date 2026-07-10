@@ -9,6 +9,7 @@ using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
+using Restaurant.Contract.DTOs.Guests.Carts;
 using Restaurant.Contract.DTOs.Production.Reservations;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Guest;
@@ -101,13 +102,15 @@ namespace Restaurant.Persistence.Services.Production
             reservation.AddTable(selectedTable.Id);
 
             var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
-
-            if (customer is not null)
+            if (customer is null)
             {
-                reservation.AddCustomer(customer.Id);
+                return Result<ReservationResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
+            reservation.AddCustomer(customer.Id);
             await _reservationRepository.AddAsync(reservation, cancellationToken);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             specification.ApplyCriteria(reservation.Id);

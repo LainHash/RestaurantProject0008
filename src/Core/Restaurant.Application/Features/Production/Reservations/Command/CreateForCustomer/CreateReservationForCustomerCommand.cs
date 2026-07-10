@@ -5,7 +5,7 @@ using Restaurant.Contract.DTOs.Production.Reservations;
 namespace Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer
 {
     public record CreateReservationForCustomerCommand(CreateReservationForCustomerRequest Body, Guid UserId)
-        :IRequest<Result<ReservationResponse>>
+        : IRequest<Result<ReservationResponse>>
     {
     }
 }
