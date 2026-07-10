@@ -24,5 +24,8 @@ namespace Restaurant.Application.Services.Guests
 
         Task<Result<WishlistRepsonse>>
             AddItemAsync(AddWishlistItemSpecification specification, CancellationToken cancellationToken);
+
+        Task<Result<object>>
+            DeleteExpiredWishlistAsync(IEnumerable<Guid> wishlistIds, CancellationToken cancellationToken);
     }
 }

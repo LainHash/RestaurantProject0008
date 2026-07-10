@@ -123,5 +123,15 @@ namespace Restaurant.Persistence.Services.Guests
             return Result<WishlistRepsonse>
                     .Succeed(response, Success.WishlistAdded);
         }
+
+        public async Task<Result<object>> DeleteExpiredWishlistAsync(IEnumerable<Guid> wishlistIds, CancellationToken cancellationToken)
+        {
+            await _wishlistRepository.RemoveRangeAsync(wishlistIds, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result<object>
+                .Succeed(default, Success.Deleted);
+        }
     }
 }

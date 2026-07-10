@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetById;
 using System.IdentityModel.Tokens.Jwt;
@@ -72,6 +73,16 @@ namespace Restaurant.API.Controllers.Guests
             CancellationToken cancellationToken)
         {
             var command = new AddWishlistItemCommand(id, productId);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteExpired(
+            [FromBody] IEnumerable<Guid> wishlistIds,
+            CancellationToken cancellationToken)
+        {
+            var command = new DeleteExpiredWishlistCommand(wishlistIds);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
