@@ -15,7 +15,8 @@ namespace Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem
             ProductId = command.ProductId;
 
             AddIncludeAggregator(x => x.Include(c => c.WishlistItems)
-                                            .ThenInclude(ci => ci.Product));
+                                                    .ThenInclude((WishlistItem ci) => ci.Product));
+
         }
     }
 }

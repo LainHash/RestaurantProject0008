@@ -36,7 +36,7 @@ namespace Restaurant.Persistence.Repositories.Guest
         public async Task<Wishlist?> FindAsync(ISpecification<Wishlist> specification, CancellationToken cancellationToken = default)
         {
             var query = SpecificationEvaluator
-                .GetQuery(_context.Wishlists.AsQueryable().AsNoTracking(), specification);
+                .GetQuery(_context.Wishlists.AsQueryable(), specification);
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 

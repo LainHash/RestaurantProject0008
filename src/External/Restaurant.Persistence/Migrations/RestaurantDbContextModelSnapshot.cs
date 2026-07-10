@@ -164,6 +164,9 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
+                    b.HasIndex("SessionId")
+                        .IsUnique();
+
                     b.ToTable("Carts", t =>
                         {
                             t.HasCheckConstraint("CK_Cart_CustomerId_Or_SessionId", "\"CustomerId\" IS NOT NULL OR \"SessionId\" IS NOT NULL");
@@ -268,6 +271,9 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("CustomerId")
                         .IsUnique();
 
+                    b.HasIndex("SessionId")
+                        .IsUnique();
+
                     b.ToTable("Wishlists", t =>
                         {
                             t.HasCheckConstraint("CK_Wishlist_CustomerId_Or_SessionId", "\"CustomerId\" IS NOT NULL OR \"SessionId\" IS NOT NULL");
@@ -281,22 +287,13 @@ namespace Restaurant.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("AddedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("NOW()");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("LineTotal")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");

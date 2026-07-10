@@ -22,10 +22,5 @@ namespace Restaurant.Domain.Entities.Guests
         {
             SessionId = id;
         }
-
-        public void AddItem(Guid productId)
-        {
-            WishlistItems.Add(new WishlistItem(productId));
-        }
     }
 }

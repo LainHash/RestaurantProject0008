@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
@@ -18,17 +18,20 @@ namespace Restaurant.Persistence.Services.Guests
     internal class WishlistService : IWishlistService
     {
         private readonly IWishlistRepository _wishlistRepository;
+        private readonly IWishlistItemRepository _wishlistItemRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public WishlistService(
             IWishlistRepository wishlistRepository,
             IUnitOfWork unitOfWork,
-            ICustomerRepository customerRepository)
+            ICustomerRepository customerRepository,
+            IWishlistItemRepository wishlistItemRepository)
         {
             _wishlistRepository = wishlistRepository;
             _unitOfWork = unitOfWork;
             _customerRepository = customerRepository;
+            _wishlistItemRepository = wishlistItemRepository;
         }
 
         public async Task<Result<IEnumerable<WishlistRepsonse>>> GetAllAsync(GetAllWishlistsSpecification specification, CancellationToken cancellationToken)
@@ -76,16 +79,16 @@ namespace Restaurant.Persistence.Services.Guests
             var wishlist = new Wishlist();
 
             var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
-            if(customer is null)
+            if (customer is null)
             {
                 return Result<WishlistRepsonse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
             wishlist.SetCustomer(customer.Id);
-            await _wishlistRepository.AddAsync(wishlist , cancellationToken);
-            
-            await _unitOfWork.SaveChangesAsync(cancellationToken) ;
+            await _wishlistRepository.AddAsync(wishlist, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             specification.ApplyCriteria(wishlist.Id);
             var createdWishlist = await _wishlistRepository.FindAsync(specification, cancellationToken);
@@ -103,7 +106,7 @@ namespace Restaurant.Persistence.Services.Guests
                 return Result<WishlistRepsonse>
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
-            
+
             var existedItem = wishlist.WishlistItems.Any(x => x.ProductId == specification.ProductId);
             if (existedItem)
             {
@@ -111,9 +114,9 @@ namespace Restaurant.Persistence.Services.Guests
                     .Fail(Error.WishlistAdded, HttpStatusCode.Conflict);
             }
 
-            wishlist.AddItem(specification.ProductId);
-            await _wishlistRepository.UpdateAsync(wishlist, cancellationToken);
-            
+            var item = new WishlistItem(wishlist.Id, specification.ProductId);
+            await _wishlistItemRepository.AddAsync(item, cancellationToken);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var response = new WishlistRepsonse(wishlist);
