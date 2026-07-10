@@ -119,8 +119,6 @@ namespace Restaurant.Persistence.Services.Guests
                 await _cartItemRepository.AddAsync(cartItem, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-                cartItem.SetLineTotal();
             }
             else
             {
@@ -128,8 +126,6 @@ namespace Restaurant.Persistence.Services.Guests
                 await _cartItemRepository.UpdateAsync(existingItem, cancellationToken);
 
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-                existingItem.SetLineTotal();
             }
 
             var response = new CartResponse(cart);

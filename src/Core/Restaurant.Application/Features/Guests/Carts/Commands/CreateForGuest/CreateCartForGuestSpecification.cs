@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Contract.DTOs.Guests.Carts;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Specifications;
 
@@ -13,7 +14,8 @@ namespace Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest
             SessionId = command.SessionId;
 
             AddIncludeAggregator(x => x.Include(c => c.CartItems)
-                                            .ThenInclude(ci => ci.Product));
+                                            .ThenInclude((CartItem ci) => ci.Product)
+                                            .ThenInclude((Product p) => p.ProductStock));
         }
 
         public void ApplyCriteria(Guid id)
