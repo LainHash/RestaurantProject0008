@@ -43,6 +43,8 @@ namespace Restaurant.Persistence.Contexts
 
         public DbSet<Cart> Carts { get; set; } = null!;
         public DbSet<CartItem> CartItems { get; set; } = null!;
+        public DbSet<Wishlist> Wishlists { get; set; } = null!;
+        public DbSet<WishlistItem> WishlistItems { get; set; } = null!;
 
         // ── Model building ──────────────────────────────────────────────────
         protected override void OnModelCreating(ModelBuilder modelBuilder)

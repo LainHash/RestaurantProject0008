@@ -245,6 +245,75 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Wishlist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("SessionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("Wishlists", t =>
+                        {
+                            t.HasCheckConstraint("CK_Wishlist_CustomerId_Or_SessionId", "\"CustomerId\" IS NOT NULL OR \"SessionId\" IS NOT NULL");
+                        });
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Guests.WishlistItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AddedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("NOW()");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("LineTotal")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("WishlistId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WishlistId", "ProductId")
+                        .IsUnique();
+
+                    b.ToTable("WishlistItems");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.PersonalInformation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -863,6 +932,35 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Wishlist", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Guests.Customer", "Customer")
+                        .WithOne("Wishlist")
+                        .HasForeignKey("Restaurant.Domain.Entities.Guests.Wishlist", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Guests.WishlistItem", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Catalog.Product", "Product")
+                        .WithMany("WishlistItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restaurant.Domain.Entities.Guests.Wishlist", "Wishlist")
+                        .WithMany("WishlistItems")
+                        .HasForeignKey("WishlistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Wishlist");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.User", b =>
                 {
                     b.HasOne("Restaurant.Domain.Entities.Identity.Role", "Role")
@@ -1017,6 +1115,8 @@ namespace Restaurant.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Recipes");
+
+                    b.Navigation("WishlistItems");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Cart", b =>
@@ -1029,6 +1129,13 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Reservations");
+
+                    b.Navigation("Wishlist");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Wishlist", b =>
+                {
+                    b.Navigation("WishlistItems");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.PersonalInformation", b =>
