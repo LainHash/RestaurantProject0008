@@ -13,9 +13,8 @@ namespace Restaurant.Persistence.Configurations.Guests
             builder.Property(x => x.Quantity)
                 .IsRequired();
 
-            builder.Property(x => x.LineTotal)
-                .HasPrecision(18, 2)
-                .IsRequired();
+            builder.Property(x => x.UnitPrice)
+                .HasColumnType("decimal(18,2)");
 
             builder.Property(x => x.AddedAt)
                 .HasDefaultValueSql("NOW()")

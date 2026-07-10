@@ -28,5 +28,7 @@
         public const string UploadFailed = "File upload failed.";
 
         public const string DatabaseError = "Database operation failed.";
+
+        public const string OutOfStock = "Not enough stock.";
     }
 }

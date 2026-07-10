@@ -58,12 +58,14 @@ namespace Restaurant.Persistence.Contexts
         // ── Auto-set audit fields on SaveChanges ────────────────────────────
         public override int SaveChanges()
         {
+            ChangeTracker.DetectChanges();
             SetAuditFields();
             return base.SaveChanges();
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            ChangeTracker.DetectChanges();
             SetAuditFields();
             return base.SaveChangesAsync(cancellationToken);
         }

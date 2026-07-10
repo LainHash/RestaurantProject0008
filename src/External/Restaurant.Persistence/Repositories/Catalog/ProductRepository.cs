@@ -52,5 +52,10 @@ namespace Restaurant.Persistence.Repositories.Catalog
                 .GetQuery(_context.Products.AsQueryable().AsNoTracking(), specification, applyPaging: false);
             return await query.CountAsync(cancellationToken);
         }
+
+        public async Task<bool> AnyAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Products.AnyAsync(x => x.Id == id, cancellationToken);
+        }
     }
 }

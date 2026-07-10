@@ -12,6 +12,7 @@ using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Guest;
+using Restaurant.Domain.Repositories.Inventory;
 using Restaurant.Domain.Specifications;
 using System.Net;
 
@@ -22,18 +23,24 @@ namespace Restaurant.Persistence.Services.Guests
         private readonly ICartRepository _cartRepository;
         private readonly ICartItemRepository _cartItemRepository;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IProductStockRepository _productStockRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CartService(
             ICartRepository cartRepository,
             IUnitOfWork unitOfWork,
             ICustomerRepository customerRepository,
-            ICartItemRepository cartItemRepository)
+            ICartItemRepository cartItemRepository,
+            IProductStockRepository productStockRepository,
+            IProductRepository productRepository)
         {
             _cartRepository = cartRepository;
             _unitOfWork = unitOfWork;
             _customerRepository = customerRepository;
             _cartItemRepository = cartItemRepository;
+            _productStockRepository = productStockRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<Result<IEnumerable<CartResponse>>>
@@ -112,23 +119,37 @@ namespace Restaurant.Persistence.Services.Guests
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            var existingItem = cart.CartItems.FirstOrDefault(x => x.ProductId == specification.ProductId);
-            if(existingItem is null)
+            var productStock = await _productStockRepository.FindByProductIdAsync(specification.ProductId, cancellationToken);
+            if (productStock is null)
             {
-                var cartItem = new CartItem(cart.Id, specification.ProductId);
-                await _cartItemRepository.AddAsync(cartItem, cancellationToken);
+                return Result<CartResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
 
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            if(productStock.StockQuantity <= 0)
+            {
+                return Result<CartResponse>
+                    .Fail(Error.OutOfStock);
+            }
+
+            var existingItem = cart.CartItems.FirstOrDefault(x => x.ProductId == specification.ProductId);
+
+            if (existingItem is null)
+            {
+                var cartItem = new CartItem(cart.Id, specification.ProductId, productStock.UnitPrice);
+                await _cartItemRepository.AddAsync(cartItem, cancellationToken);
             }
             else
             {
                 existingItem.IncreaseQuantity();
                 await _cartItemRepository.UpdateAsync(existingItem, cancellationToken);
-
-                await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
 
-            var response = new CartResponse(cart);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var addItemCart = await _cartRepository.FindAsync(specification, cancellationToken);
+
+            var response = new CartResponse(addItemCart!);
             return Result<CartResponse>
                 .Succeed(response, Success.CartAdded);
         }

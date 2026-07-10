@@ -9,6 +9,7 @@ namespace Restaurant.Domain.Repositories.Catalog
         Task<int> CountAsync(ISpecification<Product> specification, CancellationToken cancellationToken= default);
         Task<Product?> FindAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Product?> FindAsync(ISpecification<Product> specification, CancellationToken cancellationToken = default);
+        Task<bool> AnyAsync(Guid id, CancellationToken cancellationToken = default);
         Task AddAsync(Product product, CancellationToken cancellationToken = default);
         Task UpdateAsync(Product product, CancellationToken cancellationToken = default);
     }

@@ -22,5 +22,19 @@ namespace Restaurant.Domain.Entities.Guests
         {
             SessionId = id;
         }
+
+        public void AddItem(Guid productId, decimal unitPrice)
+        {
+            var item = CartItems.FirstOrDefault(x => x.ProductId == productId);
+            if (item is null)
+            {
+                var addedCartItem = new CartItem(Id, productId, unitPrice);
+                CartItems.Add(addedCartItem);
+            }
+            else
+            {
+                item.IncreaseQuantity();
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ using Restaurant.Application.Services.Territory;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Identity;
+using Restaurant.Domain.Repositories.Inventory;
 using Restaurant.Domain.Repositories.Misc;
 using Restaurant.Domain.Repositories.Production;
 using Restaurant.Domain.Repositories.Territory;
@@ -18,6 +19,7 @@ using Restaurant.Persistence.Contexts;
 using Restaurant.Persistence.Repositories.Catalog;
 using Restaurant.Persistence.Repositories.Guest;
 using Restaurant.Persistence.Repositories.Identity;
+using Restaurant.Persistence.Repositories.Inventory;
 using Restaurant.Persistence.Repositories.Misc;
 using Restaurant.Persistence.Repositories.Production;
 using Restaurant.Persistence.Repositories.Territory;
@@ -62,6 +64,7 @@ namespace Restaurant.Persistence
             // ── Repositories ─────────────────────────────────────────────────
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductStockRepository, ProductStockRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<IAreaRepository, AreaRepository>();
             services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
