@@ -2,16 +2,16 @@
 
 namespace Restaurant.Domain.Entities.Guests
 {
-    public partial class Cart : AuditableEntity
+    public partial class Wishlist : AuditableEntity
     {
         public Guid? SessionId { get; private set; }
         public Guid? CustomerId { get; private set; }
 
         public virtual Customer? Customer { get; private set; }
-        public virtual ICollection<CartItem> CartItems { get; private set; } = [];
+        public virtual ICollection<WishlistItem> WishlistItems { get; private set; } = [];
     }
 
-    public partial class Cart
+    public partial class Wishlist
     {
         public void AddCustomer(Guid id)
         {

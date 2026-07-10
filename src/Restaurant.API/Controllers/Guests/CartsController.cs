@@ -7,6 +7,8 @@ using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
 using Restaurant.Contract.DTOs.Guests.Carts;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Guests
@@ -37,32 +39,42 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
-        [HttpPost("for-customer")]
-        public async Task<IActionResult> CreateForCustomer(
-            [FromBody] CreateCartForCustomerRequest request,
-            CancellationToken cancellationToken)
+        [HttpPost]
+        public async Task<IActionResult> CreateForCustomer(CancellationToken cancellationToken)
         {
-            var command = new CreateCartForCustomerCommand(request);
+            Guid? userId = null!;
+
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                   ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+                if (Guid.TryParse(userIdString, out Guid parsedId))
+                {
+                    userId = parsedId;
+                }
+            }
+            
+            var command = new CreateCartForCustomerCommand(userId.Value);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpPost("for-guest")]
         public async Task<IActionResult> CreateForGuest(
-            [FromBody] CreateCartForGuestRequest request,
+            [FromBody] Guid sessionId,
             CancellationToken cancellationToken)
         {
-            var command = new CreateCartForGuestCommand(request);
+            var command = new CreateCartForGuestCommand(sessionId);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
 
         [HttpDelete("clear-expired-cart")]
         public async Task<IActionResult> DeleteExpired(
-            [FromBody] DeleteExpiredCartRequest request,
+            [FromBody] IEnumerable<Guid> cardIds,
             CancellationToken cancellationToken)
         {
-            var command = new DeleteExpiredCartCommand(request);
+            var command = new DeleteExpiredCartCommand(cardIds);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

@@ -18,9 +18,12 @@ namespace Restaurant.Domain.Entities.Catalog
 
         public virtual Category Category { get; private set; } = null!;
         public virtual ProductStock ProductStock { get; private set; } = null!;
-        public virtual ICollection<CartItem> CartItems { get; private set; } = [];
         public virtual ICollection<ProductImage> ProductImages { get; private set; } = [];
         public virtual ICollection<Recipe> Recipes { get; private set; } = [];
+
+
+        public virtual ICollection<CartItem> CartItems { get; private set; } = [];
+        public virtual ICollection<WishlistItem> WishlistItems { get; private set; } = [];
 
     }
 

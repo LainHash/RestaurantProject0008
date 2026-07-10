@@ -16,14 +16,17 @@ namespace Restaurant.Persistence.Services.Guests
     internal class CartService : ICartService
     {
         private readonly ICartRepository _cartRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public CartService(
             ICartRepository cartRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICustomerRepository customerRepository)
         {
             _cartRepository = cartRepository;
             _unitOfWork = unitOfWork;
+            _customerRepository = customerRepository;
         }
 
         public async Task<Result<IEnumerable<CartResponse>>>
@@ -55,8 +58,17 @@ namespace Restaurant.Persistence.Services.Guests
             CreateForCustomerAsync(CreateCartForCustomerSpecification specification, CancellationToken cancellationToken)
         {
             var cart = new Cart();
-            cart.SetCustomerId(specification.Body.CustomerId);
+
+            var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
+            if(customer is null)
+            {
+                return Result<CartResponse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            cart.AddCustomer(customer.Id);
             await _cartRepository.AddAsync(cart, cancellationToken);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             specification.ApplyCriteria(cart.Id);
@@ -71,8 +83,9 @@ namespace Restaurant.Persistence.Services.Guests
             CreateForGuestAsync(CreateCartForGuestSpecification specification, CancellationToken cancellationToken)
         {
             var cart = new Cart();
-            cart.SetGuestId(specification.Body.SessionId);
+            cart.AddGuest(specification.SessionId);
             await _cartRepository.AddAsync(cart, cancellationToken);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             specification.ApplyCriteria(cart.Id);
@@ -83,9 +96,9 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<object>> DeleteExpiredCartAsync(DeleteExpiredCartRequest request, CancellationToken cancellationToken)
+        public async Task<Result<object>> DeleteExpiredCartAsync(IEnumerable<Guid> cartIds, CancellationToken cancellationToken)
         {
-            await _cartRepository.RemoveRangeAsync(request.Ids, cancellationToken);
+            await _cartRepository.RemoveRangeAsync(cartIds, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

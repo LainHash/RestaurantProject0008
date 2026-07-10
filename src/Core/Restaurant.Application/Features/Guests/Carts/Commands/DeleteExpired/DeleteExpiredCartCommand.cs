@@ -4,7 +4,7 @@ using Restaurant.Contract.DTOs.Guests.Carts;
 
 namespace Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired
 {
-    public record DeleteExpiredCartCommand(DeleteExpiredCartRequest Body)
+    public record DeleteExpiredCartCommand(IEnumerable<Guid> CartIds)
         : IRequest<Result<object>>
     {
     }

@@ -7,10 +7,10 @@ namespace Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest
 {
     public class CreateCartForGuestSpecification : BaseSpecification<Cart>
     {
-        public CreateCartForGuestRequest Body { get; set; }
+        public Guid SessionId { get; set; }
         public CreateCartForGuestSpecification(CreateCartForGuestCommand command)
         {
-            Body = command.Body;
+            SessionId = command.SessionId;
 
             AddIncludeAggregator(x => x.Include(c => c.CartItems)
                                             .ThenInclude(ci => ci.Product));
