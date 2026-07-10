@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
@@ -60,6 +61,17 @@ namespace Restaurant.API.Controllers.Guests
         public async Task<IActionResult> CreateForGuest([FromBody] Guid sessionId, CancellationToken cancellationToken)
         {
             var command = new CreateWishlistForGuestCommand(sessionId);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/add-item")]
+        public async Task<IActionResult> AddItem(
+            [FromRoute] Guid id,
+            [FromBody] Guid productId,
+            CancellationToken cancellationToken)
+        {
+            var command = new AddWishlistItemCommand(id, productId);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
