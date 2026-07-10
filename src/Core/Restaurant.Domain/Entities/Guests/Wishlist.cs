@@ -13,14 +13,19 @@ namespace Restaurant.Domain.Entities.Guests
 
     public partial class Wishlist
     {
-        public void AddCustomer(Guid id)
+        public void SetCustomer(Guid id)
         {
             CustomerId = id;
         }
 
-        public void AddGuest(Guid id)
+        public void SetGuest(Guid id)
         {
             SessionId = id;
+        }
+
+        public void AddItem(Guid productId)
+        {
+            WishlistItems.Add(new WishlistItem(productId));
         }
     }
 }

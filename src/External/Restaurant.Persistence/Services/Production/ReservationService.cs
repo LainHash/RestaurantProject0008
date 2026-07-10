@@ -99,7 +99,7 @@ namespace Restaurant.Persistence.Services.Production
             }
 
             var reservation = new Reservation(specification.Body.ToInfo());
-            reservation.AddTable(selectedTable.Id);
+            reservation.SetTable(selectedTable.Id);
 
             var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
             if (customer is null)
@@ -108,7 +108,7 @@ namespace Restaurant.Persistence.Services.Production
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            reservation.AddCustomer(customer.Id);
+            reservation.SetCustomer(customer.Id);
             await _reservationRepository.AddAsync(reservation, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -141,7 +141,7 @@ namespace Restaurant.Persistence.Services.Production
             }
 
             var reservation = new Reservation(specification.Body.ToInfo());
-            reservation.AddTable(selectedTable.Id);
+            reservation.SetTable(selectedTable.Id);
 
             await _reservationRepository.AddAsync(reservation, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

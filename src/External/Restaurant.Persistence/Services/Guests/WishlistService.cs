@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
+﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetById;
@@ -57,7 +58,7 @@ namespace Restaurant.Persistence.Services.Guests
         {
             var wishlist = new Wishlist();
 
-            wishlist.AddGuest(specification.SessionId);
+            wishlist.SetGuest(specification.SessionId);
             await _wishlistRepository.AddAsync(wishlist, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -67,7 +68,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new WishlistRepsonse(createdWishlist!);
             return Result<WishlistRepsonse>
-                    .Succeed(response, Success.Created);
+                    .Succeed(response, Success.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<WishlistRepsonse>> CreateForCustomerAsync(CreateWishlistForCustomerSpecification specification, CancellationToken cancellationToken)
@@ -81,7 +82,7 @@ namespace Restaurant.Persistence.Services.Guests
                     .Fail(Error.NotFound, HttpStatusCode.NotFound);
             }
 
-            wishlist.AddCustomer(customer.Id);
+            wishlist.SetCustomer(customer.Id);
             await _wishlistRepository.AddAsync(wishlist , cancellationToken);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken) ;
@@ -91,7 +92,33 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new WishlistRepsonse(createdWishlist!);
             return Result<WishlistRepsonse>
-                    .Succeed(response, Success.Created);
+                    .Succeed(response, Success.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<WishlistRepsonse>> AddItemAsync(AddWishlistItemSpecification specification, CancellationToken cancellationToken)
+        {
+            var wishlist = await _wishlistRepository.FindAsync(specification, cancellationToken);
+            if (wishlist is null)
+            {
+                return Result<WishlistRepsonse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+            
+            var existedItem = wishlist.WishlistItems.Any(x => x.ProductId == specification.ProductId);
+            if (existedItem)
+            {
+                return Result<WishlistRepsonse>
+                    .Fail(Error.WishlistAdded, HttpStatusCode.Conflict);
+            }
+
+            wishlist.AddItem(specification.ProductId);
+            await _wishlistRepository.UpdateAsync(wishlist, cancellationToken);
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new WishlistRepsonse(wishlist);
+            return Result<WishlistRepsonse>
+                    .Succeed(response, Success.WishlistAdded);
         }
     }
 }

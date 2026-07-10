@@ -12,5 +12,11 @@ namespace Restaurant.Domain.Entities.Guests
 
         public virtual Wishlist Wishlist { get; private set; } = null!;
         public virtual Product Product { get; private set; } = null!;
+
+        public WishlistItem(Guid productId)
+        {
+            ProductId = productId;
+            AddedAt = DateTime.UtcNow;
+        }
     }
 }

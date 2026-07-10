@@ -46,6 +46,12 @@ namespace Restaurant.Persistence.Repositories.Guest
             return Task.CompletedTask;
         }
 
+        public Task UpdateAsync(Wishlist wishlist, CancellationToken cancelToken = default)
+        {
+            _context.Wishlists.Update(wishlist);
+            return Task.CompletedTask;
+        }
+
         public async Task RemoveAsync(Guid id, CancellationToken cancellationToken = default)
         {
             await _context.Carts

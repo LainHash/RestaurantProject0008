@@ -13,6 +13,8 @@
         public const string Deleted = "Resource already deleted.";
         public const string Restored = "Resource not yet deleted.";
 
+        public const string WishlistAdded = "Item already added.";
+
         public const string ValidationFailed = "Validation failed.";
 
         public const string InternalServerError = "An unexpected error occurred.";
