@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
+﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetById;
 using Restaurant.Application.Models.Results;
@@ -17,5 +18,7 @@ namespace Restaurant.Application.Services.Guests
         Task<Result<WishlistRepsonse>>
             CreateForGuestAsync(CreateWishlistForGuestSpecification specification, CancellationToken cancellationToken);
 
+        Task<Result<WishlistRepsonse>>
+            CreateForCustomerAsync(CreateWishlistForCustomerSpecification specification, CancellationToken cancellationToken);
     }
 }

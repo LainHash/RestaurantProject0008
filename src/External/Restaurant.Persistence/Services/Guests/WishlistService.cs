@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
+﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetById;
 using Restaurant.Application.Models.Messages;
@@ -16,14 +17,17 @@ namespace Restaurant.Persistence.Services.Guests
     internal class WishlistService : IWishlistService
     {
         private readonly IWishlistRepository _wishlistRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public WishlistService(
             IWishlistRepository wishlistRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ICustomerRepository customerRepository)
         {
             _wishlistRepository = wishlistRepository;
             _unitOfWork = unitOfWork;
+            _customerRepository = customerRepository;
         }
 
         public async Task<Result<IEnumerable<WishlistRepsonse>>> GetAllAsync(GetAllWishlistsSpecification specification, CancellationToken cancellationToken)
@@ -61,7 +65,31 @@ namespace Restaurant.Persistence.Services.Guests
             specification.ApplyCriteria(wishlist.Id);
             var createdWishlist = await _wishlistRepository.FindAsync(specification, cancellationToken);
 
-            var response = new WishlistRepsonse(wishlist);
+            var response = new WishlistRepsonse(createdWishlist!);
+            return Result<WishlistRepsonse>
+                    .Succeed(response, Success.Created);
+        }
+
+        public async Task<Result<WishlistRepsonse>> CreateForCustomerAsync(CreateWishlistForCustomerSpecification specification, CancellationToken cancellationToken)
+        {
+            var wishlist = new Wishlist();
+
+            var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
+            if(customer is null)
+            {
+                return Result<WishlistRepsonse>
+                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+            }
+
+            wishlist.AddCustomer(customer.Id);
+            await _wishlistRepository.AddAsync(wishlist , cancellationToken);
+            
+            await _unitOfWork.SaveChangesAsync(cancellationToken) ;
+
+            specification.ApplyCriteria(wishlist.Id);
+            var createdWishlist = await _wishlistRepository.FindAsync(specification, cancellationToken);
+
+            var response = new WishlistRepsonse(createdWishlist!);
             return Result<WishlistRepsonse>
                     .Succeed(response, Success.Created);
         }
