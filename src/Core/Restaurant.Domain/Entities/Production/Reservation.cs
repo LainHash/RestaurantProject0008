@@ -89,5 +89,10 @@ namespace Restaurant.Domain.Entities.Production
         {
             CustomerId = customerId;
         }
+
+        public void UpdateStatus(string status)
+        {
+            Status = status;
+        }
     }
 }
