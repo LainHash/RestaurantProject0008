@@ -74,7 +74,7 @@ namespace Restaurant.API.Controllers.Territory
         [HttpPatch("{id}/update-status")]
         public async Task<IActionResult> UpdateStatus(
             [FromRoute] Guid id,
-            [FromBody] UpdateRestaurantTableStatusRequest request,
+            [FromForm] UpdateRestaurantTableStatusRequest request,
             CancellationToken cancellationToken)
         {
             var command = new UpdateRestaurantTableStatusCommand(id, request);
