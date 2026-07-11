@@ -1,6 +1,7 @@
 using Restaurant.Application.Common.Enums;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForGuest;
+using Restaurant.Application.Features.Production.Reservations.Command.UpdateStatus;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
@@ -11,6 +12,7 @@ using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Guests.Carts;
 using Restaurant.Contract.DTOs.Production.Reservations;
+using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Production;
@@ -48,7 +50,7 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = reservations.Select(r => new ReservationResponse(r));
             return PageResult<IEnumerable<ReservationResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Reservation>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<PageResult<IEnumerable<ReservationResponse>>>
@@ -61,7 +63,7 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = reservations.Select(r => new ReservationResponse(r));
             return PageResult<IEnumerable<ReservationResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Reservation>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<ReservationResponse>>
@@ -71,12 +73,12 @@ namespace Restaurant.Persistence.Services.Production
             if (reservation is null)
             {
                 return Result<ReservationResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Reservation>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new ReservationResponse(reservation);
             return Result<ReservationResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Reservation>.Retrieved);
         }
 
         public async Task<Result<ReservationResponse>> 
@@ -105,7 +107,7 @@ namespace Restaurant.Persistence.Services.Production
             if (customer is null)
             {
                 return Result<ReservationResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Customer>.NotFound, HttpStatusCode.NotFound);
             }
 
             reservation.SetCustomer(customer.Id);
@@ -118,7 +120,7 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = new ReservationResponse(createdReservation!);
             return Result<ReservationResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Reservation>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<ReservationResponse>> 
@@ -151,7 +153,26 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = new ReservationResponse(createdReservation!);
             return Result<ReservationResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Reservation>.Created, HttpStatusCode.Created);
+        }
+
+        public async Task<Result<ReservationResponse>> UpdateStatusAsync(UpdateReservationStatusSpecification specification, CancellationToken cancellationToken)
+        {
+            var reservation = await _reservationRepository.FindAsync(specification, cancellationToken);
+            if (reservation is null)
+            {
+                return Result<ReservationResponse>
+                    .Fail(Error<Reservation>.NotFound, HttpStatusCode.NotFound);
+            }
+
+            reservation.UpdateStatus(specification.Body.ReservationStatus.ToString());
+            await _reservationRepository.UpdateAsync(reservation, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new ReservationResponse(reservation);
+            return Result<ReservationResponse>
+                .Succeed(response, Success<Reservation>.Updated);
         }
     }
 }
