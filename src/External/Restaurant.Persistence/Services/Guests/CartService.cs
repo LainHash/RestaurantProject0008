@@ -159,12 +159,12 @@ namespace Restaurant.Persistence.Services.Guests
             DeleteExpiredCartAsync(DeleteExpiredCartSpecification specification, CancellationToken cancellationToken)
         {
             var carts = await _cartRepository.ToListAsync(specification, cancellationToken);
-            await _cartRepository.RemoveRangeAsync(carts, cancellationToken);
+            var count = _cartRepository.RemoveRange(carts, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Deleted);
+                .Succeed(count, Success.Deleted);
         }
     }
 }

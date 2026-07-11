@@ -130,12 +130,12 @@ namespace Restaurant.Persistence.Services.Guests
         {
             var wishlists = await _wishlistRepository.ToListAsync(specification, cancellationToken);
 
-            await _wishlistRepository.RemoveRangeAsync(wishlists, cancellationToken);
+            var count = _wishlistRepository.RemoveRange(wishlists, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Deleted);
+                .Succeed(count, Success.Deleted);
         }
     }
 }

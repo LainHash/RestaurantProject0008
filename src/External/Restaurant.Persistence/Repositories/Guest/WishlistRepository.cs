@@ -66,10 +66,11 @@ namespace Restaurant.Persistence.Repositories.Guest
                 .ExecuteDeleteAsync(cancellationToken);
         }
 
-        public Task RemoveRangeAsync(IEnumerable<Wishlist> wishlists, CancellationToken cancellationToken = default)
+        public int RemoveRange(IEnumerable<Wishlist> wishlists, CancellationToken cancellationToken = default)
         {
+            var count = wishlists.Count();
             _context.Wishlists.RemoveRange(wishlists);
-            return Task.CompletedTask;
+            return count;
         }
     }
 }

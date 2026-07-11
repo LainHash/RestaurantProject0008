@@ -12,6 +12,6 @@ namespace Restaurant.Domain.Repositories.Guest
         Task AddAsync(Cart cart, CancellationToken cancellationToken = default);
         Task RemoveAsync(Guid id, CancellationToken cancellationToken = default);
         Task RemoveRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
-        Task RemoveRangeAsync(IEnumerable<Cart> carts, CancellationToken cancellationToken = default);
+        int RemoveRange(IEnumerable<Cart> carts, CancellationToken cancellationToken = default);
     }
 }
