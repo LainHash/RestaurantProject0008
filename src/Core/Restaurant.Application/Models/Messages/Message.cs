@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
 
 namespace Restaurant.Application.Models.Messages
@@ -15,6 +16,10 @@ namespace Restaurant.Application.Models.Messages
         public const string Deleted = $"{nameof(T)} deleted successfully.";
 
         public const string Restored = $"{nameof(T)} restored successfully.";
+
+        public const string Uploaded = $"{nameof(T)} uploaded successfully.";
+
+        public const string Added = $"{nameof(T)} added successfully.";
     }
 
     public static class Error<T>

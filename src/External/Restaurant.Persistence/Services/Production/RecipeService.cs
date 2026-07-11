@@ -9,6 +9,7 @@ using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Recipes;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Repositories.Production;
 using System.Net;
@@ -43,24 +44,26 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = recipe.Select(r => new RecipeResponse(r));
             return PageResult<IEnumerable<RecipeResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Recipe>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
-        public async Task<Result<RecipeResponse>> GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<RecipeResponse>> 
+            GetByIdAsync(GetRecipeByIdSpecification specification, CancellationToken cancellationToken)
         {
             var recipe = await _recipeRespository.FindAsync(specification, cancellationToken);
             if (recipe is null)
             {
                 return Result<RecipeResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Recipe>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new RecipeResponse(recipe);
             return Result<RecipeResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Recipe>.Retrieved);
         }
 
-        public async Task<Result<RecipeResponse>> CreateAsync(CreateRecipeSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<RecipeResponse>> 
+            CreateAsync(CreateRecipeSpecification specification, CancellationToken cancellationToken)
         {
             var recipe = new Recipe(specification.Body.ToInfo());
             await _recipeRespository.AddAsync(recipe, cancellationToken);
@@ -70,7 +73,7 @@ namespace Restaurant.Persistence.Services.Production
             var createdRecipe = await _recipeRespository.FindAsync(specification, cancellationToken);
             var response = new RecipeResponse(createdRecipe!);
             return Result<RecipeResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Recipe>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<RecipeResponse>> 
@@ -84,7 +87,7 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = new RecipeResponse(recipe!);
             return Result<RecipeResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Ingredient>.Added);
         }
 
         public async Task<Result<RecipeResponse>> 
@@ -98,7 +101,7 @@ namespace Restaurant.Persistence.Services.Production
 
             var response = new RecipeResponse(recipe!);
             return Result<RecipeResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<RecipeStep>.Added);
         }
     }
 }
