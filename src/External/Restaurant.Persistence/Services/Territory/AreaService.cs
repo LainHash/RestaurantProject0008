@@ -4,6 +4,7 @@ using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Territory;
 using Restaurant.Contract.DTOs.Territory.Areas;
+using Restaurant.Domain.Entities.Territory;
 using Restaurant.Domain.Repositories.Territory;
 using System.Net;
 
@@ -26,7 +27,7 @@ namespace Restaurant.Persistence.Services.Territory
 
             var response = areas.Select(a => new AreaResponse(a));
             return PageResult<IEnumerable<AreaResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Area>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<AreaResponse>> GetByIdAsync(GetAreaByIdSpecification specification, CancellationToken cancellationToken = default)
@@ -35,12 +36,12 @@ namespace Restaurant.Persistence.Services.Territory
             if (area is null)
             {
                 return Result<AreaResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Area>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new AreaResponse(area);
             return Result<AreaResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Area>.Retrieved);
         }
     }
 }

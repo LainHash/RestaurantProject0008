@@ -29,5 +29,7 @@ namespace Restaurant.Application.Models.Messages
         public const string NotYetDeleted = $"{nameof(T)} not yet deleted.";
 
         public const string AlreadyDeleted = $"{nameof(T)} already deleted.";
+
+        public const string OutOfStock = $"{nameof(T)} out of stock.";
     }
 }
