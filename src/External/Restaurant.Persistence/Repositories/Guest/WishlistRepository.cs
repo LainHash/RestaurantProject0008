@@ -65,5 +65,11 @@ namespace Restaurant.Persistence.Repositories.Guest
                 .Where(x => ids.Contains(x.Id))
                 .ExecuteDeleteAsync(cancellationToken);
         }
+
+        public Task RemoveRangeAsync(IEnumerable<Wishlist> wishlists, CancellationToken cancellationToken = default)
+        {
+            _context.Wishlists.RemoveRange(wishlists);
+            return Task.CompletedTask;
+        }
     }
 }

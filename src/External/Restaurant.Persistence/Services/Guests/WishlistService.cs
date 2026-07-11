@@ -1,6 +1,7 @@
 using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetById;
 using Restaurant.Application.Models.Messages;
@@ -124,9 +125,12 @@ namespace Restaurant.Persistence.Services.Guests
                     .Succeed(response, Success.WishlistAdded);
         }
 
-        public async Task<Result<object>> DeleteExpiredWishlistAsync(IEnumerable<Guid> wishlistIds, CancellationToken cancellationToken)
+        public async Task<Result<object>> 
+            DeleteExpiredWishlistAsync(DeleteExpiredWishlistSpecification specification, CancellationToken cancellationToken)
         {
-            await _wishlistRepository.RemoveRangeAsync(wishlistIds, cancellationToken);
+            var wishlists = await _wishlistRepository.ToListAsync(specification, cancellationToken);
+
+            await _wishlistRepository.RemoveRangeAsync(wishlists, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

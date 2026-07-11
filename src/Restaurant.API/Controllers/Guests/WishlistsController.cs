@@ -79,10 +79,9 @@ namespace Restaurant.API.Controllers.Guests
 
         [HttpDelete]
         public async Task<IActionResult> DeleteExpired(
-            [FromBody] IEnumerable<Guid> wishlistIds,
             CancellationToken cancellationToken)
         {
-            var command = new DeleteExpiredWishlistCommand(wishlistIds);
+            var command = new DeleteExpiredWishlistCommand();
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
