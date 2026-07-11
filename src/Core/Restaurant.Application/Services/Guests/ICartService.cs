@@ -1,6 +1,7 @@
 ﻿using Restaurant.Application.Features.Guests.Carts.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
 using Restaurant.Application.Models.Results;
@@ -26,6 +27,6 @@ namespace Restaurant.Application.Services.Guests
             AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<object>>
-            DeleteExpiredCartAsync(IEnumerable<Guid> cartIds, CancellationToken cancellationToken);
+            DeleteExpiredCartAsync(DeleteExpiredCartSpecification specification, CancellationToken cancellationToken);
     }
 }
