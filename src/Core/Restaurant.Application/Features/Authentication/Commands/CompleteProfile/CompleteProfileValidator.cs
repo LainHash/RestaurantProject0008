@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 
 namespace Restaurant.Application.Features.Authentication.Commands.CompleteProfile
 {
@@ -6,9 +6,7 @@ namespace Restaurant.Application.Features.Authentication.Commands.CompleteProfil
     {
         public CompleteProfileValidator()
         {
-            RuleFor(x => x.Body.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("A valid email is required.");
+
 
             RuleFor(x => x.Body.FirstName)
                 .NotEmpty().WithMessage("First Name is required.")
