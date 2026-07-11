@@ -2,7 +2,7 @@
 
 namespace Restaurant.Contract.DTOs.Production.Reservations
 {
-    public class UpdaterReservationStatusRequest
+    public class UpdateReservationStatusRequest
     {
         public ReservationStatus ReservationStatus { get; set; }
     }

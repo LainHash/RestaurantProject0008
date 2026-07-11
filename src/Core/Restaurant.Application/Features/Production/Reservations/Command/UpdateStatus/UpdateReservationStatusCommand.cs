@@ -4,7 +4,7 @@ using Restaurant.Contract.DTOs.Production.Reservations;
 
 namespace Restaurant.Application.Features.Production.Reservations.Command.UpdateStatus
 {
-    public record UpdateReservationStatusCommand(Guid Id, UpdaterReservationStatusRequest Body)
+    public record UpdateReservationStatusCommand(Guid Id, UpdateReservationStatusRequest Body)
         : IRequest<Result<ReservationResponse>>
     {
     }

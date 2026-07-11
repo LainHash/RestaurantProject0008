@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForGuest;
+using Restaurant.Application.Features.Production.Reservations.Command.UpdateStatus;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAll;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetAllByWeek;
 using Restaurant.Application.Features.Production.Reservations.Queries.GetById;
 using Restaurant.Contract.DTOs.Production.Reservations;
+using Restaurant.Contract.DTOs.Territory.RestaurantTables;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -72,6 +74,17 @@ namespace Restaurant.API.Controllers.Production
             CancellationToken cancellationToken)
         {
             var command = new CreateReservationForGuestCommand(request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/update-status")]
+        public async Task<IActionResult> UpdateStatus(
+            [FromRoute] Guid id,
+            [FromForm] UpdateReservationStatusRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new UpdateReservationStatusCommand(id, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

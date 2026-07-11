@@ -9,7 +9,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Command.Update
     public class UpdateReservationStatusSpecification
         : BaseSpecification<Reservation>
     {
-        public UpdaterReservationStatusRequest Body { get; set; } = null!;
+        public UpdateReservationStatusRequest Body { get; set; } = null!;
         public UpdateReservationStatusSpecification(UpdateReservationStatusCommand command)
         {
             Criteria = r => r.Id == command.Id;
