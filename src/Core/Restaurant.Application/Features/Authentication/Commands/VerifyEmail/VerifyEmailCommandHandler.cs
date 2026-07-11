@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Authentication;
 
@@ -14,7 +14,7 @@ namespace Restaurant.Application.Features.Authentication.Commands.VerifyEmail
 
         public async Task<Result<object>> Handle(VerifyEmailCommand request, CancellationToken cancellationToken)
         {
-            var response = await _authenticationService.VerifyEmailAsync(request.Body, cancellationToken);
+            var response = await _authenticationService.VerifyEmailAsync(request.UserId, request.Body, cancellationToken);
             return response;
         }
     }

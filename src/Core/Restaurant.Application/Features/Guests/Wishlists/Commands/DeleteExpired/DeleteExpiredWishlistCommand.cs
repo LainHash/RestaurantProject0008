@@ -3,7 +3,7 @@ using Restaurant.Application.Models.Results;
 
 namespace Restaurant.Application.Features.Guests.Wishlists.Commands.DeleteExpired
 {
-    public record DeleteExpiredWishlistCommand(IEnumerable<Guid> WishlistIds)
+    public record DeleteExpiredWishlistCommand()
         : IRequest<Result<object>>
     {
     }

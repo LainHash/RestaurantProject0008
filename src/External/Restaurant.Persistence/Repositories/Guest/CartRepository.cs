@@ -59,5 +59,12 @@ namespace Restaurant.Persistence.Repositories.Guest
                 .Where(x => ids.Contains(x.Id))
                 .ExecuteDeleteAsync(cancellationToken);
         }
+
+        public int RemoveRange(IEnumerable<Cart> carts, CancellationToken cancellationToken = default)
+        {
+            var count = carts.Count();
+            _context.Carts.RemoveRange(carts);
+            return count;
+        }
     }
 }

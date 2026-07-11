@@ -13,5 +13,6 @@ namespace Restaurant.Domain.Repositories.Guest
         Task UpdateAsync(Wishlist wishlist, CancellationToken cancelToken = default);
         Task RemoveAsync(Guid id, CancellationToken cancellationToken = default);
         Task RemoveRangeAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
+        int RemoveRange(IEnumerable<Wishlist> wishlists, CancellationToken cancellationToken = default);
     }
 }

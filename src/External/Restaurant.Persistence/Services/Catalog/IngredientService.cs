@@ -38,7 +38,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = ingredients.Select(i => new IngredientResponse(i));
             return PageResult<IEnumerable<IngredientResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Ingredient>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<IngredientResponse>> 
@@ -48,12 +48,12 @@ namespace Restaurant.Persistence.Services.Catalog
             if (ingredient is null)
             {
                 return Result<IngredientResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Ingredient>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new IngredientResponse(ingredient);
             return Result<IngredientResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Ingredient>.Retrieved);
         }
 
         public async Task<Result<IngredientResponse>> 
@@ -68,7 +68,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new IngredientResponse(createdIngredient!);
             return Result<IngredientResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Ingredient>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<IEnumerable<IngredientResponse>>> CreateManyAsync(CreateManyIngredientsSpecification specification, CancellationToken cancellationToken)
@@ -83,7 +83,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = createdIngredients.Select(i => new IngredientResponse(i));
             return Result<IEnumerable<IngredientResponse>>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Ingredient>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<IngredientResponse>> 
@@ -93,7 +93,7 @@ namespace Restaurant.Persistence.Services.Catalog
             if (ingredient is null)
             {
                 return Result<IngredientResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Ingredient>.NotFound, HttpStatusCode.NotFound);
             }
 
             ingredient.Update(specification.Body.Name, specification.Body.Description, specification.Body.CategoryId);
@@ -102,7 +102,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new IngredientResponse(ingredient);
             return Result<IngredientResponse>
-                .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
+                .Succeed(response, Success<Ingredient>.Updated);
         }
 
         public async Task<Result<IngredientResponse>> 
@@ -112,7 +112,7 @@ namespace Restaurant.Persistence.Services.Catalog
             if (ingredient is null)
             {
                 return Result<IngredientResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Ingredient>.NotFound, HttpStatusCode.NotFound);
             }
 
             ingredient.IngredientStock.Update(specification.Body.UnitPrice, specification.Body.Unit, specification.Body.StockQuantity);
@@ -121,7 +121,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new IngredientResponse(ingredient);
             return Result<IngredientResponse>
-                .Succeed(response, Success.Uploaded, HttpStatusCode.OK);
+                .Succeed(response, Success<Ingredient>.Updated, HttpStatusCode.OK);
         }
 
         public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken)
@@ -130,13 +130,13 @@ namespace Restaurant.Persistence.Services.Catalog
             if (ingredient is null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Ingredient>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (ingredient.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+                    .Fail(Error<Ingredient>.AlreadyDeleted, HttpStatusCode.Conflict);
             }
 
             ingredient.SoftDelete();
@@ -144,7 +144,7 @@ namespace Restaurant.Persistence.Services.Catalog
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Deleted);
+                .Succeed(default, Success<Ingredient>.Deleted);
         }
 
         public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken)
@@ -153,13 +153,13 @@ namespace Restaurant.Persistence.Services.Catalog
             if (ingredient is null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Ingredient>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (!ingredient.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+                    .Fail(Error<Ingredient>.NotYetDeleted, HttpStatusCode.Conflict);
             }
 
             ingredient.Restore();
@@ -167,7 +167,7 @@ namespace Restaurant.Persistence.Services.Catalog
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Restored);
+                .Succeed(default, Success<Ingredient>.Restored);
         }
     }
 }

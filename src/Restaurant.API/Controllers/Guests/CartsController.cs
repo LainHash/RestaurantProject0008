@@ -82,11 +82,9 @@ namespace Restaurant.API.Controllers.Guests
         }
 
         [HttpDelete("clear-expired-cart")]
-        public async Task<IActionResult> DeleteExpired(
-            [FromBody] IEnumerable<Guid> cardIds,
-            CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteExpired(CancellationToken cancellationToken)
         {
-            var command = new DeleteExpiredCartCommand(cardIds);
+            var command = new DeleteExpiredCartCommand();
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }

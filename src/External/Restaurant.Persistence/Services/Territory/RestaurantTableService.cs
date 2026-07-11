@@ -26,7 +26,7 @@ namespace Restaurant.Persistence.Services.Territory
 
             var response = restaurantTables.Select(rt => new RestaurantTableResponse(rt));
             return Result<IEnumerable<RestaurantTableResponse>>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<RestaurantTable>.Retrieved);
         }
 
         public async Task<Result<RestaurantTableResponse>>
@@ -36,12 +36,12 @@ namespace Restaurant.Persistence.Services.Territory
             if (restaurantTable is null)
             {
                 return Result<RestaurantTableResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<RestaurantTable>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new RestaurantTableResponse(restaurantTable);
             return Result<RestaurantTableResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<RestaurantTable>.Retrieved);
         }
 
         public async Task<Result<RestaurantTableResponse>> CreateAsync(CreateRestaurantTableRequest request, CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ namespace Restaurant.Persistence.Services.Territory
 
             var response = new RestaurantTableResponse(table);
             return Result<RestaurantTableResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<RestaurantTable>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<RestaurantTableResponse>> UpdateAsync(Guid id, UpdateRestaurantTableRequest request, CancellationToken cancellationToken = default)
@@ -61,7 +61,7 @@ namespace Restaurant.Persistence.Services.Territory
             if (table is null)
             {
                 return Result<RestaurantTableResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<RestaurantTable>.NotFound, HttpStatusCode.NotFound);
             }
 
             table.Update(request.TableNumber, request.Capacity, request.Status, request.AreaId);
@@ -70,7 +70,7 @@ namespace Restaurant.Persistence.Services.Territory
 
             var response = new RestaurantTableResponse(table);
             return Result<RestaurantTableResponse>
-                .Succeed(response, Success.Updated);
+                .Succeed(response, Success<RestaurantTable>.Updated);
         }
 
         public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -79,13 +79,13 @@ namespace Restaurant.Persistence.Services.Territory
             if (table is null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<RestaurantTable>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (table.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+                    .Fail(Error<RestaurantTable>.AlreadyDeleted, HttpStatusCode.Conflict);
             }
 
             table.SoftDelete();
@@ -93,7 +93,7 @@ namespace Restaurant.Persistence.Services.Territory
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                    .Succeed(default, Success.Deleted, HttpStatusCode.OK);
+                    .Succeed(default, Success<RestaurantTable>.Deleted, HttpStatusCode.OK);
         }
 
         public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken = default)
@@ -102,21 +102,41 @@ namespace Restaurant.Persistence.Services.Territory
             if (table is null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<RestaurantTable>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (!table.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+                    .Fail(Error<RestaurantTable>.NotYetDeleted, HttpStatusCode.Conflict);
             }
 
             table.Restore();
             await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                    .Succeed(default, Success.Restored, HttpStatusCode.OK);
+                    .Succeed(default, Success<RestaurantTable>.Restored, HttpStatusCode.OK);
+        }
+
+        public async Task<Result<RestaurantTableResponse>> UpdateStatusAsync(Guid id, UpdateRestaurantTableStatusRequest request, CancellationToken cancellationToken = default)
+        {
+            var table = await _restaurantTableRepository.FindAsync(id, cancellationToken);
+            if (table is null)
+            {
+                return Result<RestaurantTableResponse>
+                    .Fail(Error<RestaurantTable>.NotFound, HttpStatusCode.NotFound);
+            }
+
+            table.UpdateStatus(request.TableStatus.ToString());
+            await _restaurantTableRepository.UpdateAsync(table, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new RestaurantTableResponse(table);
+            return Result<RestaurantTableResponse>
+                .Succeed(response, Success<RestaurantTable>.Updated);
         }
     }
 }

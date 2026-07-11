@@ -8,6 +8,7 @@ using Restaurant.Application.Services.Misc;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Storage;
 using Restaurant.Contract.DTOs.Misc.Images;
+using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Informations.Misc.Images;
 using Restaurant.Domain.Repositories.Catalog;
@@ -46,8 +47,8 @@ namespace Restaurant.Persistence.Services.Misc
             var product = await _productRepository.FindAsync(specification.ProductId, cancellationToken);
             if (product is null)
             {
-                return Result<UploadImageResponse>.Fail(
-                    Error.NotFound, HttpStatusCode.NotFound);
+                return Result<UploadImageResponse>
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
             }
 
             // 2. Kiểm tra giới hạn 5 ảnh / product
@@ -56,9 +57,8 @@ namespace Restaurant.Persistence.Services.Misc
 
             if (currentCount >= MaxImagesPerProduct)
             {
-                return Result<UploadImageResponse>.Fail(
-                    $"Product đã đạt giới hạn tối đa {MaxImagesPerProduct} ảnh.",
-                    HttpStatusCode.UnprocessableEntity);
+                return Result<UploadImageResponse>
+                    .Fail($"Product đã đạt giới hạn tối đa {MaxImagesPerProduct} ảnh.", HttpStatusCode.UnprocessableEntity);
             }
 
             await using var transaction = await _unitOfWork.BeginTransactionAsync(cancellationToken);
@@ -72,9 +72,8 @@ namespace Restaurant.Persistence.Services.Misc
 
                 if (!uploadResult.IsSuccess)
                 {
-                    return Result<UploadImageResponse>.Fail(
-                        $"Upload Cloudinary thất bại: {uploadResult.ErrorMessage}",
-                        HttpStatusCode.BadGateway);
+                    return Result<UploadImageResponse>
+                        .Fail($"Upload Cloudinary thất bại: {uploadResult.ErrorMessage}", HttpStatusCode.BadGateway);
                 }
 
                 // 4. Nếu ảnh mới là primary → unset ảnh primary cũ
@@ -102,17 +101,15 @@ namespace Restaurant.Persistence.Services.Misc
 
                 var response = new UploadImageResponse(productImage, uploadResult.PublicId);
 
-                return Result<UploadImageResponse>.Succeed(
-                    response,
-                    Success.Created,
-                    HttpStatusCode.Created);
+                return Result<UploadImageResponse>
+                    .Succeed(response, Success<Image>.Uploaded, HttpStatusCode.Created);
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync(cancellationToken);
                 _logger.LogError(ex, "Lỗi khi upload ảnh cho product {ProductId}", specification.ProductId);
-                return Result<UploadImageResponse>.Fail(
-                    Error.Conflict, HttpStatusCode.InternalServerError);
+                return Result<UploadImageResponse>
+                    .Fail(Error.Conflict, HttpStatusCode.InternalServerError);
             }
         }
     }

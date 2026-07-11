@@ -1,4 +1,4 @@
-﻿using Restaurant.Application.Mapping.Identity;
+using Restaurant.Application.Mapping.Identity;
 using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Authentication;
@@ -88,9 +88,9 @@ namespace Restaurant.Persistence.Services.Authentication
         }
 
         public async Task<Result<object>> 
-            VerifyEmailAsync(VerifyEmailRequest request, CancellationToken cancellationToken = default)
+            VerifyEmailAsync(Guid userId, VerifyEmailRequest request, CancellationToken cancellationToken = default)
         {
-            var user = await _userRepository.FindAsync(request.Email, cancellationToken);
+            var user = await _userRepository.FindAsync(userId, cancellationToken);
             if (user == null)
             {
                 return Result<object>
@@ -124,9 +124,9 @@ namespace Restaurant.Persistence.Services.Authentication
         }
 
         public async Task<Result<object>> 
-            CompleteProfileAsync(CompleteProfileRequest request, CancellationToken cancellationToken = default)
+            CompleteProfileAsync(Guid userId, CompleteProfileRequest request, CancellationToken cancellationToken = default)
         {
-            var user = await _userRepository.FindAsync(request.Email, cancellationToken);
+            var user = await _userRepository.FindAsync(userId, cancellationToken);
             if (user == null)
             {
                 return Result<object>

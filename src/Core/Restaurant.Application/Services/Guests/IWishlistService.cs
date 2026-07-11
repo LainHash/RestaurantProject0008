@@ -1,6 +1,7 @@
 ﻿using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Wishlists.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Wishlists.Queries.GetById;
 using Restaurant.Application.Models.Results;
@@ -26,6 +27,6 @@ namespace Restaurant.Application.Services.Guests
             AddItemAsync(AddWishlistItemSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<object>>
-            DeleteExpiredWishlistAsync(IEnumerable<Guid> wishlistIds, CancellationToken cancellationToken);
+            DeleteExpiredWishlistAsync(DeleteExpiredWishlistSpecification specification, CancellationToken cancellationToken);
     }
 }

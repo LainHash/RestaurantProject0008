@@ -227,7 +227,7 @@ namespace Restaurant.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid>("PersonalInformationId")
+                    b.Property<Guid?>("PersonalInformationId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")

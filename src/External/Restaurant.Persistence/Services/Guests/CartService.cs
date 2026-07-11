@@ -1,6 +1,7 @@
 ﻿using Restaurant.Application.Features.Guests.Carts.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
+using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
 using Restaurant.Application.Models.Messages;
@@ -10,6 +11,7 @@ using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Guests.Carts;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Entities.Inventory;
 using Restaurant.Domain.Repositories.Catalog;
 using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Inventory;
@@ -50,7 +52,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = carts.Select(x => new CartResponse(x));
             return Result<IEnumerable<CartResponse>>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Cart>.Retrieved);
         }
 
         public async Task<Result<CartResponse>> 
@@ -60,12 +62,12 @@ namespace Restaurant.Persistence.Services.Guests
             if (cart is null)
             {
                 return Result<CartResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Cart>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new CartResponse(cart);
             return Result<CartResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Cart>.Retrieved);
         }
 
         public async Task<Result<CartResponse>> 
@@ -77,7 +79,7 @@ namespace Restaurant.Persistence.Services.Guests
             if(customer is null)
             {
                 return Result<CartResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Cart>.NotFound, HttpStatusCode.NotFound);
             }
 
             cart.AddCustomer(customer.Id);
@@ -90,7 +92,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new CartResponse(createdCart!);
             return Result<CartResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Cart>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<CartResponse>> 
@@ -107,7 +109,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new CartResponse(createdCart!);
             return Result<CartResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Cart>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<CartResponse>> AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken)
@@ -116,20 +118,20 @@ namespace Restaurant.Persistence.Services.Guests
             if (cart is null)
             {
                 return Result<CartResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Cart>.NotFound, HttpStatusCode.NotFound);
             }
 
             var productStock = await _productStockRepository.FindByProductIdAsync(specification.ProductId, cancellationToken);
             if (productStock is null)
             {
                 return Result<CartResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<ProductStock>.NotFound, HttpStatusCode.NotFound);
             }
 
             if(productStock.StockQuantity <= 0)
             {
                 return Result<CartResponse>
-                    .Fail(Error.OutOfStock);
+                    .Fail(Error<ProductStock>.OutOfStock);
             }
 
             var existingItem = cart.CartItems.FirstOrDefault(x => x.ProductId == specification.ProductId);
@@ -151,17 +153,19 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new CartResponse(addItemCart!);
             return Result<CartResponse>
-                .Succeed(response, Success.CartAdded);
+                .Succeed(response, Success<CartItem>.Added);
         }
 
-        public async Task<Result<object>> DeleteExpiredCartAsync(IEnumerable<Guid> cartIds, CancellationToken cancellationToken)
+        public async Task<Result<object>> 
+            DeleteExpiredCartAsync(DeleteExpiredCartSpecification specification, CancellationToken cancellationToken)
         {
-            await _cartRepository.RemoveRangeAsync(cartIds, cancellationToken);
+            var carts = await _cartRepository.ToListAsync(specification, cancellationToken);
+            var count = _cartRepository.RemoveRange(carts, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Deleted);
+                .Succeed(count, Success<Cart>.Deleted);
         }
     }
 }

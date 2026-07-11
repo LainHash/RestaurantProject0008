@@ -16,7 +16,8 @@ namespace Restaurant.Application.Features.Guests.Wishlists.Commands.DeleteExpire
 
         public async Task<Result<object>> Handle(DeleteExpiredWishlistCommand request, CancellationToken cancellationToken)
         {
-            var response = await _wishlistService.DeleteExpiredWishlistAsync(request.WishlistIds, cancellationToken);
+            var specification = new DeleteExpiredWishlistSpecification(request);
+            var response = await _wishlistService.DeleteExpiredWishlistAsync(specification, cancellationToken);
             return response;
         }
     }

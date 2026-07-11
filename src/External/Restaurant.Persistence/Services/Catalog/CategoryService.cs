@@ -30,7 +30,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = categories.Select(c => new CategoryResponse(c));
             return PageResult<IEnumerable<CategoryResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Category>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<CategoryResponse>>
@@ -40,12 +40,12 @@ namespace Restaurant.Persistence.Services.Catalog
             if (category == null)
             {
                 return Result<CategoryResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Category>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new CategoryResponse(category);
             return Result<CategoryResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Category>.Retrieved);
         }
 
         public async Task<Result<CategoryResponse>> CreateAsync(CreateCategoryRequest request, CancellationToken cancellationToken = default)
@@ -56,7 +56,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new CategoryResponse(category);
             return Result<CategoryResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Category>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<CategoryResponse>> UpdateAsync(Guid id, UpdateCategoryRequest request, CancellationToken cancellationToken = default)
@@ -65,7 +65,7 @@ namespace Restaurant.Persistence.Services.Catalog
             if (category == null)
             {
                 return Result<CategoryResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Category>.NotFound, HttpStatusCode.NotFound);
             }
 
             category.Update(request.Name, request.Description, request.Type);
@@ -74,7 +74,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new CategoryResponse(category);
             return Result<CategoryResponse>
-                .Succeed(response, Success.Updated);
+                .Succeed(response, Success<Category>.Updated);
         }
 
         public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -83,13 +83,13 @@ namespace Restaurant.Persistence.Services.Catalog
             if (category == null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Category>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (category.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+                    .Fail(Error<Category>.AlreadyDeleted, HttpStatusCode.Conflict);
             }
 
             category.SoftDelete();
@@ -97,7 +97,7 @@ namespace Restaurant.Persistence.Services.Catalog
             await _categoryRepository.UpdateAsync(category, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result<object>
-                .Succeed(null, Success.Deleted);
+                .Succeed(default, Success<Category>.Deleted);
         }
 
         public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken = default)
@@ -106,13 +106,13 @@ namespace Restaurant.Persistence.Services.Catalog
             if (category == null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Category>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (!category.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+                    .Fail(Error<Category>.NotYetDeleted, HttpStatusCode.Conflict);
             }
 
             category.Restore();
@@ -120,7 +120,7 @@ namespace Restaurant.Persistence.Services.Catalog
             await _categoryRepository.UpdateAsync(category, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result<object>
-                .Succeed(null, Success.Restored);
+                .Succeed(default, Success<Category>.Restored);
         }
     }
 }

@@ -2,6 +2,7 @@ using DotNetEnv;
 using Restaurant.Application;
 using Restaurant.Infrastructure;
 using Restaurant.Persistence;
+using System.Text.Json.Serialization;
 
 
 Env.Load();
@@ -33,6 +34,12 @@ builder.Services.AddHttpClient();
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(
+        new JsonStringEnumConverter());
+});
 
 
 builder.Services.AddCors(options =>

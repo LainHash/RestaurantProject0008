@@ -16,7 +16,8 @@ namespace Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired
 
         public async Task<Result<object>> Handle(DeleteExpiredCartCommand request, CancellationToken cancellationToken)
         {
-            var response = await _cartService.DeleteExpiredCartAsync(request.CartIds, cancellationToken);
+            var specification = new DeleteExpiredCartSpecification(request);
+            var response = await _cartService.DeleteExpiredCartAsync(specification, cancellationToken);
             return response;
         }
     }

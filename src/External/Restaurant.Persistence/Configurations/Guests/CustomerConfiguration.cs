@@ -14,9 +14,6 @@ namespace Restaurant.Persistence.Configurations.Guests
             builder.Property(x => x.UserId)
                 .IsRequired();
 
-            builder.Property(x => x.PersonalInformationId)
-                .IsRequired();
-
             // Relationships
             builder.HasOne(x => x.User)
                 .WithOne(x => x.Customer)

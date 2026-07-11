@@ -36,7 +36,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = products.Select(p => new ProductResponse(p));
             return PageResult<IEnumerable<ProductResponse>>
-                .Succeed(response, Success.Retrieved, totalItems, indexPage, specification.Take);
+                .Succeed(response, Success<Product>.Retrieved, totalItems, indexPage, specification.Take);
         }
 
         public async Task<Result<ProductResponse>>
@@ -46,12 +46,12 @@ namespace Restaurant.Persistence.Services.Catalog
             if (product is null)
             {
                 return Result<ProductResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new ProductResponse(product);
             return Result<ProductResponse>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Product>.Retrieved);
         }
 
         public async Task<Result<ProductResponse>> 
@@ -66,7 +66,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new ProductResponse(createdProduct!);
             return Result<ProductResponse>
-                .Succeed(response, Success.Created, HttpStatusCode.Created);
+                .Succeed(response, Success<Product>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<ProductResponse>> UpdateAsync(UpdateProductSpecification specification, CancellationToken cancellationToken = default)
@@ -75,7 +75,7 @@ namespace Restaurant.Persistence.Services.Catalog
             if (product is null)
             {
                 return Result<ProductResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
             }
 
             product.Update(specification.Body.ToInfo());
@@ -84,7 +84,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new ProductResponse(product);
             return Result<ProductResponse>
-                .Succeed(response, Success.Updated);
+                .Succeed(response, Success<Product>.Updated);
         }
 
         public async Task<Result<ProductResponse>> UpdateAsync(UpdateProductStockSpecification specification, CancellationToken cancellationToken = default)
@@ -93,7 +93,7 @@ namespace Restaurant.Persistence.Services.Catalog
             if (product is null)
             {
                 return Result<ProductResponse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
             }
 
             product.ProductStock.Update(specification.Body.ToInfo());
@@ -111,13 +111,13 @@ namespace Restaurant.Persistence.Services.Catalog
             if (product is null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (product.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Deleted, HttpStatusCode.Conflict);
+                    .Fail(Error<Product>.AlreadyDeleted, HttpStatusCode.Conflict);
             }
 
             product.SoftDelete();
@@ -125,7 +125,7 @@ namespace Restaurant.Persistence.Services.Catalog
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Deleted);
+                .Succeed(default, Success<Product>.Deleted);
         }
 
         public async Task<Result<object>> RestoreAsync(Guid id, CancellationToken cancellationToken = default)
@@ -134,13 +134,13 @@ namespace Restaurant.Persistence.Services.Catalog
             if (product is null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (!product.IsDeleted)
             {
                 return Result<object>
-                    .Fail(Error.Restored, HttpStatusCode.Conflict);
+                    .Fail(Error<Product>.NotYetDeleted, HttpStatusCode.Conflict);
             }
 
             product.Restore();
@@ -148,7 +148,7 @@ namespace Restaurant.Persistence.Services.Catalog
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Restored);
+                .Succeed(default, Success<Product>.Restored);
         }
 
     }

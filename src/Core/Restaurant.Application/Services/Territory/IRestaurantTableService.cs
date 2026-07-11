@@ -23,5 +23,8 @@ namespace Restaurant.Application.Services.Territory
         Task<Result<object>>
             RestoreAsync(Guid id, CancellationToken cancellationToken = default);
 
+        Task<Result<RestaurantTableResponse>>
+            UpdateStatusAsync(Guid id, UpdateRestaurantTableStatusRequest request, CancellationToken cancellationToken = default);
+
     }
 }
