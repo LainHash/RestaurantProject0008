@@ -48,5 +48,10 @@ namespace Restaurant.Domain.Entities.Territory
             Status = status;
             AreaId = areaId;
         }
+
+        public void UpdateStatus(string status)
+        {
+            Status = status;
+        }
     }
 }
