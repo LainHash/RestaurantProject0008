@@ -65,38 +65,46 @@ namespace Restaurant.Persistence
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IProductStockRepository, ProductStockRepository>();
+            services.AddScoped<IIngredientRepository, IngredientRepository>();
+
             services.AddScoped<IImageRepository, ImageRepository>();
+
             services.AddScoped<IAreaRepository, AreaRepository>();
             services.AddScoped<IRestaurantTableRepository, RestaurantTableRepository>();
+
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
+
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IRecipeRespository, RecipeRepository>();
-            services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<IRecipeStepRepository, RecipeStepRepository>();
+
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ICartItemRepository, CartItemRepository>();
             services.AddScoped<IWishlistRepository, WishlistRepository>();
             services.AddScoped<IWishlistItemRepository, WishlistItemRepository>();
 
-            // ── AutoMapper ───────────────────────────────────────────────────
-            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(DependencyInjection).Assembly));
-
 
             // ── Service ──────────────────────────────────────────────────────
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IIngredientService, IngredientService>();
+
             services.AddScoped<IImageService, ImageService>();
+
             services.AddScoped<IAreaService, AreaService>();
             services.AddScoped<IRestaurantTableService, RestaurantTableService>();
+
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IRecipeService, RecipeService>();
-            services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IRecipeIngredientRepository,  RecipeIngredientRepository>();
+
+            services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IWishlistService, WishlistService>();
 
