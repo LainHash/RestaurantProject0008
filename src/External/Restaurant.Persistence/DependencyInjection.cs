@@ -13,6 +13,7 @@ using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Identity;
 using Restaurant.Domain.Repositories.Inventory;
 using Restaurant.Domain.Repositories.Misc;
+using Restaurant.Domain.Repositories.Personnel;
 using Restaurant.Domain.Repositories.Production;
 using Restaurant.Domain.Repositories.Territory;
 using Restaurant.Persistence.Contexts;
@@ -21,6 +22,7 @@ using Restaurant.Persistence.Repositories.Guest;
 using Restaurant.Persistence.Repositories.Identity;
 using Restaurant.Persistence.Repositories.Inventory;
 using Restaurant.Persistence.Repositories.Misc;
+using Restaurant.Persistence.Repositories.Personnel;
 using Restaurant.Persistence.Repositories.Production;
 using Restaurant.Persistence.Repositories.Territory;
 using Restaurant.Persistence.Seeders;
@@ -86,6 +88,8 @@ namespace Restaurant.Persistence
             services.AddScoped<IWishlistRepository, WishlistRepository>();
             services.AddScoped<IWishlistItemRepository, WishlistItemRepository>();
 
+            services.AddScoped<IPositionRepository, PositionRepository>();
+
 
             // ── Service ──────────────────────────────────────────────────────
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -107,6 +111,8 @@ namespace Restaurant.Persistence
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IWishlistService, WishlistService>();
+
+
 
             return services;
         }
