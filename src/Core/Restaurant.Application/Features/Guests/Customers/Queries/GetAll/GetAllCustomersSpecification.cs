@@ -9,7 +9,7 @@ namespace Restaurant.Application.Features.Guests.Customers.Queries.GetAll
         public GetAllCustomersSpecification(GetAllCustomersQuery query)
         {
             AddInclude(x => x.User);
-            AddInclude(x => x.PersonalInformation!);
+            AddInclude(x => x.Profile!);
         }
     }
 }

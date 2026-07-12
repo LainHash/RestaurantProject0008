@@ -1,13 +1,13 @@
 ﻿using Restaurant.Contract.DTOs.Authentication;
-using Restaurant.Domain.Informations.Identity.PersonalInformations;
+using Restaurant.Domain.Informations.Identity.Profiles;
 
 namespace Restaurant.Application.Mapping.Identity
 {
-    public static class PersonalInfomationMapping
+    public static class ProfileMapping
     {
-        public static CreatePersonalInformationInformation ToInfo(this CompleteProfileRequest request)
+        public static CreateProfileInformation ToInfo(this CompleteProfileRequest request)
         {
-            return new CreatePersonalInformationInformation(
+            return new CreateProfileInformation(
                     request.FirstName,
                     request.LastName,
                     request.DOB,

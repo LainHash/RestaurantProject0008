@@ -11,7 +11,7 @@ namespace Restaurant.Application.Features.Guests.Customers.Queries.GetById
             Criteria = x => x.Id == query.Id;
 
             AddInclude(x => x.User);
-            AddInclude(x => x.PersonalInformation!);
+            AddInclude(x => x.Profile!);
         }
     }
 }

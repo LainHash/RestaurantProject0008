@@ -227,7 +227,7 @@ namespace Restaurant.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("PersonalInformationId")
+                    b.Property<Guid?>("ProfileId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -238,7 +238,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonalInformationId")
+                    b.HasIndex("ProfileId")
                         .IsUnique();
 
                     b.HasIndex("UserId")
@@ -310,7 +310,7 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("WishlistItems");
                 });
 
-            modelBuilder.Entity("Restaurant.Domain.Entities.Identity.PersonalInformation", b =>
+            modelBuilder.Entity("Restaurant.Domain.Entities.Identity.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -371,7 +371,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PersonalInformations");
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.Role", b =>
@@ -639,10 +639,10 @@ namespace Restaurant.Persistence.Migrations
                     b.Property<Guid?>("ManagerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("PersonalInformationId")
+                    b.Property<Guid>("PositionId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("PositionId")
+                    b.Property<Guid?>("ProfileId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Status")
@@ -659,10 +659,10 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.HasIndex("PersonalInformationId")
-                        .IsUnique();
-
                     b.HasIndex("PositionId");
+
+                    b.HasIndex("ProfileId")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -999,9 +999,9 @@ namespace Restaurant.Persistence.Migrations
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Customer", b =>
                 {
-                    b.HasOne("Restaurant.Domain.Entities.Identity.PersonalInformation", "PersonalInformation")
+                    b.HasOne("Restaurant.Domain.Entities.Identity.Profile", "Profile")
                         .WithOne("Customer")
-                        .HasForeignKey("Restaurant.Domain.Entities.Guests.Customer", "PersonalInformationId")
+                        .HasForeignKey("Restaurant.Domain.Entities.Guests.Customer", "ProfileId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Restaurant.Domain.Entities.Identity.User", "User")
@@ -1010,7 +1010,7 @@ namespace Restaurant.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PersonalInformation");
+                    b.Navigation("Profile");
 
                     b.Navigation("User");
                 });
@@ -1103,16 +1103,16 @@ namespace Restaurant.Persistence.Migrations
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Restaurant.Domain.Entities.Identity.PersonalInformation", "PersonalInformation")
-                        .WithOne("Employee")
-                        .HasForeignKey("Restaurant.Domain.Entities.Personnel.Employee", "PersonalInformationId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Restaurant.Domain.Entities.Personnel.Position", "Position")
                         .WithMany("Employees")
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Restaurant.Domain.Entities.Identity.Profile", "Profile")
+                        .WithOne("Employee")
+                        .HasForeignKey("Restaurant.Domain.Entities.Personnel.Employee", "ProfileId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Restaurant.Domain.Entities.Identity.User", "User")
                         .WithOne("Employee")
@@ -1122,9 +1122,9 @@ namespace Restaurant.Persistence.Migrations
 
                     b.Navigation("Manager");
 
-                    b.Navigation("PersonalInformation");
-
                     b.Navigation("Position");
+
+                    b.Navigation("Profile");
 
                     b.Navigation("User");
                 });
@@ -1254,7 +1254,7 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("WishlistItems");
                 });
 
-            modelBuilder.Entity("Restaurant.Domain.Entities.Identity.PersonalInformation", b =>
+            modelBuilder.Entity("Restaurant.Domain.Entities.Identity.Profile", b =>
                 {
                     b.Navigation("Customer")
                         .IsRequired();

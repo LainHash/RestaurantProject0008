@@ -24,7 +24,7 @@ namespace Restaurant.Persistence.Seeders
         {
             // Identity seeding: Role first, then PersonalInformation, then User, then Customer
             await SeedAsync<RoleSeeder>(_context);
-            await SeedAsync<PersonalInformationSeeder>(_context);
+            await SeedAsync<ProfileSeeder>(_context);
             await SeedAsync<UserSeeder>(_context);
             await SeedAsync<CustomerSeeder>(_context);
 

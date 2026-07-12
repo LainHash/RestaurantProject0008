@@ -28,7 +28,7 @@ namespace Restaurant.Persistence.Contexts
         public DbSet<Ingredient> Ingredients { get; set; } = null!;
         public DbSet<IngredientStock> IngredientStocks { get; set; } = null!;
 
-        public DbSet<PersonalInformation> PersonalInformations { get; set; } = null!;
+        public DbSet<Profile> Profiles { get; set; } = null!;
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Customer> Customers { get; set; } = null!;
         public DbSet<Role> Roles { get; set; } = null!;

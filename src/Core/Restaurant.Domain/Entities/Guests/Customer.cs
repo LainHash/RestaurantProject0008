@@ -7,10 +7,10 @@ namespace Restaurant.Domain.Entities.Guests
     public partial class Customer : SoftDeletableEntity
     {
         public Guid UserId { get; private set; }
-        public Guid? PersonalInformationId { get; private set; }
+        public Guid? ProfileId { get; private set; }
 
         public virtual User User { get; private set; } = null!;
-        public virtual PersonalInformation? PersonalInformation { get; private set; }
+        public virtual Profile? Profile { get; private set; }
         public virtual ICollection<Reservation> Reservations { get; private set; } = new List<Reservation>();
 
 
@@ -21,22 +21,22 @@ namespace Restaurant.Domain.Entities.Guests
     public partial class Customer
     {
         public Customer() { }
-        public Customer(Guid id, Guid userId, Guid? personalInformationId = null)
+        public Customer(Guid id, Guid userId, Guid? profileId = null)
         {
             Id = id;
             UserId = userId;
-            PersonalInformationId = personalInformationId;
+            ProfileId = profileId;
         }
 
-        public Customer(Guid userId, Guid? personalInformationId = null)
+        public Customer(Guid userId, Guid? profileId = null)
         {
             UserId = userId;
-            PersonalInformationId = personalInformationId;
+            ProfileId = profileId;
         }
 
         public void CompleteProfile(Guid piId)
         {
-            PersonalInformationId = piId;
+            ProfileId = piId;
         }
     }
 }

@@ -27,15 +27,15 @@ namespace Restaurant.Contract.DTOs.Guests.Customers
             Id = customer.Id;
             UserName = customer.User.UserName;
             Email = customer.User.Email;
-            FirstName = customer.PersonalInformation!.FirstName;
-            LastName = customer.PersonalInformation.LastName;
-            Dob = customer.PersonalInformation.Dob;
-            Gender = customer.PersonalInformation.Gender ? "Male" : "Female";
-            Address = customer.PersonalInformation.Address;
-            City = customer.PersonalInformation.City;
-            Country = customer.PersonalInformation.Country;
-            Phone = customer.PersonalInformation.Phone;
-            CitizenCardId = customer.PersonalInformation.CitizenCardId;
+            FirstName = customer.Profile!.FirstName;
+            LastName = customer.Profile.LastName;
+            Dob = customer.Profile.Dob;
+            Gender = customer.Profile.Gender ? "Male" : "Female";
+            Address = customer.Profile.Address;
+            City = customer.Profile.City;
+            Country = customer.Profile.Country;
+            Phone = customer.Profile.Phone;
+            CitizenCardId = customer.Profile.CitizenCardId;
         }
     }
 }

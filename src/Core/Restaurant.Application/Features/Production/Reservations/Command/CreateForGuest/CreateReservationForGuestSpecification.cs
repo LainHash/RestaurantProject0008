@@ -17,7 +17,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Command.Create
             AddIncludeAggregator(r => r.Include(r => r.Customer)
                                         .ThenInclude((Customer? c) => c!.User));
             AddIncludeAggregator(r => r.Include(r => r.Customer)
-                                        .ThenInclude((Customer? c) => c!.PersonalInformation));
+                                        .ThenInclude((Customer? c) => c!.Profile));
 
             AddInclude(r => r.RestaurantTable);
         }
