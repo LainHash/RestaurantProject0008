@@ -1,9 +1,12 @@
-﻿using Restaurant.Contract.DTOs.Personnel.Employees;
+﻿using Restaurant.Application.Features.Personnel.Employees.Queries.GetAll;
+using Restaurant.Application.Models.Results;
+using Restaurant.Contract.DTOs.Personnel.Employees;
 
 namespace Restaurant.Application.Services.Personnel
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<EmployeeResponse>> GetAllAsync();
+        Task<Result<IEnumerable<EmployeeResponse>>> 
+            GetAllAsync(GetAllEmployeesSpecification specification, CancellationToken cancellationToken);
     }
 }
