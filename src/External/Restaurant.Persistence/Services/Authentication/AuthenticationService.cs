@@ -72,13 +72,11 @@ namespace Restaurant.Persistence.Services.Authentication
             await _userRepository.AddAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // Create Customer record (PIId is null until CompleteProfile is called)
             var customer = new Customer(user.Id);
 
             await _customerRepository.AddAsync(customer, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // Send activation email with the 6-digit code
             var message = new EmailMessage(user.UserName, verificationCode);
             await _emailService.SendEmailAsync(user.Email, message, cancellationToken);
 

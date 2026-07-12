@@ -1,5 +1,6 @@
 ﻿using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Entities.Personnel;
 using Restaurant.Domain.Informations.Identity.PersonalInformations;
 
 namespace Restaurant.Domain.Entities.Identity
@@ -21,6 +22,7 @@ namespace Restaurant.Domain.Entities.Identity
 
 
         public virtual Customer Customer { get; private set; } = null!;
+        public virtual Employee Employee { get; private set; } = null!;
     }
 
     public partial class PersonalInformation

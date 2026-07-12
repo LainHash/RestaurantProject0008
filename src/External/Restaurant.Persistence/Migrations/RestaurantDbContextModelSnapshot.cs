@@ -615,6 +615,93 @@ namespace Restaurant.Persistence.Migrations
                     b.ToTable("TemporaryContacts");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Employee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("BaseSalary")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateOnly>("HiredDate")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("ManagerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("PersonalInformationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
+
+                    b.HasIndex("PersonalInformationId")
+                        .IsUnique();
+
+                    b.HasIndex("PositionId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Position", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Positions");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1009,6 +1096,39 @@ namespace Restaurant.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Employee", b =>
+                {
+                    b.HasOne("Restaurant.Domain.Entities.Personnel.Employee", "Manager")
+                        .WithMany("Subordinates")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Restaurant.Domain.Entities.Identity.PersonalInformation", "PersonalInformation")
+                        .WithOne("Employee")
+                        .HasForeignKey("Restaurant.Domain.Entities.Personnel.Employee", "PersonalInformationId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Restaurant.Domain.Entities.Personnel.Position", "Position")
+                        .WithMany("Employees")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Restaurant.Domain.Entities.Identity.User", "User")
+                        .WithOne("Employee")
+                        .HasForeignKey("Restaurant.Domain.Entities.Personnel.Employee", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Manager");
+
+                    b.Navigation("PersonalInformation");
+
+                    b.Navigation("Position");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
                 {
                     b.HasOne("Restaurant.Domain.Entities.Catalog.Product", "Product")
@@ -1138,6 +1258,9 @@ namespace Restaurant.Persistence.Migrations
                 {
                     b.Navigation("Customer")
                         .IsRequired();
+
+                    b.Navigation("Employee")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.Role", b =>
@@ -1148,6 +1271,9 @@ namespace Restaurant.Persistence.Migrations
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.User", b =>
                 {
                     b.Navigation("Customer")
+                        .IsRequired();
+
+                    b.Navigation("Employee")
                         .IsRequired();
                 });
 
@@ -1160,6 +1286,16 @@ namespace Restaurant.Persistence.Migrations
                 {
                     b.Navigation("Reservation")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Employee", b =>
+                {
+                    b.Navigation("Subordinates");
+                });
+
+            modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Position", b =>
+                {
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
