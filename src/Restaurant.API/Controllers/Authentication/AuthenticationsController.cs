@@ -38,14 +38,11 @@ namespace Restaurant.API.Controllers.Authentication
 
         [Authorize]
         [HttpPost("/complete-profile")]
-        public async Task<IActionResult> CompleteProfile([FromBody] CompleteProfileRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CompleteProfile(
+            [FromRoute] Guid userId,
+            [FromBody] CompleteProfileRequest request,
+            CancellationToken cancellationToken)
         {
-            var userIdString = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!Guid.TryParse(userIdString, out var userId))
-            {
-                return Unauthorized();
-            }
-
             var command = new CompleteProfileCommand(userId, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
@@ -53,14 +50,11 @@ namespace Restaurant.API.Controllers.Authentication
 
         [Authorize]
         [HttpPost("/verify-email")]
-        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> VerifyEmail(
+            [FromRoute] Guid userId,
+            [FromBody] VerifyEmailRequest request,
+            CancellationToken cancellationToken)
         {
-            var userIdString = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (!Guid.TryParse(userIdString, out var userId))
-            {
-                return Unauthorized();
-            }
-
             var command = new VerifyEmailCommand(userId, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
