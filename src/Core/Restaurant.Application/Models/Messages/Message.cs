@@ -5,30 +5,30 @@ using System.Text;
 
 namespace Restaurant.Application.Models.Messages
 {
-    public static class Success<T>
+    public static class Success<TEntity> where TEntity : class
     {
-        public const string Retrieved = $"{nameof(T)} retrived successfully.";
+        public static string Retrieved = $"{typeof(TEntity).Name} retrived successfully.";
 
-        public const string Created = $"{nameof(T)} created successfully.";
-        public const string Updated = $"{nameof(T)} updated successfully.";
+        public static string Created = $"{typeof(TEntity).Name} created successfully.";
+        public static string Updated = $"{typeof(TEntity).Name} updated successfully.";
 
-        public const string Deleted = $"{nameof(T)} deleted successfully.";
-        public const string Restored = $"{nameof(T)} restored successfully.";
+        public static string Deleted = $"{typeof(TEntity).Name} deleted successfully.";
+        public static string Restored = $"{typeof(TEntity).Name} restored successfully.";
 
-        public const string Uploaded = $"{nameof(T)} uploaded successfully.";
-        public const string Added = $"{nameof(T)} added successfully.";
+        public static string Uploaded = $"{typeof(TEntity).Name} uploaded successfully.";
+        public static string Added = $"{typeof(TEntity).Name} added successfully.";
     }
 
-    public static class Error<T>
+    public static class Error<TEntity> where TEntity : class
     {
-        public const string NotFound = $"{nameof(T)} not found.";
+        public static string NotFound = $"{typeof(TEntity).Name} not found.";
 
-        public const string NotYetDeleted = $"{nameof(T)} not yet deleted.";
+        public static string NotYetDeleted = $"{typeof(TEntity).Name} not yet deleted.";
 
-        public const string AlreadyDeleted = $"{nameof(T)} already deleted.";
+        public static string AlreadyDeleted = $"{typeof(TEntity).Name} already deleted.";
 
-        public const string AlreadyAdded = $"{nameof(T)} already added.";
+        public static string AlreadyAdded = $"{typeof(TEntity).Name} already added.";
 
-        public const string OutOfStock = $"{nameof(T)} out of stock.";
+        public static string OutOfStock = $"{typeof(TEntity).Name} out of stock.";
     }
 }
