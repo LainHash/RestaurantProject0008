@@ -3,7 +3,7 @@ using Restaurant.Application.Models.Results;
 using Restaurant.Application.Services.Personnel;
 using Restaurant.Contract.DTOs.Personnel.Positions;
 
-namespace Restaurant.Application.Features.Personnel.Queries.GetAll
+namespace Restaurant.Application.Features.Personnel.Positions.Queries.GetAll
 {
     internal class GetAllPositionsQueryHandler
         : IRequestHandler<GetAllPositionsQuery, Result<IEnumerable<PositionResponse>>>
