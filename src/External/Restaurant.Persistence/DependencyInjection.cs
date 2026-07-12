@@ -6,6 +6,7 @@ using Restaurant.Application.Services.Catalog;
 using Restaurant.Application.Services.Guests;
 using Restaurant.Application.Services.Misc;
 using Restaurant.Application.Services.Persistence;
+using Restaurant.Application.Services.Personnel;
 using Restaurant.Application.Services.Production;
 using Restaurant.Application.Services.Territory;
 using Restaurant.Domain.Repositories.Catalog;
@@ -13,6 +14,7 @@ using Restaurant.Domain.Repositories.Guest;
 using Restaurant.Domain.Repositories.Identity;
 using Restaurant.Domain.Repositories.Inventory;
 using Restaurant.Domain.Repositories.Misc;
+using Restaurant.Domain.Repositories.Personnel;
 using Restaurant.Domain.Repositories.Production;
 using Restaurant.Domain.Repositories.Territory;
 using Restaurant.Persistence.Contexts;
@@ -21,6 +23,7 @@ using Restaurant.Persistence.Repositories.Guest;
 using Restaurant.Persistence.Repositories.Identity;
 using Restaurant.Persistence.Repositories.Inventory;
 using Restaurant.Persistence.Repositories.Misc;
+using Restaurant.Persistence.Repositories.Personnel;
 using Restaurant.Persistence.Repositories.Production;
 using Restaurant.Persistence.Repositories.Territory;
 using Restaurant.Persistence.Seeders;
@@ -29,6 +32,7 @@ using Restaurant.Persistence.Services.Catalog;
 using Restaurant.Persistence.Services.Guests;
 using Restaurant.Persistence.Services.Misc;
 using Restaurant.Persistence.Services.Persistence;
+using Restaurant.Persistence.Services.Personnel;
 using Restaurant.Persistence.Services.Production;
 using Restaurant.Persistence.Services.Territory;
 
@@ -86,6 +90,8 @@ namespace Restaurant.Persistence
             services.AddScoped<IWishlistRepository, WishlistRepository>();
             services.AddScoped<IWishlistItemRepository, WishlistItemRepository>();
 
+            services.AddScoped<IPositionRepository, PositionRepository>();
+
 
             // ── Service ──────────────────────────────────────────────────────
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -107,6 +113,8 @@ namespace Restaurant.Persistence
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IWishlistService, WishlistService>();
+
+            services.AddScoped<IPositionService, PositionService>();
 
             return services;
         }
