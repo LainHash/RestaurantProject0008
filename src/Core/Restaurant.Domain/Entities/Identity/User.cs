@@ -1,5 +1,6 @@
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Entities.Personnel;
 using Restaurant.Domain.Informations.Identity.Users;
 
 namespace Restaurant.Domain.Entities.Identity
@@ -17,6 +18,7 @@ namespace Restaurant.Domain.Entities.Identity
         public Guid RoleId { get; private set; }
 
         public virtual Customer Customer { get; private set; } = null!;
+        public virtual Employee Employee { get; private set; } = null!;
         public virtual Role Role { get; private set; } = null!;
 
     }

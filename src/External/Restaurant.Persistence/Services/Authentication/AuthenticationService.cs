@@ -51,14 +51,14 @@ namespace Restaurant.Persistence.Services.Authentication
             if (existingUser != null)
             {
                 return Result<object>
-                    .Fail(Error.EmailExisted, HttpStatusCode.Conflict);
+                    .Fail("This email already used. Please user another email.", HttpStatusCode.Conflict);
             }
 
             var customerRole = await _roleRepository.FindAsync("Customer", cancellationToken);
             if (customerRole == null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Role>.NotFound, HttpStatusCode.NotFound);
             }
 
             var verificationCode = GenerateCode();
@@ -72,18 +72,16 @@ namespace Restaurant.Persistence.Services.Authentication
             await _userRepository.AddAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // Create Customer record (PIId is null until CompleteProfile is called)
             var customer = new Customer(user.Id);
 
             await _customerRepository.AddAsync(customer, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            // Send activation email with the 6-digit code
             var message = new EmailMessage(user.UserName, verificationCode);
             await _emailService.SendEmailAsync(user.Email, message, cancellationToken);
 
             return Result<object>
-                .Succeed(default, Success.Register, HttpStatusCode.Created);
+                .Succeed(default, "Register successfully.", HttpStatusCode.Created);
             
         }
 
@@ -94,7 +92,7 @@ namespace Restaurant.Persistence.Services.Authentication
             if (user == null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<User>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (user.IsActive)
@@ -130,7 +128,7 @@ namespace Restaurant.Persistence.Services.Authentication
             if (user == null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<User>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (!user.IsActive)
@@ -143,7 +141,7 @@ namespace Restaurant.Persistence.Services.Authentication
             if (customer == null)
             {
                 return Result<object>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Customer>.NotFound, HttpStatusCode.NotFound);
             }
 
             if (customer.PersonalInformationId.HasValue)
@@ -172,7 +170,7 @@ namespace Restaurant.Persistence.Services.Authentication
             if (user == null || !_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
             {
                 return Result<AuthenticationResponse>
-                    .Fail(Error.LoginFailed, HttpStatusCode.Unauthorized);
+                    .Fail("Incorrect email or password.", HttpStatusCode.Unauthorized);
             }
 
             if (!user.IsActive)
@@ -195,7 +193,7 @@ namespace Restaurant.Persistence.Services.Authentication
             };
 
             return Result<AuthenticationResponse>
-                .Succeed(response, "Login successful.", HttpStatusCode.Accepted);
+                .Succeed(response, "Login successfully.", HttpStatusCode.Accepted);
         }
 
         private string GenerateCode()

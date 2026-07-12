@@ -41,7 +41,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = wishlists.Select(x => new WishlistRepsonse(x));
             return Result<IEnumerable<WishlistRepsonse>>
-                .Succeed(response, Success.Retrieved);
+                .Succeed(response, Success<Wishlist>.Retrieved);
         }
 
         public async Task<Result<WishlistRepsonse>> GetByIdAsync(GetWishlistByIdSpecification specification, CancellationToken cancellationToken)
@@ -50,12 +50,12 @@ namespace Restaurant.Persistence.Services.Guests
             if (wishlist is null)
             {
                 return Result<WishlistRepsonse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Wishlist>.NotFound, HttpStatusCode.NotFound);
             }
 
             var response = new WishlistRepsonse(wishlist);
             return Result<WishlistRepsonse>
-                    .Succeed(response, Success.Retrieved);
+                    .Succeed(response, Success<Wishlist>.Retrieved);
         }
 
         public async Task<Result<WishlistRepsonse>> CreateForGuestAsync(CreateWishlistForGuestSpecification specification, CancellationToken cancellationToken)
@@ -72,7 +72,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new WishlistRepsonse(createdWishlist!);
             return Result<WishlistRepsonse>
-                    .Succeed(response, Success.Created, HttpStatusCode.Created);
+                    .Succeed(response, Success<Wishlist>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<WishlistRepsonse>> CreateForCustomerAsync(CreateWishlistForCustomerSpecification specification, CancellationToken cancellationToken)
@@ -83,7 +83,7 @@ namespace Restaurant.Persistence.Services.Guests
             if (customer is null)
             {
                 return Result<WishlistRepsonse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Customer>.NotFound, HttpStatusCode.NotFound);
             }
 
             wishlist.SetCustomer(customer.Id);
@@ -96,7 +96,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new WishlistRepsonse(createdWishlist!);
             return Result<WishlistRepsonse>
-                    .Succeed(response, Success.Created, HttpStatusCode.Created);
+                    .Succeed(response, Success<Wishlist>.Created, HttpStatusCode.Created);
         }
 
         public async Task<Result<WishlistRepsonse>> AddItemAsync(AddWishlistItemSpecification specification, CancellationToken cancellationToken)
@@ -105,14 +105,14 @@ namespace Restaurant.Persistence.Services.Guests
             if (wishlist is null)
             {
                 return Result<WishlistRepsonse>
-                    .Fail(Error.NotFound, HttpStatusCode.NotFound);
+                    .Fail(Error<Wishlist>.NotFound, HttpStatusCode.NotFound);
             }
 
             var existingItem = wishlist.WishlistItems.Any(x => x.ProductId == specification.ProductId);
             if (existingItem)
             {
                 return Result<WishlistRepsonse>
-                    .Fail(Error.WishlistAdded, HttpStatusCode.Conflict);
+                    .Fail(Error<WishlistItem>.AlreadyAdded, HttpStatusCode.Conflict);
             }
 
             var item = new WishlistItem(wishlist.Id, specification.ProductId);
@@ -122,7 +122,7 @@ namespace Restaurant.Persistence.Services.Guests
 
             var response = new WishlistRepsonse(wishlist);
             return Result<WishlistRepsonse>
-                    .Succeed(response, Success.WishlistAdded);
+                    .Succeed(response, Success<WishlistItem>.Added);
         }
 
         public async Task<Result<object>> 
@@ -135,7 +135,7 @@ namespace Restaurant.Persistence.Services.Guests
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result<object>
-                .Succeed(count, Success.Deleted);
+                .Succeed(count, Success<Wishlist>.Deleted);
         }
     }
 }
