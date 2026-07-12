@@ -7,5 +7,6 @@ namespace Restaurant.Application.Services.Personnel
     {
         Task<Result<IEnumerable<PositionResponse>>> GetAllAsync(CancellationToken cancellationToken);
         Task<Result<PositionResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<Result<PositionResponse>> CreateAsync(CreatePositionRequest request, CancellationToken cancellationToken);
     }
 }

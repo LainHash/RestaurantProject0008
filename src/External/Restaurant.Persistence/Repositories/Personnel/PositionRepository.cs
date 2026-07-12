@@ -23,5 +23,11 @@ namespace Restaurant.Persistence.Repositories.Personnel
         {
             return await _context.Positions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
+
+        public Task AddAsync(Position position, CancellationToken cancellationToken = default)
+        {
+            _context.Positions.Add(position);
+            return Task.CompletedTask;
+        }
     }
 }

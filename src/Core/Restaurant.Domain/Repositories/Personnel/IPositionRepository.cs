@@ -6,5 +6,6 @@ namespace Restaurant.Domain.Repositories.Personnel
     {
         Task<IEnumerable<Position>> ToListAsync(CancellationToken cancellationToken = default);
         Task<Position?> FindAsync(Guid id, CancellationToken cancellationToken = default);
+        Task AddAsync(Position position, CancellationToken cancellationToken = default);
     }
 }
