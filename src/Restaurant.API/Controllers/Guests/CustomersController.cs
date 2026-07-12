@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.Application.Features.Guests.Customers.Queries.GetAll;
+using Restaurant.Application.Features.Guests.Customers.Queries.GetById;
 
 namespace Restaurant.API.Controllers.Guests
 {
@@ -18,6 +19,14 @@ namespace Restaurant.API.Controllers.Guests
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllCustomersQuery query, CancellationToken cancellationToken)
         {
+            var result = await _mediator.Send(query, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetCustomerByIdQuery(id);
             var result = await _mediator.Send(query, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
