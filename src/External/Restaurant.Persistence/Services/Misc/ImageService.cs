@@ -109,7 +109,7 @@ namespace Restaurant.Persistence.Services.Misc
                 await transaction.RollbackAsync(cancellationToken);
                 _logger.LogError(ex, "Lỗi khi upload ảnh cho product {ProductId}", specification.ProductId);
                 return Result<UploadImageResponse>
-                    .Fail(Error.Conflict, HttpStatusCode.InternalServerError);
+                    .Fail("Lỗi khi upload ảnh.", HttpStatusCode.InternalServerError);
             }
         }
     }

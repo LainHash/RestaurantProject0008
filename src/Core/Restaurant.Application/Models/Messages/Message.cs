@@ -10,15 +10,12 @@ namespace Restaurant.Application.Models.Messages
         public const string Retrieved = $"{nameof(T)} retrived successfully.";
 
         public const string Created = $"{nameof(T)} created successfully.";
-
         public const string Updated = $"{nameof(T)} updated successfully.";
 
         public const string Deleted = $"{nameof(T)} deleted successfully.";
-
         public const string Restored = $"{nameof(T)} restored successfully.";
 
         public const string Uploaded = $"{nameof(T)} uploaded successfully.";
-
         public const string Added = $"{nameof(T)} added successfully.";
     }
 
@@ -29,6 +26,8 @@ namespace Restaurant.Application.Models.Messages
         public const string NotYetDeleted = $"{nameof(T)} not yet deleted.";
 
         public const string AlreadyDeleted = $"{nameof(T)} already deleted.";
+
+        public const string AlreadyAdded = $"{nameof(T)} already added.";
 
         public const string OutOfStock = $"{nameof(T)} out of stock.";
     }

@@ -102,7 +102,7 @@ namespace Restaurant.Persistence.Services.Catalog
 
             var response = new ProductResponse(product);
             return Result<ProductResponse>
-                .Succeed(response, Success.Updated);
+                .Succeed(response, Success<Product>.Updated);
         }
 
         public async Task<Result<object>> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
