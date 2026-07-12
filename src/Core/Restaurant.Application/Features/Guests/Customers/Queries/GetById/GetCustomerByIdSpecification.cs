@@ -1,4 +1,5 @@
-﻿using Restaurant.Domain.Entities.Guests;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Specifications;
 
 namespace Restaurant.Application.Features.Guests.Customers.Queries.GetById
@@ -10,8 +11,9 @@ namespace Restaurant.Application.Features.Guests.Customers.Queries.GetById
         {
             Criteria = x => x.Id == query.Id;
 
-            AddInclude(x => x.User);
-            AddInclude(x => x.PersonalInformation!);
+            AddIncludeAggregator(x => x.Include(c => c.User)
+                                        .ThenInclude(u => u.Role));
+            AddInclude(x => x.Profile!);
         }
     }
 }

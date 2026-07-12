@@ -1,6 +1,6 @@
-﻿namespace Restaurant.Domain.Informations.Identity.PersonalInformations
+﻿namespace Restaurant.Domain.Informations.Identity.Profiles
 {
-    public sealed record CreatePersonalInformationInformation(
+    public sealed record CreateProfileInformation(
             string FirstName,
             string LastName,
             DateOnly Dob,

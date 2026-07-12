@@ -4,9 +4,9 @@ using Restaurant.Domain.Entities.Identity;
 
 namespace Restaurant.Persistence.Configurations.Identity
 {
-    internal class PersonalInformationConfiguration : IEntityTypeConfiguration<PersonalInformation>
+    internal class ProfileConfiguration : IEntityTypeConfiguration<Profile>
     {
-        public void Configure(EntityTypeBuilder<PersonalInformation> builder)
+        public void Configure(EntityTypeBuilder<Profile> builder)
         {
             builder.HasKey(x => x.Id);
 

@@ -78,7 +78,7 @@ namespace Restaurant.Persistence
 
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
 
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IRecipeRespository, RecipeRepository>();
@@ -91,6 +91,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IWishlistItemRepository, WishlistItemRepository>();
 
             services.AddScoped<IPositionRepository, PositionRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 
             // ── Service ──────────────────────────────────────────────────────

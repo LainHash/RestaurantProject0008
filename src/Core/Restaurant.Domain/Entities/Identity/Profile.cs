@@ -1,11 +1,11 @@
 ﻿using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Personnel;
-using Restaurant.Domain.Informations.Identity.PersonalInformations;
+using Restaurant.Domain.Informations.Identity.Profiles;
 
 namespace Restaurant.Domain.Entities.Identity
 {
-    public partial class PersonalInformation : SoftDeletableEntity
+    public partial class Profile : SoftDeletableEntity
     {
         public string FirstName { get; private set; } = string.Empty;
         public string LastName { get; private set; } = string.Empty;
@@ -25,10 +25,10 @@ namespace Restaurant.Domain.Entities.Identity
         public virtual Employee Employee { get; private set; } = null!;
     }
 
-    public partial class PersonalInformation
+    public partial class Profile
     {
 
-        public PersonalInformation(
+        public Profile(
             Guid id,
             string firstName,
             string lastName,
@@ -52,7 +52,7 @@ namespace Restaurant.Domain.Entities.Identity
             CitizenCardId = citizenCardId;
         }
 
-        public PersonalInformation(
+        public Profile(
             string firstName,
             string lastName,
             DateOnly dob,
@@ -74,7 +74,7 @@ namespace Restaurant.Domain.Entities.Identity
             CitizenCardId = citizenCardId;
         }
 
-        public PersonalInformation(CreatePersonalInformationInformation information)
+        public Profile(CreateProfileInformation information)
         {
             FirstName = information.FirstName;
             LastName = information.LastName;

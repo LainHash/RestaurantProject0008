@@ -17,7 +17,7 @@ namespace Restaurant.Persistence.Services.Authentication
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
-        private readonly IPersonalInformationRepository _personalInfoRepository;
+        private readonly IProfileRepository _personalInfoRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IEmailService _emailService;
@@ -27,7 +27,7 @@ namespace Restaurant.Persistence.Services.Authentication
         public AuthenticationService(
             IUserRepository userRepository,
             IRoleRepository roleRepository,
-            IPersonalInformationRepository personalInfoRepository,
+            IProfileRepository personalInfoRepository,
             ICustomerRepository customerRepository,
             IPasswordHasher passwordHasher,
             IEmailService emailService,
@@ -144,13 +144,13 @@ namespace Restaurant.Persistence.Services.Authentication
                     .Fail(Error<Customer>.NotFound, HttpStatusCode.NotFound);
             }
 
-            if (customer.PersonalInformationId.HasValue)
+            if (customer.ProfileId.HasValue)
             {
                 return Result<object>
                     .Fail("Profile has already been completed.", HttpStatusCode.Conflict);
             }
 
-            var personalInfo = new PersonalInformation(request.ToInfo());
+            var personalInfo = new Profile(request.ToInfo());
 
             await _personalInfoRepository.AddAsync(personalInfo, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

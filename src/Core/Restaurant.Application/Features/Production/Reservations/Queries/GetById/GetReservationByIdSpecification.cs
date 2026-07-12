@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Domain.Entities.Guests;
+using Restaurant.Domain.Entities.Identity;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Specifications;
 
@@ -12,9 +13,10 @@ namespace Restaurant.Application.Features.Production.Reservations.Queries.GetByI
             Criteria = r => r.Id == query.Id;
 
             AddIncludeAggregator(r => r.Include(r => r.Customer)
-                                        .ThenInclude((Customer? c) => c!.User));
+                                        .ThenInclude((Customer? c) => c!.User)
+                                        .ThenInclude((User u) => u.Role));
             AddIncludeAggregator(r => r.Include(r => r.Customer)
-                                        .ThenInclude((Customer? c) => c!.PersonalInformation));
+                                        .ThenInclude((Customer? c) => c!.Profile));
 
             AddInclude(r => r.RestaurantTable);
         }
@@ -26,7 +28,7 @@ namespace Restaurant.Application.Features.Production.Reservations.Queries.GetByI
             AddIncludeAggregator(r => r.Include(r => r.Customer)
                                         .ThenInclude((Customer? c) => c!.User));
             AddIncludeAggregator(r => r.Include(r => r.Customer)
-                                        .ThenInclude((Customer? c) => c!.PersonalInformation));
+                                        .ThenInclude((Customer? c) => c!.Profile));
 
             AddInclude(r => r.RestaurantTable);
         }

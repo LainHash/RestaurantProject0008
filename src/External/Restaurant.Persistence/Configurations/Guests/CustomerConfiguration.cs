@@ -20,9 +20,9 @@ namespace Restaurant.Persistence.Configurations.Guests
                 .HasForeignKey<Customer>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(x => x.PersonalInformation)
+            builder.HasOne(x => x.Profile)
                 .WithOne(x => x.Customer)
-                .HasForeignKey<Customer>(x => x.PersonalInformationId)
+                .HasForeignKey<Customer>(x => x.ProfileId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 

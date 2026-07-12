@@ -26,9 +26,9 @@ namespace Restaurant.Persistence.Configurations.Personnel
                 .HasForeignKey<Employee>(x => x.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(x => x.PersonalInformation)
+            builder.HasOne(x => x.Profile)
                 .WithOne(x => x.Employee)
-                .HasForeignKey<Employee>(x => x.PersonalInformationId)
+                .HasForeignKey<Employee>(x => x.ProfileId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
 

@@ -13,12 +13,12 @@ namespace Restaurant.Domain.Entities.Personnel
         public Guid? ManagerId { get; private set; }
 
         public Guid UserId { get; private set; }
-        public Guid? PersonalInformationId { get; private set; }
+        public Guid? ProfileId { get; private set; }
 
         public virtual Position Position { get; private set; } = null!;
         public virtual Employee? Manager { get; private set; }
         public virtual ICollection<Employee> Subordinates { get; private set; } = new List<Employee>();
         public virtual User User { get; private set; } = null!;
-        public virtual PersonalInformation? PersonalInformation { get; private set; }
+        public virtual Profile? Profile { get; private set; }
     }
 }

@@ -28,7 +28,7 @@ namespace Restaurant.Persistence.Seeders.Customers
 
                 foreach (var record in records)
                 {
-                    context.Customers.Add(new Customer(record.Id, record.UserId, record.PIId));
+                    context.Customers.Add(new Customer(record.Id, record.UserId, record.ProfileId));
                 }
 
                 await context.SaveChangesAsync();
@@ -40,7 +40,7 @@ namespace Restaurant.Persistence.Seeders.Customers
         {
             public Guid Id { get; set; }
             public Guid UserId { get; set; }
-            public Guid PIId { get; set; }
+            public Guid ProfileId { get; set; }
         }
     }
 }
