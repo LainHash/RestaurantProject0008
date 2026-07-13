@@ -58,7 +58,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Ingredient", b =>
@@ -95,7 +95,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Product", b =>
@@ -138,7 +138,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Cart", b =>
@@ -167,7 +167,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("SessionId")
                         .IsUnique();
 
-                    b.ToTable("Carts", t =>
+                    b.ToTable("Carts", null, t =>
                         {
                             t.HasCheckConstraint("CK_Cart_CustomerId_Or_SessionId", "\"CustomerId\" IS NOT NULL OR \"SessionId\" IS NOT NULL");
                         });
@@ -209,7 +209,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("CartId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Customer", b =>
@@ -244,7 +244,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Guests.Wishlist", b =>
@@ -273,7 +273,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("SessionId")
                         .IsUnique();
 
-                    b.ToTable("Wishlists", t =>
+                    b.ToTable("Wishlists", null, t =>
                         {
                             t.HasCheckConstraint("CK_Wishlist_CustomerId_Or_SessionId", "\"CustomerId\" IS NOT NULL OR \"SessionId\" IS NOT NULL");
                         });
@@ -307,7 +307,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("WishlistId", "ProductId")
                         .IsUnique();
 
-                    b.ToTable("WishlistItems");
+                    b.ToTable("WishlistItems", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.Profile", b =>
@@ -371,7 +371,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.Role", b =>
@@ -403,7 +403,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Identity.User", b =>
@@ -462,7 +462,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.IngredientStock", b =>
@@ -490,7 +490,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("IngredientId")
                         .IsUnique();
 
-                    b.ToTable("IngredientStocks");
+                    b.ToTable("IngredientStocks", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Inventory.ProductStock", b =>
@@ -518,7 +518,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("ProductId")
                         .IsUnique();
 
-                    b.ToTable("ProductStocks");
+                    b.ToTable("ProductStocks", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Misc.Image", b =>
@@ -561,7 +561,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Misc.ProductImage", b =>
@@ -586,7 +586,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("ProductId", "DisplayOrder")
                         .IsUnique();
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Misc.TemporaryContact", b =>
@@ -612,7 +612,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TemporaryContacts");
+                    b.ToTable("TemporaryContacts", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Employee", b =>
@@ -667,7 +667,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Personnel.Position", b =>
@@ -699,7 +699,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Positions");
+                    b.ToTable("Positions", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Recipe", b =>
@@ -741,7 +741,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.RecipeIngredient", b =>
@@ -772,7 +772,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeIngredients");
+                    b.ToTable("RecipeIngredients", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.RecipeStep", b =>
@@ -799,7 +799,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeSteps");
+                    b.ToTable("RecipeSteps", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Production.Reservation", b =>
@@ -858,7 +858,7 @@ namespace Restaurant.Persistence.Migrations
                     b.HasIndex("TemporaryContactId")
                         .IsUnique();
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Territory.Area", b =>
@@ -902,7 +902,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Territory.RestaurantTable", b =>
@@ -943,7 +943,7 @@ namespace Restaurant.Persistence.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("RestaurantTables");
+                    b.ToTable("RestaurantTables", (string)null);
                 });
 
             modelBuilder.Entity("Restaurant.Domain.Entities.Catalog.Ingredient", b =>

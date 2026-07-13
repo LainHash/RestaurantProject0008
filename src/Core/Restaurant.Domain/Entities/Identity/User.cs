@@ -60,7 +60,10 @@ namespace Restaurant.Domain.Entities.Identity
             PasswordHash = information.PasswordHash;
             RoleId = information.RoleId;
             VerificationCode = information.VerificationCode;
-            VerificationCodeExpiresAt = information.VerificationCodeExpiresAt;
+            if (information.VerificationCode is not null)
+            {
+                VerificationCodeExpiresAt = information.VerificationCodeExpiresAt;
+            }
         }
 
         public void CompleteVerification()
@@ -68,6 +71,11 @@ namespace Restaurant.Domain.Entities.Identity
             IsActive = true;
             VerificationCode = null;
             VerificationCodeExpiresAt = null;
+        }
+
+        public void Active()
+        {
+            IsActive = true;
         }
     }
 }

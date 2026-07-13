@@ -5,6 +5,7 @@ using Restaurant.Application.Services.Authentication;
 using Restaurant.Application.Services.Email;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Authentication;
+using Restaurant.Contract.DTOs.Identity.Profiles;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Identity;
 using Restaurant.Domain.Repositories.Guest;
@@ -17,7 +18,7 @@ namespace Restaurant.Persistence.Services.Authentication
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
-        private readonly IProfileRepository _personalInfoRepository;
+        private readonly IProfileRepository _profileRepository;
         private readonly ICustomerRepository _customerRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IEmailService _emailService;
@@ -27,7 +28,7 @@ namespace Restaurant.Persistence.Services.Authentication
         public AuthenticationService(
             IUserRepository userRepository,
             IRoleRepository roleRepository,
-            IProfileRepository personalInfoRepository,
+            IProfileRepository profileRepository,
             ICustomerRepository customerRepository,
             IPasswordHasher passwordHasher,
             IEmailService emailService,
@@ -36,7 +37,7 @@ namespace Restaurant.Persistence.Services.Authentication
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
-            _personalInfoRepository = personalInfoRepository;
+            _profileRepository = profileRepository;
             _customerRepository = customerRepository;
             _passwordHasher = passwordHasher;
             _emailService = emailService;
@@ -152,7 +153,7 @@ namespace Restaurant.Persistence.Services.Authentication
 
             var personalInfo = new Profile(request.ToInfo());
 
-            await _personalInfoRepository.AddAsync(personalInfo, cancellationToken);
+            await _profileRepository.AddAsync(personalInfo, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             customer.CompleteProfile(personalInfo.Id);

@@ -1,4 +1,4 @@
-namespace Restaurant.Contract.DTOs.Authentication;
+namespace Restaurant.Contract.DTOs.Identity.Profiles;
 
 public class CompleteProfileRequest
 {
