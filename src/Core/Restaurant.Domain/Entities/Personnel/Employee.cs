@@ -1,9 +1,10 @@
 ﻿using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Identity;
+using Restaurant.Domain.Informations.Personnel.Employees;
 
 namespace Restaurant.Domain.Entities.Personnel
 {
-    public class Employee : SoftDeletableEntity
+    public partial class Employee : SoftDeletableEntity
     {
         public DateOnly HiredDate { get; private set; }
         public decimal BaseSalary { get; private set; }
@@ -20,5 +21,18 @@ namespace Restaurant.Domain.Entities.Personnel
         public virtual ICollection<Employee> Subordinates { get; private set; } = new List<Employee>();
         public virtual User User { get; private set; } = null!;
         public virtual Profile? Profile { get; private set; }
+    }
+
+    public partial class Employee
+    {
+        public Employee(CreateEmployeeInformation information)
+        {
+            HiredDate = information.HiredDate;
+            BaseSalary = information.BaseSalary;
+            Status = information.Status;
+            PositionId = information.PositionId;
+            ManagerId = information.ManagerId;
+            UserId = information.UserId;
+        }
     }
 }

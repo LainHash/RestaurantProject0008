@@ -40,6 +40,11 @@ namespace Restaurant.Persistence.Repositories.Personnel
             return await query.FirstOrDefaultAsync(cancellation);
         }
 
+        public async Task<Employee?> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Employees.FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+        }
+
         public Task AddAsync(Employee employee, CancellationToken cancellationToken = default)
         {
             _context.Employees.Add(employee);
