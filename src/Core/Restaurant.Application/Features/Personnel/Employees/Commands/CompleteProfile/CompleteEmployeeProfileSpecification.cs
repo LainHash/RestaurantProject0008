@@ -8,11 +8,10 @@ namespace Restaurant.Application.Features.Personnel.Employees.Commands.CompleteP
     public class CompleteEmployeeProfileSpecification
         : BaseSpecification<Employee>
     {
-        public Guid UserId { get; set; }
         public CompleteEmployeeProfileRequest Body { get; set; }
         public CompleteEmployeeProfileSpecification(CompleteEmployeeProfileCommand command)
         {
-            Criteria = e => e.UserId == UserId;
+            Criteria = e => e.UserId == command.UserId;
             Body = command.Body;
 
             AddInclude(x => x.Profile!);
