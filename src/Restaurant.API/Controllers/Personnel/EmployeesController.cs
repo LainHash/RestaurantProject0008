@@ -4,7 +4,6 @@ using Restaurant.Application.Features.Personnel.Employees.Commands.Create;
 using Restaurant.Application.Features.Personnel.Employees.Queries.GetAll;
 using Restaurant.Application.Features.Personnel.Employees.Queries.GetById;
 using Restaurant.Contract.DTOs.Personnel.Employees;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Personnel
 {

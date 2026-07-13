@@ -25,6 +25,7 @@ namespace Restaurant.Domain.Entities.Personnel
 
     public partial class Employee
     {
+        public Employee() { }
         public Employee(CreateEmployeeInformation information)
         {
             HiredDate = information.HiredDate;
@@ -33,6 +34,11 @@ namespace Restaurant.Domain.Entities.Personnel
             PositionId = information.PositionId;
             ManagerId = information.ManagerId;
             UserId = information.UserId;
+        }
+
+        public void CompleteProfile(Guid profileId)
+        {
+            ProfileId = profileId;
         }
     }
 }

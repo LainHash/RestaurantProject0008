@@ -11,5 +11,6 @@ namespace Restaurant.Domain.Repositories.Personnel
         Task<Employee?> FindAsync(ISpecification<Employee> specification, CancellationToken cancellation = default);
         Task<Employee?> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
         Task AddAsync(Employee employee, CancellationToken cancellationToken = default);
+        Task UpdateAsync(Employee employee, CancellationToken cancellationToken = default);
     }
 }

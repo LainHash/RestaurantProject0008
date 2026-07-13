@@ -50,5 +50,11 @@ namespace Restaurant.Persistence.Repositories.Personnel
             _context.Employees.Add(employee);
             return Task.CompletedTask;
         }
+
+        public Task UpdateAsync(Employee employee, CancellationToken cancellationToken = default)
+        {
+            _context.Employees.Update(employee);
+            return Task.CompletedTask;
+        }
     }
 }

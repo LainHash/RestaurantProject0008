@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Features.Personnel.Employees.Commands.Create;
+﻿using Restaurant.Application.Features.Personnel.Employees.Commands.CompleteProfile;
+using Restaurant.Application.Features.Personnel.Employees.Commands.Create;
 using Restaurant.Application.Features.Personnel.Employees.Queries.GetAll;
 using Restaurant.Application.Features.Personnel.Employees.Queries.GetById;
 using Restaurant.Application.Models.Results;
@@ -16,5 +17,8 @@ namespace Restaurant.Application.Services.Personnel
 
         Task<Result<EmployeeResponse>>
             CreateAsync(CreateEmployeeSpecification specification, CancellationToken cancellationToken);
+
+        Task<Result<EmployeeResponse>>
+            CompleteEmployeeProfileAsync(CompleteEmployeeProfileSpecification specification, CancellationToken cancellationToken);
     }
 }
