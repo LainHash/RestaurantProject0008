@@ -26,6 +26,9 @@ namespace Restaurant.Application.Services.Guests
         Task<Result<CartResponse>>
             AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken);
 
+        Task<Result<CartResponse>>
+            UpdateQuantity();
+
         Task<Result<object>>
             DeleteExpiredCartAsync(DeleteExpiredCartSpecification specification, CancellationToken cancellationToken);
     }

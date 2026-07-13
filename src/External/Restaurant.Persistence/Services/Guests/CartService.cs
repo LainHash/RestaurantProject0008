@@ -112,7 +112,8 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success<Cart>.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<CartResponse>> AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<CartResponse>> 
+            AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.FindAsync(specification, cancellationToken);
             if (cart is null)
