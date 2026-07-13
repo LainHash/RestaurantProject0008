@@ -19,6 +19,6 @@ namespace Restaurant.Application.Services.Personnel
             CreateAsync(CreateEmployeeSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<EmployeeResponse>>
-            CompleteEmployeeProfileAsync(CompleteEmployeeProfileSpecification specification, CancellationToken cancellationToken);
+            CompleteProfileAsync(CompleteEmployeeProfileSpecification specification, CancellationToken cancellationToken);
     }
 }

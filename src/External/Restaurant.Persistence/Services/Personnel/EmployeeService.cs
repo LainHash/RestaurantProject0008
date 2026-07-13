@@ -99,7 +99,7 @@ namespace Restaurant.Persistence.Services.Personnel
                 .Succeed(response, Success<Employee>.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<EmployeeResponse>> CompleteEmployeeProfileAsync(CompleteEmployeeProfileSpecification specification, CancellationToken cancellationToken)
+        public async Task<Result<EmployeeResponse>> CompleteProfileAsync(CompleteEmployeeProfileSpecification specification, CancellationToken cancellationToken)
         {
             var employee = await _employeeRepository.FindAsync(specification, cancellationToken);
             if(employee is null)
