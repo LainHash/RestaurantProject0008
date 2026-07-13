@@ -15,6 +15,6 @@ namespace Restaurant.Application.Services.Personnel
             GetByIdAsync(GetEmployeeByIdSpecification specification, CancellationToken cancellationToken);
 
         Task<Result<EmployeeResponse>>
-            CreateEmployeeAsync(CreateEmployeeSpecification specification, CancellationToken cancellationToken);
+            CreateAsync(CreateEmployeeSpecification specification, CancellationToken cancellationToken);
     }
 }

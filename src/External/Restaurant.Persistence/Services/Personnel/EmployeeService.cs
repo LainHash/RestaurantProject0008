@@ -63,7 +63,7 @@ namespace Restaurant.Persistence.Services.Personnel
         }
 
         public async Task<Result<EmployeeResponse>>
-            CreateEmployeeAsync(CreateEmployeeSpecification specification, CancellationToken cancellationToken)
+            CreateAsync(CreateEmployeeSpecification specification, CancellationToken cancellationToken)
         {
             var request = specification.Body;
             var existingUser = await _userRepository.FindAsync(request.Register.Email, cancellationToken);
