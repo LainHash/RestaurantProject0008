@@ -156,7 +156,7 @@ namespace Restaurant.Persistence.Services.Guests
         }
 
         public async Task<Result<CartResponse>>
-            UpdateQuantity(UpdateCartItemQuantitySpecification specification, CancellationToken cancellationToken)
+            UpdateQuantityAsync(UpdateCartItemQuantitySpecification specification, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.FindAsync(specification, cancellationToken);
             if (cart is null)

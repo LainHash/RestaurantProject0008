@@ -5,8 +5,10 @@ using Restaurant.Application.Features.Guests.Carts.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
+using Restaurant.Application.Features.Guests.Carts.Commands.UpdateQuantity;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
+using Restaurant.Contract.DTOs.Guests.CartItems;
 using Restaurant.Contract.DTOs.Guests.Carts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -77,6 +79,17 @@ namespace Restaurant.API.Controllers.Guests
             CancellationToken cancellationToken)
         {
             var command = new AddCartItemCommand(id, productId);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPatch("{id}/update-quantity")]
+        public async Task<IActionResult> UpdateQuantity(
+            [FromRoute] Guid id,
+            [FromBody] UpdateCartItemQuantityRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new UpdateCartItemQuantityCommand(id, request);
             var result = await _mediator.Send(command, cancellationToken);
             return StatusCode(result.StatusCode, result);
         }
