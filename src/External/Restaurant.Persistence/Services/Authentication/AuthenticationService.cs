@@ -5,6 +5,7 @@ using Restaurant.Application.Services.Authentication;
 using Restaurant.Application.Services.Email;
 using Restaurant.Application.Services.Persistence;
 using Restaurant.Contract.DTOs.Authentication;
+using Restaurant.Contract.DTOs.Identity.Profiles;
 using Restaurant.Domain.Entities.Guests;
 using Restaurant.Domain.Entities.Identity;
 using Restaurant.Domain.Repositories.Guest;

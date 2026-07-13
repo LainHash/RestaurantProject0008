@@ -7,6 +7,7 @@ using Restaurant.Application.Features.Authentication.Commands.Login;
 using Restaurant.Application.Features.Authentication.Commands.Register;
 using Restaurant.Application.Features.Authentication.Commands.VerifyEmail;
 using Restaurant.Contract.DTOs.Authentication;
+using Restaurant.Contract.DTOs.Identity.Profiles;
 
 namespace Restaurant.API.Controllers.Authentication
 {

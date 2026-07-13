@@ -9,5 +9,6 @@ namespace Restaurant.Domain.Repositories.Personnel
         Task<IEnumerable<Employee>> ToListAsync(ISpecification<Employee> specification, CancellationToken cancellation = default);
         Task<Employee?> FindAsync(Guid id, CancellationToken cancellation = default);
         Task<Employee?> FindAsync(ISpecification<Employee> specification, CancellationToken cancellation = default);
+        Task AddAsync(Employee employee, CancellationToken cancellationToken = default);
     }
 }

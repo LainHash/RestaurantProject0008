@@ -1,4 +1,5 @@
 ﻿using Restaurant.Contract.DTOs.Authentication;
+using Restaurant.Contract.DTOs.Identity.Profiles;
 using Restaurant.Domain.Informations.Identity.Profiles;
 
 namespace Restaurant.Application.Mapping.Identity

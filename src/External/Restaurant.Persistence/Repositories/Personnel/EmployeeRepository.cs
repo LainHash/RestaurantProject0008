@@ -39,5 +39,11 @@ namespace Restaurant.Persistence.Repositories.Personnel
                 .GetQuery(_context.Employees.AsQueryable().AsNoTracking(), specification);
             return await query.FirstOrDefaultAsync(cancellation);
         }
+
+        public Task AddAsync(Employee employee, CancellationToken cancellationToken = default)
+        {
+            _context.Employees.Add(employee);
+            return Task.CompletedTask;
+        }
     }
 }
