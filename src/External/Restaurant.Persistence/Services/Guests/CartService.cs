@@ -2,6 +2,7 @@
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
+using Restaurant.Application.Features.Guests.Carts.Commands.UpdateQuantity;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
 using Restaurant.Application.Models.Messages;
@@ -25,7 +26,6 @@ namespace Restaurant.Persistence.Services.Guests
         private readonly ICartRepository _cartRepository;
         private readonly ICartItemRepository _cartItemRepository;
         private readonly ICustomerRepository _customerRepository;
-        private readonly IProductRepository _productRepository;
         private readonly IProductStockRepository _productStockRepository;
         private readonly IUnitOfWork _unitOfWork;
 
@@ -34,15 +34,13 @@ namespace Restaurant.Persistence.Services.Guests
             IUnitOfWork unitOfWork,
             ICustomerRepository customerRepository,
             ICartItemRepository cartItemRepository,
-            IProductStockRepository productStockRepository,
-            IProductRepository productRepository)
+            IProductStockRepository productStockRepository)
         {
             _cartRepository = cartRepository;
             _unitOfWork = unitOfWork;
             _customerRepository = customerRepository;
             _cartItemRepository = cartItemRepository;
             _productStockRepository = productStockRepository;
-            _productRepository = productRepository;
         }
 
         public async Task<Result<IEnumerable<CartResponse>>>
@@ -55,7 +53,7 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success<Cart>.Retrieved);
         }
 
-        public async Task<Result<CartResponse>> 
+        public async Task<Result<CartResponse>>
             GetByIdAsync(GetCartByIdSpecification specification, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.FindAsync(specification, cancellationToken);
@@ -70,13 +68,13 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success<Cart>.Retrieved);
         }
 
-        public async Task<Result<CartResponse>> 
+        public async Task<Result<CartResponse>>
             CreateForCustomerAsync(CreateCartForCustomerSpecification specification, CancellationToken cancellationToken)
         {
             var cart = new Cart();
 
             var customer = await _customerRepository.FindByUserIdAsync(specification.UserId, cancellationToken);
-            if(customer is null)
+            if (customer is null)
             {
                 return Result<CartResponse>
                     .Fail(Error<Cart>.NotFound, HttpStatusCode.NotFound);
@@ -95,7 +93,7 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success<Cart>.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<CartResponse>> 
+        public async Task<Result<CartResponse>>
             CreateForGuestAsync(CreateCartForGuestSpecification specification, CancellationToken cancellationToken)
         {
             var cart = new Cart();
@@ -112,7 +110,7 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success<Cart>.Created, HttpStatusCode.Created);
         }
 
-        public async Task<Result<CartResponse>> 
+        public async Task<Result<CartResponse>>
             AddItemAsync(AddCartItemSpecification specification, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.FindAsync(specification, cancellationToken);
@@ -129,7 +127,7 @@ namespace Restaurant.Persistence.Services.Guests
                     .Fail(Error<ProductStock>.NotFound, HttpStatusCode.NotFound);
             }
 
-            if(productStock.StockQuantity <= 0)
+            if (productStock.StockQuantity <= 0)
             {
                 return Result<CartResponse>
                     .Fail(Error<ProductStock>.OutOfStock);
@@ -157,7 +155,55 @@ namespace Restaurant.Persistence.Services.Guests
                 .Succeed(response, Success<CartItem>.Added);
         }
 
-        public async Task<Result<object>> 
+        public async Task<Result<CartResponse>>
+            UpdateQuantity(UpdateCartItemQuantitySpecification specification, CancellationToken cancellationToken)
+        {
+            var cart = await _cartRepository.FindAsync(specification, cancellationToken);
+            if (cart is null)
+            {
+                return Result<CartResponse>
+                    .Fail(Error<Cart>.NotFound, HttpStatusCode.NotFound);
+            }
+
+            var item = cart.CartItems.FirstOrDefault(x => x.ProductId == specification.Body.ProductId);
+            if (item is null)
+            {
+                return Result<CartResponse>
+                    .Fail(Error<Product>.NotFound, HttpStatusCode.NotFound);
+            }
+
+            if (specification.Body.Amount > 0)
+            {
+                var productStock = await _productStockRepository.FindByProductIdAsync(specification.Body.ProductId, cancellationToken);
+                if (productStock is null)
+                {
+                    return Result<CartResponse>
+                        .Fail(Error<ProductStock>.NotFound, HttpStatusCode.NotFound);
+                }
+
+                if (productStock.StockQuantity < specification.Body.Amount)
+                {
+                    return Result<CartResponse>
+                        .Fail(Error<ProductStock>.OutOfStock);
+                }
+
+                item.IncreaseQuantity(specification.Body.Amount);
+            }
+            else if (specification.Body.Amount < 0)
+            {
+                item.DecreaseQuantity(specification.Body.Amount);
+            }
+
+            await _cartItemRepository.UpdateAsync(item);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new CartResponse(cart);
+            return Result<CartResponse>
+                .Succeed(response, Success<CartItem>.Added);
+        }
+
+        public async Task<Result<object>>
             DeleteExpiredCartAsync(DeleteExpiredCartSpecification specification, CancellationToken cancellationToken)
         {
             var carts = await _cartRepository.ToListAsync(specification, cancellationToken);

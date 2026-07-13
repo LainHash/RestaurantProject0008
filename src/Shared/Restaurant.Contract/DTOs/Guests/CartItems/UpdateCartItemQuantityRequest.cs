@@ -3,6 +3,6 @@
     public class UpdateCartItemQuantityRequest
     {
         public Guid ProductId { get; set; }
-        public int Quantity { get; set; }
+        public int Amount { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Restaurant.Application.Features.Guests.Carts.Commands.UpdateQuantity
 {
-    public record UpdateItemQuantityCommand(Guid Id, UpdateCartItemQuantityRequest Body)
+    public record UpdateCartItemQuantityCommand(Guid Id, UpdateCartItemQuantityRequest Body)
         : IRequest<Result<CartResponse>>
     {
     }

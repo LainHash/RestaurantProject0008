@@ -6,11 +6,11 @@ using Restaurant.Domain.Specifications;
 
 namespace Restaurant.Application.Features.Guests.Carts.Commands.UpdateQuantity
 {
-    public class UpdateItemQuantitySpecification
+    public class UpdateCartItemQuantitySpecification
         : BaseSpecification<Cart>
     {
         public UpdateCartItemQuantityRequest Body { get; set; }
-        public UpdateItemQuantitySpecification(UpdateItemQuantityCommand command)
+        public UpdateCartItemQuantitySpecification(UpdateCartItemQuantityCommand command)
         {
             Criteria = c => c.Id == command.Id;
             Body = command.Body;
