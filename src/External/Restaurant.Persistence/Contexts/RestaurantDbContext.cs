@@ -59,6 +59,8 @@ namespace Restaurant.Persistence.Contexts
         public DbSet<Position> Positions { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
 
+        public DbSet<Discount> Discounts { get; set; } = null!;
+
         public DbSet<AuditLog> AuditLogs { get; set; } = null!;
 
         // ── Model building ──────────────────────────────────────────────────
