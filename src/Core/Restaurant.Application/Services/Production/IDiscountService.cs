@@ -7,5 +7,6 @@ namespace Restaurant.Application.Services.Production
     {
         Task<Result<IEnumerable<DiscountResponse>>> GetAllAsync(CancellationToken cancellationToken);
         Task<Result<DiscountResponse>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<Result<DiscountResponse>> CreateAsync(CreateDiscountRequest request, CancellationToken cancellationToken);
     }
 }

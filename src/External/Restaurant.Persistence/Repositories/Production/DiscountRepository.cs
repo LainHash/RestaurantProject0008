@@ -23,5 +23,11 @@ namespace Restaurant.Persistence.Repositories.Production
         {
             return await _context.Discounts.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
+
+        public Task AddAsync(Discount discount, CancellationToken cancellationToken = default)
+        {
+            _context.Discounts.Add(discount);
+            return Task.CompletedTask;
+        }
     }
 }
