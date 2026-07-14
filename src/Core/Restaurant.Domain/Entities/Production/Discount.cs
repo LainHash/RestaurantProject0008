@@ -16,6 +16,11 @@ namespace Restaurant.Domain.Entities.Production
 
     public partial class Discount
     {
+        public Discount()
+        {
+            
+        }
+        
         public Discount(CreateDiscountInformation information)
         {
             Name = information.Name;
