@@ -1,5 +1,7 @@
-﻿using Restaurant.Application.Models.Messages;
+﻿using Restaurant.Application.Mapping.Production;
+using Restaurant.Application.Models.Messages;
 using Restaurant.Application.Models.Results;
+using Restaurant.Application.Services.Persistence;
 using Restaurant.Application.Services.Production;
 using Restaurant.Contract.DTOs.Production.Discounts;
 using Restaurant.Domain.Entities.Production;
@@ -11,10 +13,14 @@ namespace Restaurant.Persistence.Services.Production
     internal class DiscountService : IDiscountService
     {
         private readonly IDiscountRepository _discountRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DiscountService(IDiscountRepository discountRepository)
+        public DiscountService(
+            IDiscountRepository discountRepository,
+            IUnitOfWork unitOfWork)
         {
             _discountRepository = discountRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<IEnumerable<DiscountResponse>>> GetAllAsync(CancellationToken cancellationToken)
@@ -38,6 +44,19 @@ namespace Restaurant.Persistence.Services.Production
             var response = new DiscountResponse(discount);
             return Result<DiscountResponse>
                 .Succeed(response, Success<Discount>.Retrieved);
+        }
+
+        public async Task<Result<DiscountResponse>> CreateAsync(CreateDiscountRequest request, CancellationToken cancellationToken)
+        {
+            var discount = new Discount(request.ToInfo());
+
+            await _discountRepository.AddAsync(discount, cancellationToken);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            var response = new DiscountResponse(discount);
+            return Result<DiscountResponse>
+                .Succeed(response, Success<Discount>.Created, HttpStatusCode.Created);
         }
     }
 }
