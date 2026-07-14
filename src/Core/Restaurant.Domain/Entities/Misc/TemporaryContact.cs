@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Production;
 
 namespace Restaurant.Domain.Entities.Misc
 {
-    public partial class TemporaryContact : Entity
+    public partial class TemporaryContact : AuditableEntity
     {
         public string GuestName { get; private set; } = string.Empty;
         public string GuestEmail { get; private set; } = string.Empty;

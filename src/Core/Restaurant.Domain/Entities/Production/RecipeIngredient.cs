@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Domain.Entities.Production
 {
-    public partial class RecipeIngredient : Entity
+    public partial class RecipeIngredient : AuditableEntity
     {
         public Guid RecipeId { get; private set; }
         public Guid IngredientId { get; private set; }

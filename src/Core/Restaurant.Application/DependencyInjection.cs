@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Application.Behaviors;
+using Restaurant.Application.Services.Misc;
 
 namespace Restaurant.Application
 {
@@ -12,9 +13,13 @@ namespace Restaurant.Application
             {
                 config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
                 config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                config.AddOpenBehavior(typeof(AuditLogBehavior<,>));
             });
 
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
+            // AuditContext: Scoped — sống trong 1 request, chia sẻ giữa Behavior và DbContext
+            services.AddScoped<AuditContext>();
 
             return services;
         }

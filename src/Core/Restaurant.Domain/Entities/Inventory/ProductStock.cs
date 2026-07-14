@@ -4,7 +4,7 @@ using Restaurant.Domain.Informations.Inventory.ProductStocks;
 
 namespace Restaurant.Domain.Entities.Inventory
 {
-    public partial class ProductStock : Entity
+    public partial class ProductStock : AuditableEntity
     {
         public decimal UnitPrice { get; private set; }
         public string Unit { get; private set; } = string.Empty;

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Restaurant.Application.Services.Misc;
 using Restaurant.Domain.Abstraction;
 using Restaurant.Domain.Entities.Catalog;
 using Restaurant.Domain.Entities.Guests;
@@ -8,15 +10,22 @@ using Restaurant.Domain.Entities.Misc;
 using Restaurant.Domain.Entities.Personnel;
 using Restaurant.Domain.Entities.Production;
 using Restaurant.Domain.Entities.Territory;
+using Restaurant.Domain.Enums;
 using System.Reflection;
+using System.Text.Json;
 
 namespace Restaurant.Persistence.Contexts
 {
     public class RestaurantDbContext : DbContext
     {
-        public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options)
+        private readonly AuditContext _auditContext;
+
+        public RestaurantDbContext(
+            DbContextOptions<RestaurantDbContext> options,
+            AuditContext auditContext)
             : base(options)
         {
+            _auditContext = auditContext;
         }
 
         // ── DbSets ──────────────────────────────────────────────────────────
@@ -50,6 +59,8 @@ namespace Restaurant.Persistence.Contexts
         public DbSet<Position> Positions { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
 
+        public DbSet<AuditLog> AuditLogs { get; set; } = null!;
+
         // ── Model building ──────────────────────────────────────────────────
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -67,11 +78,25 @@ namespace Restaurant.Persistence.Contexts
             return base.SaveChanges();
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             ChangeTracker.DetectChanges();
             SetAuditFields();
-            return base.SaveChangesAsync(cancellationToken);
+
+            // ── Bước 1: Thu thập audit entries TRƯỚC khi lưu (cần OldValues) ──
+            var auditEntries = BuildAuditEntries();
+
+            // ── Bước 2: Lưu các entity chính ────────────────────────────────
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            // ── Bước 3: Lưu audit logs trong cùng transaction ───────────────
+            if (auditEntries.Count > 0)
+            {
+                AuditLogs.AddRange(auditEntries);
+                await base.SaveChangesAsync(cancellationToken);
+            }
+
+            return result;
         }
 
         private void SetAuditFields()
@@ -90,6 +115,96 @@ namespace Restaurant.Persistence.Contexts
                     entry.Entity.MarkUpdated(now);
                 }
             }
+        }
+
+        // ── Audit capture ────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Thu thập danh sách audit entries từ ChangeTracker.
+        /// Chỉ xử lý entity kế thừa <see cref="AuditableEntity"/>.
+        /// Với Modified: chỉ ghi các property thực sự thay đổi (diff).
+        /// </summary>
+        private List<AuditLog> BuildAuditEntries()
+        {
+            var now = DateTime.UtcNow;
+            var list = new List<AuditLog>();
+
+            foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                if (entry.State is not (EntityState.Added or EntityState.Modified or EntityState.Deleted))
+                    continue;
+
+                var entityName = entry.Entity.GetType().Name;
+                var action     = entry.State switch
+                {
+                    EntityState.Added    => AuditAction.Created,
+                    EntityState.Modified => AuditAction.Updated,
+                    EntityState.Deleted  => AuditAction.Deleted,
+                    _                    => throw new InvalidOperationException()
+                };
+
+                string? oldValues = null;
+                string? newValues = null;
+
+                if (action == AuditAction.Created)
+                {
+                    // Lưu tất cả property có giá trị không null
+                    var newDict = entry.Properties
+                        .Where(p => p.CurrentValue is not null)
+                        .ToDictionary(p => p.Metadata.Name, p => p.CurrentValue);
+                    newValues = JsonSerializer.Serialize(newDict);
+                }
+                else if (action == AuditAction.Updated)
+                {
+                    // Chỉ lưu các property thực sự thay đổi (diff)
+                    var oldDict = new Dictionary<string, object?>();
+                    var newDict = new Dictionary<string, object?>();
+
+                    foreach (var prop in entry.Properties)
+                    {
+                        var original = prop.OriginalValue;
+                        var current  = prop.CurrentValue;
+
+                        if (!Equals(original, current))
+                        {
+                            oldDict[prop.Metadata.Name] = original;
+                            newDict[prop.Metadata.Name] = current;
+                        }
+                    }
+
+                    if (oldDict.Count > 0)
+                    {
+                        oldValues = JsonSerializer.Serialize(oldDict);
+                        newValues = JsonSerializer.Serialize(newDict);
+                    }
+                }
+                else // Deleted
+                {
+                    var oldDict = entry.Properties
+                        .Where(p => p.OriginalValue is not null)
+                        .ToDictionary(p => p.Metadata.Name, p => p.OriginalValue);
+                    oldValues = JsonSerializer.Serialize(oldDict);
+                }
+
+                // Entity.Id được set trong Entity() constructor bằng Guid.CreateVersion7()
+                // nên luôn có giá trị — kể cả với Added state.
+                var entityId = entry.Entity.Id.ToString();
+
+                var log = AuditLog.Create(
+                    entityName  : entityName,
+                    entityId    : entityId,
+                    action      : action,
+                    oldValues   : oldValues,
+                    newValues   : newValues,
+                    actorId     : _auditContext.ActorId,
+                    actorName   : _auditContext.ActorName,
+                    ipAddress   : _auditContext.IpAddress,
+                    occurredAt  : now);
+
+                list.Add(log);
+            }
+
+            return list;
         }
     }
 }

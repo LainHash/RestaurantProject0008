@@ -3,7 +3,7 @@ using Restaurant.Domain.Informations.Production.RecipeSteps;
 
 namespace Restaurant.Domain.Entities.Production
 {
-    public partial class RecipeStep : Entity
+    public partial class RecipeStep : AuditableEntity
     {
         public string Description { get; private set; } = null!;
         public int StepNumber { get; private set; }

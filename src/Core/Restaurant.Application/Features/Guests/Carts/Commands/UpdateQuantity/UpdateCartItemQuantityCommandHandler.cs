@@ -6,7 +6,7 @@ using Restaurant.Contract.DTOs.Guests.Carts;
 namespace Restaurant.Application.Features.Guests.Carts.Commands.UpdateQuantity
 {
     internal class UpdateCartItemQuantityCommandHandler
-        : IRequestHandler<UpdateCartItemQuantityCommand, Result<CartResponse>
+        : IRequestHandler<UpdateCartItemQuantityCommand, Result<CartResponse>>
     {
         private readonly ICartService _cartService;
 

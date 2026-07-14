@@ -31,6 +31,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 // Add custom services
+builder.Services.AddHttpContextAccessor(); // Cần cho ICurrentUserService (Audit Log)
 builder.Services.AddApplication();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
