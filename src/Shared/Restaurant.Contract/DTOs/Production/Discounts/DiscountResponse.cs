@@ -4,6 +4,7 @@ namespace Restaurant.Contract.DTOs.Production.Discounts
 {
     public class DiscountResponse
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
@@ -13,6 +14,7 @@ namespace Restaurant.Contract.DTOs.Production.Discounts
 
         public DiscountResponse(Discount discount)
         {
+            Id = discount.Id;
             Name = discount.Name;
             Code = discount.Code;
             Type = discount.Type;

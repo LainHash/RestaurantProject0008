@@ -10,5 +10,6 @@ namespace Restaurant.Domain.Entities.Production
         public string? Description { get; private set; }
         public DateTime? ExpiredAt { get; private set; }
         public decimal Value { get; private set; }
+        public int Quantity { get; private set; }
     }
 }

@@ -93,6 +93,8 @@ namespace Restaurant.Persistence
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 
 
@@ -120,7 +122,7 @@ namespace Restaurant.Persistence
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
 
-            services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<IDiscountService, DiscountService>();
 
             // ── Infrastructure services ─────────────────────────────────
             services.AddScoped<ICurrentUserService, CurrentUserService>();

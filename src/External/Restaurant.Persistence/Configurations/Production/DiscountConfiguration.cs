@@ -29,6 +29,9 @@ namespace Restaurant.Persistence.Configurations.Production
             builder.Property(x => x.Value)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+
+            builder.Property(x => x.Quantity)
+                .IsRequired();
         }
     }
 }
