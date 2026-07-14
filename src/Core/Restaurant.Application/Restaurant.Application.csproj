@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Guests\Customers\Commands\" />
+    <Folder Include="Features\Production\Discounts\Commands\" />
     <Folder Include="Features\Territory\Areas\Commands\" />
   </ItemGroup>
 

@@ -120,6 +120,8 @@ namespace Restaurant.Persistence
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
 
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+
             // ── Infrastructure services ─────────────────────────────────
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
