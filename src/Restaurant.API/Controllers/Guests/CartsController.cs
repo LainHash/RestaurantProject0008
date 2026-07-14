@@ -1,12 +1,16 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Guests.Carts.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Carts.Commands.CreateForGuest;
 using Restaurant.Application.Features.Guests.Carts.Commands.DeleteExpired;
+using Restaurant.Application.Features.Guests.Carts.Commands.UpdateQuantity;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Carts.Queries.GetById;
+using Restaurant.Contract.DTOs.Guests.CartItems;
 using Restaurant.Contract.DTOs.Guests.Carts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,8 +18,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Guests
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CartsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,6 +29,7 @@ namespace Restaurant.API.Controllers.Guests
             _mediator = mediator;
         }
 
+        [Authorize(Roles = Roles.AdminOrManager)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllCartsQuery query, CancellationToken cancellationToken)
         {
@@ -32,6 +37,7 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
@@ -40,6 +46,7 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize(Roles = Roles.Customer)]
         [HttpPost]
         public async Task<IActionResult> CreateForCustomer(CancellationToken cancellationToken)
         {
@@ -81,6 +88,18 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [HttpPatch("{id}/update-quantity")]
+        public async Task<IActionResult> UpdateQuantity(
+            [FromRoute] Guid id,
+            [FromBody] UpdateCartItemQuantityRequest request,
+            CancellationToken cancellationToken)
+        {
+            var command = new UpdateCartItemQuantityCommand(id, request);
+            var result = await _mediator.Send(command, cancellationToken);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [Authorize(Roles = Roles.AdminOrManager)]
         [HttpDelete("clear-expired-cart")]
         public async Task<IActionResult> DeleteExpired(CancellationToken cancellationToken)
         {

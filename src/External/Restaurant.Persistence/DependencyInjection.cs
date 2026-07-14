@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Application.Services.Authentication;
@@ -93,6 +93,8 @@ namespace Restaurant.Persistence
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
+            services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+
 
             // ── Service ──────────────────────────────────────────────────────
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -117,6 +119,9 @@ namespace Restaurant.Persistence
 
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+
+            // ── Infrastructure services ─────────────────────────────────
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }

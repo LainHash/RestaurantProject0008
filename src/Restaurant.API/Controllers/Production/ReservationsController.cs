@@ -1,5 +1,7 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForCustomer;
 using Restaurant.Application.Features.Production.Reservations.Command.CreateForGuest;
 using Restaurant.Application.Features.Production.Reservations.Command.UpdateStatus;
@@ -13,8 +15,9 @@ using System.Security.Claims;
 
 namespace Restaurant.API.Controllers.Production
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = Roles.AdminManagerOrStaff)]
     public class ReservationsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -46,6 +49,7 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize] // Any authenticated user
         [HttpPost]
         public async Task<IActionResult> CreateForCustomer(
             [FromBody] CreateReservationForCustomerRequest request,
@@ -68,6 +72,7 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
+        [AllowAnonymous]
         [HttpPost("for-guest")]
         public async Task<IActionResult> CreateForGuest(
             [FromBody] CreateReservationForGuestRequest request,

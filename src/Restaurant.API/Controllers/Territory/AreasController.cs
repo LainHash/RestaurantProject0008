@@ -1,12 +1,15 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Territory.Areas.Queries.GetAll;
 using Restaurant.Application.Features.Territory.Areas.Queries.GetById;
 
 namespace Restaurant.API.Controllers.Territory
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = Roles.AdminOrManager)]
     public class AreasController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -15,6 +18,7 @@ namespace Restaurant.API.Controllers.Territory
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllAreasQuery query, CancellationToken cancellationToken)
         {
@@ -22,6 +26,7 @@ namespace Restaurant.API.Controllers.Territory
             return StatusCode(result.StatusCode, result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {

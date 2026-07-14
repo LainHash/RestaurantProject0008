@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Domain.Entities.Inventory
 {
-    public partial class IngredientStock : Entity
+    public partial class IngredientStock : AuditableEntity
     {
         public decimal UnitPrice { get; private set; }
         public string Unit { get; private set; } = string.Empty;

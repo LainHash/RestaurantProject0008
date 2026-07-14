@@ -1,12 +1,15 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Guests.Customers.Queries.GetAll;
 using Restaurant.Application.Features.Guests.Customers.Queries.GetById;
 
 namespace Restaurant.API.Controllers.Guests
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = Roles.AdminOrManager)]
     public class CustomersController : ControllerBase
     {
         private readonly IMediator _mediator;

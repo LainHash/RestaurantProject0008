@@ -1,15 +1,17 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Personnel.Positions.Commands.Create;
 using Restaurant.Application.Features.Personnel.Positions.Queries.GetAll;
 using Restaurant.Application.Features.Personnel.Positions.Queries.GetById;
 using Restaurant.Contract.DTOs.Personnel.Positions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Personnel
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = Roles.AdminOrManager)]
     public class PositionsController : ControllerBase
     {
         private readonly IMediator _mediator;

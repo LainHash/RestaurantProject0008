@@ -1,6 +1,8 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Production.Recipes.Commands.AddIngredient;
 using Restaurant.Application.Features.Production.Recipes.Commands.AddStep;
 using Restaurant.Application.Features.Production.Recipes.Commands.Create;
@@ -15,6 +17,7 @@ namespace Restaurant.API.Controllers.Production
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = Roles.AdminOrManager)]
     public class RecipesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -23,6 +26,7 @@ namespace Restaurant.API.Controllers.Production
             _mediator = mediator;
         }
 
+        [Authorize(Roles = Roles.AdminManagerOrStaff)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllRecipesQuery query, CancellationToken cancellationToken)
         {
@@ -30,6 +34,7 @@ namespace Restaurant.API.Controllers.Production
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize(Roles = Roles.AdminManagerOrStaff)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {

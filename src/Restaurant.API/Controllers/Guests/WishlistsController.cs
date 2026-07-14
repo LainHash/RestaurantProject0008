@@ -1,5 +1,7 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.AddItem;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForCustomer;
 using Restaurant.Application.Features.Guests.Wishlists.Commands.CreateForGuest;
@@ -12,8 +14,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Guests
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class WishlistsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -23,6 +25,7 @@ namespace Restaurant.API.Controllers.Guests
             _mediator = mediator;
         }
 
+        [Authorize(Roles = Roles.AdminOrManager)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllWishlistsQuery query, CancellationToken cancellationToken)
         {
@@ -30,6 +33,7 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
@@ -38,6 +42,7 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize(Roles = Roles.Customer)]
         [HttpPost]
         public async Task<IActionResult> CreateForCustomer(CancellationToken cancellationToken)
         {
@@ -58,6 +63,7 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [AllowAnonymous]
         [HttpPost("for-guest")]
         public async Task<IActionResult> CreateForGuest([FromBody] Guid sessionId, CancellationToken cancellationToken)
         {
@@ -77,6 +83,7 @@ namespace Restaurant.API.Controllers.Guests
             return StatusCode(result.StatusCode, result);
         }
 
+        [Authorize(Roles = Roles.AdminOrManager)]
         [HttpDelete]
         public async Task<IActionResult> DeleteExpired(
             CancellationToken cancellationToken)

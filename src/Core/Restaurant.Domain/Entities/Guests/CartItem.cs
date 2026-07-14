@@ -40,5 +40,10 @@ namespace Restaurant.Domain.Entities.Guests
         {
             Quantity += amount;
         }
+
+        public void DecreaseQuantity(int amount = -1)
+        {
+            Quantity += amount;
+        }
     }
 }

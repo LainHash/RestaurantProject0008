@@ -3,7 +3,7 @@ using Restaurant.Domain.Entities.Catalog;
 
 namespace Restaurant.Domain.Entities.Misc
 {
-    public partial class ProductImage : Entity
+    public partial class ProductImage : AuditableEntity
     {
         public int DisplayOrder { get; private set; }
 

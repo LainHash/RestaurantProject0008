@@ -1,5 +1,7 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Personnel.Employees.Commands.CompleteProfile;
 using Restaurant.Application.Features.Personnel.Employees.Commands.Create;
 using Restaurant.Application.Features.Personnel.Employees.Queries.GetAll;
@@ -8,6 +10,7 @@ using Restaurant.Contract.DTOs.Personnel.Employees;
 
 namespace Restaurant.API.Controllers.Personnel
 {
+    [Authorize(Roles = Roles.AdminOrManager)]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
