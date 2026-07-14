@@ -1,6 +1,8 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Create;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.CreateMany;
 using Restaurant.Application.Features.Catalog.Ingredients.Commands.Delete;
@@ -14,6 +16,7 @@ using Restaurant.Contract.DTOs.Inventory.IngredientStocks;
 
 namespace Restaurant.API.Controllers.Catalog
 {
+    [Authorize(Roles = Roles.AdminOrManager)]
     [Route("api/[controller]")]
     [ApiController]
     public class IngredientsController : ControllerBase
@@ -24,6 +27,7 @@ namespace Restaurant.API.Controllers.Catalog
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllIngredientsQuery query, CancellationToken cancellationToken)
         {
@@ -31,6 +35,7 @@ namespace Restaurant.API.Controllers.Catalog
             return StatusCode(result.StatusCode, result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {

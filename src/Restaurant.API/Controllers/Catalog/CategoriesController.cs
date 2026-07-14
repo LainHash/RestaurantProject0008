@@ -1,5 +1,7 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Catalog.Categories.Commands.Create;
 using Restaurant.Application.Features.Catalog.Categories.Commands.Delete;
 using Restaurant.Application.Features.Catalog.Categories.Commands.Restore;
@@ -12,6 +14,7 @@ namespace Restaurant.API.Controllers.Catalog
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = Roles.AdminOrManager)] // mặc định toàn controller; GET sẽ override bằng [AllowAnonymous]
     public class CategoriesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -20,6 +23,7 @@ namespace Restaurant.API.Controllers.Catalog
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllCategoriesQuery query, CancellationToken cancellationToken)
         {
@@ -27,6 +31,7 @@ namespace Restaurant.API.Controllers.Catalog
             return StatusCode(result.StatusCode, result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {

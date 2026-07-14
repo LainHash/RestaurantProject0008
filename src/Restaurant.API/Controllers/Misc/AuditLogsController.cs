@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Models.Results;
 using Restaurant.Contract.DTOs.Misc.AuditLogs;
 using Restaurant.Domain.Enums;
@@ -12,6 +14,7 @@ namespace Restaurant.API.Controllers.Misc
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = Roles.Admin)]
     public class AuditLogsController : ControllerBase
     {
         private readonly IAuditLogRepository _auditLogRepository;

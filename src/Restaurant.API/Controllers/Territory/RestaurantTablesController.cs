@@ -1,7 +1,7 @@
-﻿using MediatR;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Restaurant.Application.Features.Catalog.Categories.Commands.Restore;
-using Restaurant.Application.Features.Territory.Areas.Queries.GetAll;
+using Restaurant.API.Authorization;
 using Restaurant.Application.Features.Territory.RestaurantTables.Commands.Create;
 using Restaurant.Application.Features.Territory.RestaurantTables.Commands.Delete;
 using Restaurant.Application.Features.Territory.RestaurantTables.Commands.Restore;
@@ -10,12 +10,12 @@ using Restaurant.Application.Features.Territory.RestaurantTables.Commands.Update
 using Restaurant.Application.Features.Territory.RestaurantTables.Queries.GetAll;
 using Restaurant.Application.Features.Territory.RestaurantTables.Queries.GetById;
 using Restaurant.Contract.DTOs.Territory.RestaurantTables;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant.API.Controllers.Territory
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(Roles = Roles.AdminOrManager)]
     public class RestaurantTablesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -24,6 +24,7 @@ namespace Restaurant.API.Controllers.Territory
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllRestaurantTablesQuery query, CancellationToken cancellationToken)
         {
@@ -31,6 +32,7 @@ namespace Restaurant.API.Controllers.Territory
             return StatusCode(result.StatusCode, result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne([FromRoute] Guid id, CancellationToken cancellationToken)
         {
